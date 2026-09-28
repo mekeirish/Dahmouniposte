@@ -1,12 +1,20 @@
 /* ============================================================
-   Service Worker - Poste Dahmouni
-   - HTML → Network First
-   - Assets → Cache First
+   Service Worker - Bureau de poste DAHMOUNI 14010
+   App : Poste LAD
+   ============================================================
+   Stratégie :
+   - HTML  → Network First (pour récupérer les mises à jour)
+   - Autres assets → Cache First (rapide + offline)
+
+   ⚠️ IMPORTANT : quand tu modifies le code de l'app,
+   change la version ci-dessous (v2 → v3, v3 → v4, etc.)
+   pour forcer la mise à jour chez les utilisateurs.
    ============================================================ */
 
-const CACHE_VERSION = 'poste-dahmouni-v1';
+const CACHE_VERSION = 'poste-lad-v1';
 const CACHE_NAME = CACHE_VERSION;
 
+// Fichiers mis en cache dès l'installation
 const PRECACHE_ASSETS = [
   './',
   './index.html',
@@ -19,11 +27,13 @@ self.addEventListener('install', (event) => {
   console.log('[SW] Installation...');
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => Promise.all(
-        PRECACHE_ASSETS.map(url =>
-          cache.add(url).catch(err => console.warn(`[SW] Échec cache ${url}:`, err))
-        )
-      ))
+      .then((cache) => {
+        return Promise.all(
+          PRECACHE_ASSETS.map(url =>
+            cache.add(url).catch(err => console.warn(`[SW] Échec cache ${url}:`, err))
+          )
+        );
+      })
       .then(() => self.skipWaiting())
   );
 });
@@ -32,14 +42,16 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   console.log('[SW] Activation...');
   event.waitUntil(
-    caches.keys().then((keys) => Promise.all(
-      keys.map((key) => {
-        if (key !== CACHE_NAME) {
-          console.log('[SW] Suppression ancien cache :', key);
-          return caches.delete(key);
-        }
-      })
-    )).then(() => self.clients.claim())
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            console.log('[SW] Suppression ancien cache :', key);
+            return caches.delete(key);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
   );
 });
 
@@ -60,7 +72,7 @@ self.addEventListener('fetch', (event) => {
                  url.pathname.endsWith('/');
 
   if (isHTML) {
-    // NETWORK FIRST
+    // HTML → NETWORK FIRST (avec fallback cache)
     event.respondWith(
       fetch(request)
         .then((response) => {
@@ -68,10 +80,13 @@ self.addEventListener('fetch', (event) => {
           caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
           return response;
         })
-        .catch(() => caches.match(request).then(cached => cached || caches.match('./index.html')))
+        .catch(() => {
+          return caches.match(request)
+            .then(cached => cached || caches.match('./index.html'));
+        })
     );
   } else {
-    // CACHE FIRST
+    // Assets → CACHE FIRST
     event.respondWith(
       caches.match(request).then((cached) => {
         if (cached) return cached;
@@ -82,7 +97,10 @@ self.addEventListener('fetch', (event) => {
           }
           return response;
         }).catch(() => {
-          if (request.destination === 'image') return caches.match('./icon.png');
+          // Fallback pour les images
+          if (request.destination === 'image') {
+            return caches.match('./icon.png');
+          }
           return new Response('', { status: 408, statusText: 'Offline' });
         });
       })
@@ -92,5 +110,7 @@ self.addEventListener('fetch', (event) => {
 
 // ===== MESSAGE =====
 self.addEventListener('message', (event) => {
-  if (event.data === 'SKIP_WAITING') self.skipWaiting();
+  if (event.data === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
