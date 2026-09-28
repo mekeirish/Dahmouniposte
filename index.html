@@ -11,28 +11,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Poste Dahmouni">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" href="icon.png">
-  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/png" href="./icon.png">
+  <link rel="apple-touch-icon" href="./icon.png">
 
-  <!--
-    ================================================================
-    ⚠️ CSS TAILWIND INTÉGRÉ (compilé pour cette app uniquement)
-    ================================================================
-    Ce bloc contient UNIQUEMENT les classes Tailwind utilisées dans
-    le HTML ci-dessous. C'est volontaire : ça évite d'inclure le
-    CDN Tailwind (400 ko) et rend l'app 100% offline.
-
-    ⚠️ IMPORTANT pour les futures modifications :
-    Si tu (ou une IA) ajoutes une nouvelle classe Tailwind dans le HTML
-    (ex: "bg-purple-500", "text-3xl", "grid-cols-4", etc.) et qu'elle
-    n'apparaît PAS dans ce <style>, elle n'aura AUCUN effet visuel.
-
-    Deux solutions :
-    1. Ajouter la règle CSS manuellement dans ce <style>
-    2. Ou demander à une IA : "ajoute la classe X au <style> de index.html"
-    ================================================================
-  -->
   <style>
     /* ===== RESET / BASE ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -60,7 +42,6 @@
     input { font: inherit; }
     h1, h2, h3, h4 { font-weight: 600; }
     svg { display: block; }
-
     ::selection { background: #3b82f6; color: white; }
 
     /* ===== LAYOUT ===== */
@@ -173,7 +154,6 @@
     .bg-white\/80 { background-color: rgba(255, 255, 255, 0.8); }
     .bg-white\/90 { background-color: rgba(255, 255, 255, 0.9); }
     .bg-white\/95 { background-color: rgba(255, 255, 255, 0.95); }
-    .bg-white\/98 { background-color: rgba(255, 255, 255, 0.98); }
     .bg-gray-200\/50 { background-color: rgba(229, 231, 235, 0.5); }
     .bg-gray-200\/60 { background-color: rgba(229, 231, 235, 0.6); }
     .bg-blue-50\/50 { background-color: rgba(239, 246, 255, 0.5); }
@@ -188,7 +168,6 @@
     .bg-amber-500 { background-color: #f59e0b; }
     .bg-slate-50\/60 { background-color: rgba(248, 250, 252, 0.6); }
     .bg-slate-900\/30 { background-color: rgba(15, 23, 42, 0.3); }
-    .bg-slate-900\/40 { background-color: rgba(15, 23, 42, 0.4); }
 
     /* Gradients */
     .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); }
@@ -240,7 +219,6 @@
     .transition { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
     .duration-200 { transition-duration: 200ms; }
     .duration-300 { transition-duration: 300ms; }
-    .duration-350 { transition-duration: 350ms; }
 
     /* ===== TRANSFORMS ===== */
     .scale-95 { transform: scale(0.95); }
@@ -277,8 +255,6 @@
     .bottom-0 { bottom: 0; }
     .z-10 { z-index: 10; }
     .z-50 { z-index: 50; }
-    .z-60 { z-index: 60; }
-    .z-70 { z-index: 70; }
 
     /* ===== OVERFLOW / DISPLAY ===== */
     .hidden { display: none; }
@@ -321,7 +297,7 @@
     .install-btn:active { transform: translateX(-50%) translateY(0) scale(0.95); }
     .install-btn svg { width: 1rem; height: 1rem; }
 
-    /* Aide iOS (modal) */
+    /* Aide iOS / autres navigateurs */
     .ios-hint {
       position: fixed;
       inset: 0;
@@ -390,7 +366,6 @@
 
   <main class="flex-grow flex items-start justify-center p-4 sm:p-6 w-full">
 
-    <!-- VUE 1 : ACCUEIL -->
     <div id="viewHome" class="w-full max-w-md bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-6 sm:p-8 text-center space-y-4 self-center">
       <h2 class="text-lg sm:text-xl font-semibold mb-4 text-gray-700">Menu Principal</h2>
 
@@ -407,13 +382,11 @@
       </button>
     </div>
 
-    <!-- VUE 2 : MOIS -->
     <div id="viewMonths" class="hidden w-full max-w-2xl bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-6 sm:p-8 self-center">
       <h2 id="monthsTitle" class="text-lg sm:text-xl font-semibold mb-6 text-center text-gray-700">Sélectionnez un mois</h2>
       <div id="monthsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4"></div>
     </div>
 
-    <!-- VUE 3 : JOURS -->
     <div id="viewDays" class="hidden w-full max-w-3xl bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-6 sm:p-8">
       <h2 id="daysTitle" class="text-lg sm:text-xl font-semibold mb-4 text-center text-gray-700">Sélectionnez un jour</h2>
 
@@ -606,11 +579,11 @@
     <span>Installer l'application</span>
   </button>
 
-  <!-- AIDE iOS -->
+  <!-- AIDE INSTALLATION (iOS / fallback) -->
   <div id="iosHint" class="ios-hint">
     <div class="ios-hint-card">
-      <h3>📲 Installer sur iPhone / iPad</h3>
-      <ol>
+      <h3 id="hintTitle">📲 Installer l'application</h3>
+      <ol id="hintSteps">
         <li>Ouvrez cette page dans <strong>Safari</strong></li>
         <li>Appuyez sur le bouton <strong>Partager</strong> (icône ⎙ en bas)</li>
         <li>Faites défiler et choisissez <strong>« Sur l'écran d'accueil »</strong></li>
@@ -623,57 +596,148 @@
   </div>
 
   <script>
-    // ===== Service Worker =====
+    // ============================================================
+    // 1) SERVICE WORKER
+    // ============================================================
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-          .then(reg => console.log('✅ SW enregistré', reg.scope))
-          .catch(err => console.error('❌ SW :', err));
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => {
+            console.log('✅ SW enregistré, scope :', reg.scope);
+            // Forcer la mise à jour dès qu'un nouveau SW est prêt
+            reg.addEventListener('updatefound', () => {
+              const newWorker = reg.installing;
+              if (newWorker) {
+                newWorker.addEventListener('statechange', () => {
+                  console.log('[SW] État :', newWorker.state);
+                });
+              }
+            });
+          })
+          .catch(err => console.error('❌ SW erreur :', err));
       });
     }
 
-    // ===== BOUTON INSTALLER PWA =====
+    // ============================================================
+    // 2) BOUTON INSTALLER PWA
+    // ============================================================
     let deferredInstallPrompt = null;
-    const installBtn = document.getElementById('installBtn');
-    const iosHint = document.getElementById('iosHint');
+    let installBtn, iosHint;
 
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    // Détection environnement
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isAndroid = /Android/i.test(ua);
+    const isSamsung = /SamsungBrowser/i.test(ua);
+    const isFirefox = /Firefox|FxiOS/i.test(ua);
+    const isSafari = /^((?!chrome|android|crios|fxios).)*safari/i.test(ua);
+    const isEdge = /Edg\//i.test(ua);
+    const isChrome = /Chrome|CriOS/i.test(ua) && !isEdge && !isSamsung;
+
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+                       || window.matchMedia('(display-mode: fullscreen)').matches
+                       || window.matchMedia('(display-mode: minimal-ui)').matches
                        || window.navigator.standalone === true;
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredInstallPrompt = e;
-      installBtn.classList.add('show');
+    console.log('[PWA] Environnement :', {
+      isIOS, isAndroid, isSamsung, isFirefox, isSafari, isEdge, isChrome,
+      isStandalone,
+      protocol: location.protocol
     });
 
-    if (isIOS && !isStandalone) {
-      installBtn.classList.add('show');
+    function showInstallButton() {
+      if (installBtn) installBtn.classList.add('show');
+    }
+    function hideInstallButton() {
+      if (installBtn) installBtn.classList.remove('show');
     }
 
-    installBtn.addEventListener('click', async () => {
-      if (deferredInstallPrompt) {
-        deferredInstallPrompt.prompt();
-        const { outcome } = await deferredInstallPrompt.userChoice;
-        console.log('[PWA] Choix utilisateur :', outcome);
-        deferredInstallPrompt = null;
-        installBtn.classList.remove('show');
-      } else if (isIOS) {
-        iosHint.classList.add('show');
+    function showHintForBrowser() {
+      const title = document.getElementById('hintTitle');
+      const steps = document.getElementById('hintSteps');
+
+      if (isIOS) {
+        title.textContent = "📲 Installer sur iPhone / iPad";
+        steps.innerHTML = `
+          <li>Ouvrez cette page dans <strong>Safari</strong></li>
+          <li>Appuyez sur le bouton <strong>Partager</strong> (icône ⎙)</li>
+          <li>Faites défiler, choisissez <strong>« Sur l'écran d'accueil »</strong></li>
+          <li>Appuyez sur <strong>Ajouter</strong></li>
+        `;
+      } else if (isFirefox) {
+        title.textContent = "📲 Installer sur Firefox";
+        steps.innerHTML = `
+          <li>Firefox desktop ne supporte pas l'installation PWA</li>
+          <li>Sur Android : menu <strong>⋮ → Installer</strong></li>
+          <li>Ou utilisez Chrome / Edge pour installer</li>
+        `;
+      } else if (isSafari && !isIOS) {
+        title.textContent = "📲 Installer sur Safari (macOS)";
+        steps.innerHTML = `
+          <li>Menu <strong>Fichier → Ajouter au Dock</strong></li>
+          <li>Ou <strong>Partager → Ajouter au Dock</strong></li>
+        `;
+      } else {
+        title.textContent = "📲 Installer l'application";
+        steps.innerHTML = `
+          <li>Ouvrez le menu de votre navigateur</li>
+          <li>Cherchez <strong>« Installer l'application »</strong> ou <strong>« Ajouter à l'écran d'accueil »</strong></li>
+          <li>Confirmez l'installation</li>
+        `;
       }
+
+      iosHint.classList.add('show');
+    }
+
+    // Init après le DOM
+    document.addEventListener('DOMContentLoaded', () => {
+      installBtn = document.getElementById('installBtn');
+      iosHint = document.getElementById('iosHint');
+
+      // Cas 1 : navigateur compatible prompt natif
+      window.addEventListener('beforeinstallprompt', (e) => {
+        console.log('[PWA] beforeinstallprompt reçu ✅');
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        if (!isStandalone) showInstallButton();
+      });
+
+      // Cas 2 : iOS ou Firefox → on affiche le bouton manuellement
+      if ((isIOS || isFirefox) && !isStandalone) {
+        setTimeout(showInstallButton, 800);
+      }
+
+      // Clic sur le bouton
+      installBtn.addEventListener('click', async () => {
+        console.log('[PWA] Clic bouton install');
+        if (deferredInstallPrompt) {
+          deferredInstallPrompt.prompt();
+          const { outcome } = await deferredInstallPrompt.userChoice;
+          console.log('[PWA] Choix utilisateur :', outcome);
+          deferredInstallPrompt = null;
+          hideInstallButton();
+        } else {
+          // Pas de prompt natif → afficher les instructions
+          showHintForBrowser();
+        }
+      });
+
+      // App installée
+      window.addEventListener('appinstalled', () => {
+        console.log('[PWA] Application installée ✅');
+        deferredInstallPrompt = null;
+        hideInstallButton();
+      });
+
+      // Fermer l'aide au clic en dehors
+      iosHint.addEventListener('click', (e) => {
+        if (e.target === iosHint) iosHint.classList.remove('show');
+      });
     });
 
-    window.addEventListener('appinstalled', () => {
-      console.log('[PWA] Application installée ✅');
-      deferredInstallPrompt = null;
-      installBtn.classList.remove('show');
-    });
-
-    iosHint.addEventListener('click', (e) => {
-      if (e.target === iosHint) iosHint.classList.remove('show');
-    });
-
-    // ===== APP LOGIC =====
+    // ============================================================
+    // 3) LOGIQUE APP
+    // ============================================================
     const currentYear = new Date().getFullYear();
     let currentMonthIndex = null;
     let currentDay = null;
