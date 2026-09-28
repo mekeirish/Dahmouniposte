@@ -80,6 +80,7 @@
     .max-w-2xl { max-width: 42rem; }
     .max-w-3xl { max-width: 48rem; }
     .max-w-4xl { max-width: 56rem; }
+    .max-w-5xl { max-width: 64rem; }
     .max-h-\[90vh\] { max-height: 90vh; }
 
     /* ===== SPACING ===== */
@@ -100,6 +101,7 @@
     .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
     .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
     .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+    .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
     .py-3\.5 { padding-top: 0.875rem; padding-bottom: 0.875rem; }
     .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
     .pt-2 { padding-top: 0.5rem; }
@@ -222,6 +224,7 @@
     .border-gray-300\/80 { border-color: rgba(209, 213, 219, 0.8); }
     .border-blue-100 { border-color: #dbeafe; }
     .border-blue-200 { border-color: #bfdbfe; }
+    .border-blue-500 { border-color: #3b82f6; }
     .border-amber-100 { border-color: #fef3c7; }
     .border-amber-200 { border-color: #fde68a; }
     .border-amber-300 { border-color: #fcd34d; }
@@ -433,7 +436,7 @@
     }
     .month-btn.no-data .badge-count { display: none; }
 
-    /* ===== TABLEAU RÉCAP ===== */
+    /* ===== TABLEAUX ===== */
     .data-table {
       width: 100%;
       border-collapse: collapse;
@@ -480,6 +483,57 @@
       color: #1e40af;
     }
 
+    /* Tableau annuel */
+    .data-table.annual .col-month {
+      font-weight: 700;
+      color: #1e40af;
+      background-color: rgba(219, 234, 254, 0.4);
+      text-align: left;
+      padding-left: 6px;
+      font-size: 10px;
+    }
+    .data-table.annual tbody tr.month-empty td {
+      color: #9ca3af;
+    }
+    .data-table.annual tbody tr.month-empty .col-month {
+      color: #6b7280;
+      background-color: rgba(219, 234, 254, 0.2);
+    }
+    .data-table.annual tbody tr.month-has-data .col-month {
+      color: #78350f;
+      background-color: rgba(251, 191, 36, 0.35);
+    }
+
+    /* Toggle Arrivées/Départs */
+    .toggle-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border: 1px solid;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .toggle-btn.active-blue {
+      background-color: #2563eb;
+      border-color: #2563eb;
+      color: #ffffff;
+    }
+    .toggle-btn.active-amber {
+      background-color: #fbbf24;
+      border-color: #f59e0b;
+      color: #111827;
+    }
+    .toggle-btn.inactive {
+      background-color: rgba(255, 255, 255, 0.7);
+      border-color: rgba(209, 213, 219, 0.8);
+      color: #6b7280;
+    }
+    .toggle-btn.inactive:hover {
+      background-color: #ffffff;
+      color: #374151;
+    }
+
     /* ===== BREAKPOINTS ===== */
     @media (min-width: 640px) {
       .sm\:p-6 { padding: 1.5rem; }
@@ -495,6 +549,7 @@
       .sm\:col-span-1 { grid-column: span 1 / span 1; }
       .data-table th { font-size: 11px; padding: 8px 4px; }
       .data-table td { font-size: 12px; padding: 6px 4px; }
+      .data-table.annual .col-month { font-size: 12px; padding-left: 10px; }
     }
   </style>
 </head>
@@ -519,6 +574,7 @@
 
   <main class="flex-grow flex items-start justify-center p-4 sm:p-6 w-full">
 
+    <!-- VUE 1 : ACCUEIL -->
     <div id="viewHome" class="w-full max-w-md bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-6 sm:p-8 text-center space-y-4 self-center">
       <h2 class="text-lg sm:text-xl font-semibold mb-4 text-gray-700">Menu Principal</h2>
 
@@ -530,16 +586,18 @@
         Lettres de départ
       </button>
 
-      <button onclick="alert('Fonctionnalité Rapport annuel à venir')" class="w-full bg-white/70 hover:bg-white text-gray-700 font-medium py-3.5 px-6 rounded-2xl border border-white/80 transition-all duration-200 transform active:scale-95 cursor-pointer">
+      <button onclick="goToAnnualReport()" class="w-full bg-white/70 hover:bg-white text-gray-700 font-medium py-3.5 px-6 rounded-2xl border border-white/80 transition-all duration-200 transform active:scale-95 cursor-pointer">
         Rapport annuel
       </button>
     </div>
 
+    <!-- VUE 2 : MOIS -->
     <div id="viewMonths" class="hidden w-full max-w-2xl bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-6 sm:p-8 self-center">
       <h2 id="monthsTitle" class="text-lg sm:text-xl font-semibold mb-6 text-center text-gray-700">Sélectionnez un mois</h2>
       <div id="monthsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4"></div>
     </div>
 
+    <!-- VUE 3 : JOURS -->
     <div id="viewDays" class="hidden w-full max-w-3xl bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-6 sm:p-8">
       <h2 id="daysTitle" class="text-lg sm:text-xl font-semibold mb-4 text-center text-gray-700">Sélectionnez un jour</h2>
 
@@ -569,7 +627,7 @@
 
       <div id="daysGrid" class="grid grid-cols-5 sm:grid-cols-7 gap-2.5 sm:gap-3"></div>
 
-      <!-- TABLEAU RÉCAPITULATIF DES DONNÉES -->
+      <!-- TABLEAU RÉCAPITULATIF DES DONNÉES DU MOIS -->
       <div id="tableSection" class="mt-6">
         <h3 class="text-sm font-bold uppercase tracking-wider text-gray-600 mb-3 text-center">
           Tableau des données
@@ -597,6 +655,49 @@
               <tfoot id="dataTableFooter"></tfoot>
             </table>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VUE 4 : RAPPORT ANNUEL -->
+    <div id="viewAnnual" class="hidden w-full max-w-5xl bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-4 sm:p-6">
+      <h2 class="text-lg sm:text-xl font-semibold mb-3 text-center text-gray-700">
+        Rapport annuel <span id="annualYearLabel">2026</span>
+      </h2>
+
+      <!-- Toggle Arrivées / Départs -->
+      <div class="flex justify-center gap-2 mb-5">
+        <button id="toggleArrivals" onclick="switchAnnualSection('arrivals')" class="toggle-btn active-blue">
+          Lettres d'arrivées
+        </button>
+        <button id="toggleDepartures" onclick="switchAnnualSection('departures')" class="toggle-btn inactive">
+          Lettres de départ
+        </button>
+      </div>
+
+      <!-- Tableau annuel -->
+      <div class="bg-white/80 backdrop-blur-md border border-white/80 rounded-2xl p-2 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="data-table annual" id="annualTable">
+            <thead>
+              <tr>
+                <th class="col-month" style="text-align: left; padding-left: 6px;">MOIS</th>
+                <th>NAT</th>
+                <th>INT</th>
+                <th>LRN</th>
+                <th>LRI</th>
+                <th>RF</th>
+                <th>CO</th>
+                <th>CH</th>
+                <th>PO</th>
+                <th>PR</th>
+                <th>CPX</th>
+                <th id="annualLastColHeader">CRT</th>
+              </tr>
+            </thead>
+            <tbody id="annualTableBody"></tbody>
+            <tfoot id="annualTableFooter"></tfoot>
+          </table>
         </div>
       </div>
     </div>
@@ -908,6 +1009,7 @@
     let currentView = 'viewHome';
     let currentSection = 'arrivals';
     let currentDetailType = 'f1';
+    let annualSection = 'arrivals';
 
     const BASE_FIELDS = [
       { key: 'nat',   id: 'lettresNat' },
@@ -957,6 +1059,7 @@
     ];
 
     function getCurrentDB() { return currentSection === 'arrivals' ? dbArrivals : dbDepartures; }
+    function getDB(section) { return section === 'arrivals' ? dbArrivals : dbDepartures; }
     function saveCurrentDB() {
       const cfg = SECTION_CONFIG[currentSection];
       localStorage.setItem(cfg.storageKey, JSON.stringify(getCurrentDB()));
@@ -967,7 +1070,10 @@
     }
 
     function showView(viewId) {
-      ['viewHome', 'viewMonths', 'viewDays'].forEach(id => document.getElementById(id).classList.add('hidden'));
+      ['viewHome', 'viewMonths', 'viewDays', 'viewAnnual'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      });
       document.getElementById(viewId).classList.remove('hidden');
       currentView = viewId;
 
@@ -997,6 +1103,13 @@
       currentSection = section;
       renderMonths();
       showView('viewMonths');
+    }
+
+    function goToAnnualReport() {
+      annualSection = 'arrivals';
+      updateAnnualToggles();
+      renderAnnualReport();
+      showView('viewAnnual');
     }
 
     function monthHasData(monthIndex) {
@@ -1134,15 +1247,9 @@
         grid.appendChild(btn);
       }
 
-      // Rendu du tableau récapitulatif
       renderDataTable(monthIndex);
     }
 
-    /**
-     * Génère le tableau récapitulatif des données du mois.
-     * Colonnes : J (jour) | NAT | INT | LRN | LRI | RF | CO | CH | PO | PR | CPX | CRT/EXP
-     * + une ligne TOTAL en bas.
-     */
     function renderDataTable(monthIndex) {
       const db = getCurrentDB();
       const cfg = SECTION_CONFIG[currentSection];
@@ -1219,7 +1326,6 @@
         tr.innerHTML = `<td colspan="12" class="italic text-gray-400" style="padding: 12px 6px;">Aucune donnée saisie ce mois-ci</td>`;
         tbody.appendChild(tr);
       } else {
-        // Ligne TOTAL
         const trTotal = document.createElement('tr');
         trTotal.innerHTML = `
           <td>TOT</td>
@@ -1349,6 +1455,7 @@
 
       localStorage.setItem(RATES_STORAGE_KEY, JSON.stringify(RATES));
       if (currentView === 'viewDays') renderDays(currentMonthIndex);
+      if (currentView === 'viewAnnual') renderAnnualReport();
       renderDetailModal();
       fillRateInputs();
     }
@@ -1469,7 +1576,146 @@
     }
 
     // ============================================================
-    // 4) SÉLECTEUR D'ANNÉE
+    // 4) RAPPORT ANNUEL
+    // ============================================================
+    function updateAnnualToggles() {
+      const btnA = document.getElementById('toggleArrivals');
+      const btnD = document.getElementById('toggleDepartures');
+
+      if (annualSection === 'arrivals') {
+        btnA.className = 'toggle-btn active-blue';
+        btnD.className = 'toggle-btn inactive';
+      } else {
+        btnA.className = 'toggle-btn inactive';
+        btnD.className = 'toggle-btn active-amber';
+      }
+    }
+
+    function switchAnnualSection(section) {
+      annualSection = section;
+      updateAnnualToggles();
+      renderAnnualReport();
+    }
+
+    /**
+     * Calcule les totaux annuels pour une section donnée.
+     */
+    function computeAnnualTotals(section) {
+      const db = getDB(section);
+      const cfg = SECTION_CONFIG[section];
+      const lastKey = cfg.lastFieldKey;
+
+      const monthRows = [];
+      const totals = {
+        nat: 0, inter: 0, lrNat: 0, lrInt: 0,
+        rf: 0, co: 0, ch: 0, po: 0, pr: 0, cpx: 0,
+        [lastKey]: 0
+      };
+
+      for (let m = 0; m < 12; m++) {
+        const row = {
+          month: m,
+          hasData: false,
+          nat: 0, inter: 0, lrNat: 0, lrInt: 0,
+          rf: 0, co: 0, ch: 0, po: 0, pr: 0, cpx: 0,
+          [lastKey]: 0
+        };
+
+        const daysInMonth = new Date(currentYear, m + 1, 0).getDate();
+        for (let day = 1; day <= daysInMonth; day++) {
+          const key = `${currentYear}-${m}-${day}`;
+          const entry = db[key];
+          if (!entry) continue;
+
+          row.hasData = true;
+          row.nat   += entry.nat || 0;
+          row.inter += entry.inter || 0;
+          row.lrNat += entry.lrNat || 0;
+          row.lrInt += entry.lrInt || 0;
+          row.rf    += entry.rf || 0;
+          row.co    += entry.co || 0;
+          row.ch    += entry.ch || 0;
+          row.po    += entry.po || 0;
+          row.pr    += entry.pr || 0;
+          row.cpx   += entry.cpx || 0;
+          row[lastKey] += entry[lastKey] || 0;
+        }
+
+        totals.nat   += row.nat;
+        totals.inter += row.inter;
+        totals.lrNat += row.lrNat;
+        totals.lrInt += row.lrInt;
+        totals.rf    += row.rf;
+        totals.co    += row.co;
+        totals.ch    += row.ch;
+        totals.po    += row.po;
+        totals.pr    += row.pr;
+        totals.cpx   += row.cpx;
+        totals[lastKey] += row[lastKey];
+
+        monthRows.push(row);
+      }
+
+      return { monthRows, totals, lastKey };
+    }
+
+    function renderAnnualReport() {
+      const cfg = SECTION_CONFIG[annualSection];
+      const lastKey = cfg.lastFieldKey;
+
+      document.getElementById('annualYearLabel').textContent = currentYear;
+      document.getElementById('annualLastColHeader').textContent = cfg.lastColHeader;
+
+      const { monthRows, totals } = computeAnnualTotals(annualSection);
+
+      const tbody = document.getElementById('annualTableBody');
+      const tfoot = document.getElementById('annualTableFooter');
+      tbody.innerHTML = '';
+      tfoot.innerHTML = '';
+
+      monthRows.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.className = row.hasData ? 'month-has-data' : 'month-empty';
+
+        const fmt = (v) => row.hasData ? v : '·';
+
+        tr.innerHTML = `
+          <td class="col-month">${months[row.month]}</td>
+          <td>${fmt(row.nat)}</td>
+          <td>${fmt(row.inter)}</td>
+          <td>${fmt(row.lrNat)}</td>
+          <td>${fmt(row.lrInt)}</td>
+          <td>${fmt(row.rf)}</td>
+          <td>${fmt(row.co)}</td>
+          <td>${fmt(row.ch)}</td>
+          <td>${fmt(row.po)}</td>
+          <td>${fmt(row.pr)}</td>
+          <td>${fmt(row.cpx)}</td>
+          <td>${fmt(row[lastKey])}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const trTotal = document.createElement('tr');
+      trTotal.innerHTML = `
+        <td>TOTALE</td>
+        <td>${totals.nat}</td>
+        <td>${totals.inter}</td>
+        <td>${totals.lrNat}</td>
+        <td>${totals.lrInt}</td>
+        <td>${totals.rf}</td>
+        <td>${totals.co}</td>
+        <td>${totals.ch}</td>
+        <td>${totals.po}</td>
+        <td>${totals.pr}</td>
+        <td>${totals.cpx}</td>
+        <td>${totals[lastKey]}</td>
+      `;
+      tfoot.appendChild(trTotal);
+    }
+
+    // ============================================================
+    // 5) SÉLECTEUR D'ANNÉE
     // ============================================================
     function openYearPicker() {
       const grid = document.getElementById('yearGrid');
@@ -1526,20 +1772,19 @@
         renderMonths();
       } else if (currentView === 'viewDays') {
         renderDays(currentMonthIndex);
+      } else if (currentView === 'viewAnnual') {
+        renderAnnualReport();
       }
     }
 
     // ============================================================
-    // 5) FERMETURE DES MODALES AU CLIC EXTÉRIEUR
+    // 6) FERMETURE DES MODALES AU CLIC EXTÉRIEUR
     // ============================================================
     document.getElementById('modal').addEventListener('click', (e) => {
       if (e.target === document.getElementById('modal')) closeModal();
     });
     document.getElementById('detailModal').addEventListener('click', (e) => {
       if (e.target === document.getElementById('detailModal')) closeDetailModal();
-    });
-    document.getElementById('yearModal').addEventListener('click', (e) => {
-      if (e.target === document.getElementById('yearModal')) closeYearModal();
     });
     document.getElementById('yearModal').addEventListener('click', (e) => {
       if (e.target === document.getElementById('yearModal')) closeYearPicker();
