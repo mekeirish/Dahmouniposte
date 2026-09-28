@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Poste Dahmouni</title>
+  <title>Dahmouni Poste</title>
 
   <!-- PWA -->
   <meta name="theme-color" content="#1e40af">
-  <meta name="description" content="Gestion du courrier - Poste Dahmouni">
+  <meta name="description" content="Gestion du courrier - Dahmouni Poste">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Poste Dahmouni">
+  <meta name="apple-mobile-web-app-title" content="Dahmouni Poste">
   <link rel="manifest" href="./manifest.json">
   <link rel="icon" type="image/png" href="./icon.png">
   <link rel="apple-touch-icon" href="./icon.png">
@@ -48,6 +48,7 @@
     .flex { display: flex; }
     .flex-col { flex-direction: column; }
     .flex-grow { flex-grow: 1; }
+    .flex-wrap { flex-wrap: wrap; }
     .items-center { align-items: center; }
     .items-start { align-items: flex-start; }
     .justify-center { justify-content: center; }
@@ -63,6 +64,7 @@
     .grid { display: grid; }
     .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     .grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
     .grid-cols-7 { grid-template-columns: repeat(7, minmax(0, 1fr)); }
     .col-span-2 { grid-column: span 2 / span 2; }
@@ -82,6 +84,7 @@
 
     /* ===== SPACING ===== */
     .p-1 { padding: 0.25rem; }
+    .p-2 { padding: 0.5rem; }
     .p-2\.5 { padding: 0.625rem; }
     .p-3 { padding: 0.75rem; }
     .p-4 { padding: 1rem; }
@@ -103,11 +106,13 @@
     .-mt-2 { margin-top: -0.5rem; }
     .-mb-2 { margin-bottom: -0.5rem; }
     .mb-1 { margin-bottom: 0.25rem; }
+    .mb-2 { margin-bottom: 0.5rem; }
     .mb-3 { margin-bottom: 0.75rem; }
     .mb-4 { margin-bottom: 1rem; }
     .mb-5 { margin-bottom: 1.25rem; }
     .mb-6 { margin-bottom: 1.5rem; }
     .mt-1 { margin-top: 0.25rem; }
+    .mt-2 { margin-top: 0.5rem; }
     .mt-5 { margin-top: 1.25rem; }
     .mx-auto { margin-left: auto; margin-right: auto; }
     .my-8 { margin-top: 2rem; margin-bottom: 2rem; }
@@ -126,12 +131,14 @@
     .font-medium { font-weight: 500; }
     .font-semibold { font-weight: 600; }
     .font-bold { font-weight: 700; }
+    .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
     .uppercase { text-transform: uppercase; }
     .italic { font-style: italic; }
     .tracking-tight { letter-spacing: -0.025em; }
     .tracking-wider { letter-spacing: 0.05em; }
     .text-center { text-align: center; }
     .text-left { text-align: left; }
+    .text-right { text-align: right; }
     .leading-none { line-height: 1; }
 
     /* ===== COLORS - Text ===== */
@@ -145,7 +152,10 @@
     .text-blue-100 { color: #dbeafe; }
     .text-blue-600 { color: #2563eb; }
     .text-blue-700 { color: #1d4ed8; }
+    .text-blue-800 { color: #1e40af; }
     .text-amber-700 { color: #b45309; }
+    .text-amber-800 { color: #92400e; }
+    .text-amber-900 { color: #78350f; }
 
     /* ===== COLORS - Background ===== */
     .bg-white { background-color: #ffffff; }
@@ -154,14 +164,20 @@
     .bg-white\/80 { background-color: rgba(255, 255, 255, 0.8); }
     .bg-white\/90 { background-color: rgba(255, 255, 255, 0.9); }
     .bg-white\/95 { background-color: rgba(255, 255, 255, 0.95); }
+    .bg-gray-100 { background-color: #f3f4f6; }
+    .bg-gray-100\/70 { background-color: rgba(243, 244, 246, 0.7); }
     .bg-gray-200\/50 { background-color: rgba(229, 231, 235, 0.5); }
     .bg-gray-200\/60 { background-color: rgba(229, 231, 235, 0.6); }
     .bg-blue-50\/50 { background-color: rgba(239, 246, 255, 0.5); }
     .bg-blue-50\/60 { background-color: rgba(239, 246, 255, 0.6); }
+    .bg-blue-50\/70 { background-color: rgba(239, 246, 255, 0.7); }
     .bg-blue-500 { background-color: #3b82f6; }
     .bg-blue-600 { background-color: #2563eb; }
     .bg-amber-50\/50 { background-color: rgba(255, 251, 235, 0.5); }
     .bg-amber-50\/60 { background-color: rgba(255, 251, 235, 0.6); }
+    .bg-amber-50\/70 { background-color: rgba(255, 251, 235, 0.7); }
+    .bg-amber-100 { background-color: #fef3c7; }
+    .bg-amber-100\/80 { background-color: rgba(254, 243, 199, 0.8); }
     .bg-amber-400 { background-color: #fbbf24; }
     .bg-amber-400\/80 { background-color: rgba(251, 191, 36, 0.8); }
     .bg-amber-400\/90 { background-color: rgba(251, 191, 36, 0.9); }
@@ -196,6 +212,7 @@
     .border-blue-200 { border-color: #bfdbfe; }
     .border-amber-100 { border-color: #fef3c7; }
     .border-amber-200 { border-color: #fde68a; }
+    .border-amber-400 { border-color: #fbbf24; }
     .border-amber-500 { border-color: #f59e0b; }
     .border-slate-200 { border-color: #e2e8f0; }
 
@@ -232,8 +249,10 @@
     .hover\:bg-blue-600:hover { background-color: #2563eb; }
     .hover\:bg-blue-700:hover { background-color: #1d4ed8; }
     .hover\:bg-amber-500:hover { background-color: #f59e0b; }
+    .hover\:bg-amber-200:hover { background-color: #fde68a; }
     .hover\:text-white:hover { color: #ffffff; }
     .hover\:text-gray-600:hover { color: #4b5563; }
+    .hover\:border-amber-500:hover { border-color: #f59e0b; }
     .hover\:from-blue-600:hover { --tw-gradient-from: #2563eb; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(37, 99, 235, 0)); }
     .hover\:to-blue-700:hover { --tw-gradient-to: #1d4ed8; }
     .hover\:from-amber-500:hover { --tw-gradient-from: #f59e0b; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(245, 158, 11, 0)); }
@@ -265,7 +284,25 @@
     .overflow-y-auto { overflow-y: auto; }
     .aspect-square { aspect-ratio: 1 / 1; }
 
-    /* ===== BOUTON INSTALLER PWA (flottant) ===== */
+    /* ===== ANNEE BADGE (cliquable) ===== */
+    .year-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      background-color: rgba(251, 191, 36, 0.8);
+      color: #111827;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: background-color 0.15s;
+      border: none;
+    }
+    .year-badge:hover { background-color: #fbbf24; }
+    .year-badge svg { width: 0.75rem; height: 0.75rem; opacity: 0.7; }
+
+    /* ===== BOUTON INSTALLER PWA ===== */
     .install-btn {
       position: fixed;
       left: 50%;
@@ -297,7 +334,7 @@
     .install-btn:active { transform: translateX(-50%) translateY(0) scale(0.95); }
     .install-btn svg { width: 1rem; height: 1rem; }
 
-    /* Aide iOS / autres navigateurs */
+    /* Aide installation */
     .ios-hint {
       position: fixed;
       inset: 0;
@@ -334,6 +371,54 @@
       cursor: pointer;
     }
 
+    /* ===== MONTH CARD (avec / sans données) ===== */
+    .month-btn {
+      padding: 1rem;
+      border-radius: 1rem;
+      border: 1px solid;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      transition: all 0.2s;
+      cursor: pointer;
+      font-weight: 500;
+      position: relative;
+    }
+    /* Mois AVEC données */
+    .month-btn.has-data {
+      background-color: rgba(251, 191, 36, 0.9);
+      border-color: #f59e0b;
+      color: #111827;
+    }
+    .month-btn.has-data:hover {
+      background-color: #fbbf24;
+      transform: translateY(-2px);
+    }
+    /* Mois SANS données */
+    .month-btn.no-data {
+      background-color: rgba(243, 244, 246, 0.7);
+      border-color: rgba(209, 213, 219, 0.6);
+      color: #6b7280;
+    }
+    .month-btn.no-data:hover {
+      background-color: #f3f4f6;
+      border-color: #fbbf24;
+      color: #374151;
+    }
+    /* Badge "saisi" */
+    .month-btn .badge-count {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.1rem 0.4rem;
+      border-radius: 9999px;
+      background-color: rgba(120, 53, 15, 0.15);
+      color: #78350f;
+      margin-top: 0.1rem;
+    }
+    .month-btn.no-data .badge-count { display: none; }
+
     /* ===== BREAKPOINTS ===== */
     @media (min-width: 640px) {
       .sm\:p-6 { padding: 1.5rem; }
@@ -359,9 +444,14 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
       </button>
-      <h1 id="appTitle" class="text-xl sm:text-2xl font-bold tracking-tight text-gray-700">Poste Dahmouni</h1>
+      <h1 id="appTitle" class="text-xl sm:text-2xl font-bold tracking-tight text-gray-700">Dahmouni Poste</h1>
     </div>
-    <span id="yearBadge" class="hidden text-xs font-semibold bg-amber-400/80 text-gray-900 px-3 py-1 rounded-full">2026</span>
+    <button id="yearBadge" class="year-badge hidden" onclick="openYearPicker()" aria-label="Changer d'année">
+      <span id="yearBadgeLabel">2026</span>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+      </svg>
+    </button>
   </header>
 
   <main class="flex-grow flex items-start justify-center p-4 sm:p-6 w-full">
@@ -399,7 +489,7 @@
             </svg>
           </div>
           <div id="formule1Total" class="text-2xl font-bold">0 DA</div>
-          <div id="formule1Subtext" class="text-[11px] opacity-75 mt-1">Nat × 25 + Int × 50</div>
+          <div id="formule1Subtext" class="text-[11px] opacity-75 mt-1">Σ Nat × 25 + Σ Int × 50</div>
         </button>
 
         <button id="formule2Card" onclick="openDetails('f2')" class="text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer">
@@ -410,7 +500,7 @@
             </svg>
           </div>
           <div id="formule2Total" class="text-2xl font-bold">0 DA</div>
-          <div id="formule2Subtext" class="text-[11px] opacity-75 mt-1">LR Nat × 175 + LR Int × 350</div>
+          <div id="formule2Subtext" class="text-[11px] opacity-75 mt-1">Σ LR Nat × 175 + Σ LR Int × 350</div>
         </button>
       </div>
 
@@ -553,6 +643,8 @@
         </div>
       </div>
 
+      <div id="detailRecap" class="rounded-2xl p-4 mb-5 border border-gray-200 bg-white/60 text-sm"></div>
+
       <div id="detailFormula" class="text-xs font-medium text-gray-500 mb-4 pb-3 border-b border-gray-200"></div>
 
       <div id="detailList" class="space-y-2"></div>
@@ -571,6 +663,26 @@
     </div>
   </div>
 
+  <!-- MODALE SÉLECTEUR D'ANNÉE -->
+  <div id="yearModal" class="fixed inset-0 bg-slate-900/30 backdrop-blur-xs flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300 z-50 overflow-y-auto">
+    <div id="yearModalContent" class="w-full max-w-md bg-white/95 backdrop-blur-lg border border-white rounded-3xl p-6 sm:p-8 transform scale-95 transition-transform duration-300 my-8">
+
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-lg font-semibold text-gray-800">Choisir une année</h3>
+        <button onclick="closeYearPicker()" class="text-gray-400 hover:text-gray-600 text-2xl font-bold p-1 cursor-pointer leading-none">&times;</button>
+      </div>
+
+      <div id="yearGrid" class="grid grid-cols-4 gap-3"></div>
+
+      <div class="flex justify-end mt-6">
+        <button type="button" onclick="closeYearPicker()" class="px-5 py-2.5 rounded-2xl text-gray-600 hover:bg-gray-200/50 transition cursor-pointer font-medium">
+          Annuler
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- BOUTON INSTALLER PWA -->
   <button id="installBtn" class="install-btn" aria-label="Installer l'application">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -579,7 +691,7 @@
     <span>Installer l'application</span>
   </button>
 
-  <!-- AIDE INSTALLATION (iOS / fallback) -->
+  <!-- AIDE INSTALLATION -->
   <div id="iosHint" class="ios-hint">
     <div class="ios-hint-card">
       <h3 id="hintTitle">📲 Installer l'application</h3>
@@ -602,18 +714,7 @@
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
-          .then(reg => {
-            console.log('✅ SW enregistré, scope :', reg.scope);
-            // Forcer la mise à jour dès qu'un nouveau SW est prêt
-            reg.addEventListener('updatefound', () => {
-              const newWorker = reg.installing;
-              if (newWorker) {
-                newWorker.addEventListener('statechange', () => {
-                  console.log('[SW] État :', newWorker.state);
-                });
-              }
-            });
-          })
+          .then(reg => console.log('✅ SW enregistré, scope :', reg.scope))
           .catch(err => console.error('❌ SW erreur :', err));
       });
     }
@@ -624,33 +725,17 @@
     let deferredInstallPrompt = null;
     let installBtn, iosHint;
 
-    // Détection environnement
     const ua = navigator.userAgent || '';
     const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    const isAndroid = /Android/i.test(ua);
-    const isSamsung = /SamsungBrowser/i.test(ua);
     const isFirefox = /Firefox|FxiOS/i.test(ua);
-    const isSafari = /^((?!chrome|android|crios|fxios).)*safari/i.test(ua);
-    const isEdge = /Edg\//i.test(ua);
-    const isChrome = /Chrome|CriOS/i.test(ua) && !isEdge && !isSamsung;
 
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches
                        || window.matchMedia('(display-mode: fullscreen)').matches
                        || window.matchMedia('(display-mode: minimal-ui)').matches
                        || window.navigator.standalone === true;
 
-    console.log('[PWA] Environnement :', {
-      isIOS, isAndroid, isSamsung, isFirefox, isSafari, isEdge, isChrome,
-      isStandalone,
-      protocol: location.protocol
-    });
-
-    function showInstallButton() {
-      if (installBtn) installBtn.classList.add('show');
-    }
-    function hideInstallButton() {
-      if (installBtn) installBtn.classList.remove('show');
-    }
+    function showInstallButton() { if (installBtn) installBtn.classList.add('show'); }
+    function hideInstallButton() { if (installBtn) installBtn.classList.remove('show'); }
 
     function showHintForBrowser() {
       const title = document.getElementById('hintTitle');
@@ -671,12 +756,6 @@
           <li>Sur Android : menu <strong>⋮ → Installer</strong></li>
           <li>Ou utilisez Chrome / Edge pour installer</li>
         `;
-      } else if (isSafari && !isIOS) {
-        title.textContent = "📲 Installer sur Safari (macOS)";
-        steps.innerHTML = `
-          <li>Menu <strong>Fichier → Ajouter au Dock</strong></li>
-          <li>Ou <strong>Partager → Ajouter au Dock</strong></li>
-        `;
       } else {
         title.textContent = "📲 Installer l'application";
         steps.innerHTML = `
@@ -689,27 +768,21 @@
       iosHint.classList.add('show');
     }
 
-    // Init après le DOM
     document.addEventListener('DOMContentLoaded', () => {
       installBtn = document.getElementById('installBtn');
       iosHint = document.getElementById('iosHint');
 
-      // Cas 1 : navigateur compatible prompt natif
       window.addEventListener('beforeinstallprompt', (e) => {
-        console.log('[PWA] beforeinstallprompt reçu ✅');
         e.preventDefault();
         deferredInstallPrompt = e;
         if (!isStandalone) showInstallButton();
       });
 
-      // Cas 2 : iOS ou Firefox → on affiche le bouton manuellement
       if ((isIOS || isFirefox) && !isStandalone) {
         setTimeout(showInstallButton, 800);
       }
 
-      // Clic sur le bouton
       installBtn.addEventListener('click', async () => {
-        console.log('[PWA] Clic bouton install');
         if (deferredInstallPrompt) {
           deferredInstallPrompt.prompt();
           const { outcome } = await deferredInstallPrompt.userChoice;
@@ -717,19 +790,15 @@
           deferredInstallPrompt = null;
           hideInstallButton();
         } else {
-          // Pas de prompt natif → afficher les instructions
           showHintForBrowser();
         }
       });
 
-      // App installée
       window.addEventListener('appinstalled', () => {
-        console.log('[PWA] Application installée ✅');
         deferredInstallPrompt = null;
         hideInstallButton();
       });
 
-      // Fermer l'aide au clic en dehors
       iosHint.addEventListener('click', (e) => {
         if (e.target === iosHint) iosHint.classList.remove('show');
       });
@@ -738,7 +807,8 @@
     // ============================================================
     // 3) LOGIQUE APP
     // ============================================================
-    const currentYear = new Date().getFullYear();
+    let currentYear = new Date().getFullYear();   // Année sélectionnée (modifiable)
+    const TODAY_YEAR = new Date().getFullYear();  // Année réelle actuelle
     let currentMonthIndex = null;
     let currentDay = null;
     let currentView = 'viewHome';
@@ -814,7 +884,7 @@
       } else {
         backBtn.classList.remove('hidden');
         yearBadge.classList.remove('hidden');
-        yearBadge.textContent = currentYear;
+        document.getElementById('yearBadgeLabel').textContent = currentYear;
       }
     }
 
@@ -833,6 +903,31 @@
       showView('viewMonths');
     }
 
+    /**
+     * Vérifie si un mois donné contient au moins une saisie dans la section active.
+     */
+    function monthHasData(monthIndex) {
+      const db = getCurrentDB();
+      for (let day = 1; day <= 31; day++) {
+        const key = `${currentYear}-${monthIndex}-${day}`;
+        if (db[key] !== undefined) return true;
+      }
+      return false;
+    }
+
+    /**
+     * Compte le nombre de jours saisis dans un mois.
+     */
+    function countDaysInMonth(monthIndex) {
+      const db = getCurrentDB();
+      let count = 0;
+      for (let day = 1; day <= 31; day++) {
+        const key = `${currentYear}-${monthIndex}-${day}`;
+        if (db[key] !== undefined) count++;
+      }
+      return count;
+    }
+
     function renderMonths() {
       const cfg = SECTION_CONFIG[currentSection];
       document.getElementById('monthsTitle').textContent = `${cfg.label} - Sélectionnez un mois`;
@@ -840,11 +935,15 @@
       const grid = document.getElementById('monthsGrid');
       grid.innerHTML = '';
       months.forEach((month, index) => {
+        const hasData = monthHasData(index);
+        const count = countDaysInMonth(index);
+
         const btn = document.createElement('button');
-        btn.className = "bg-white/70 hover:bg-blue-600 hover:text-white text-gray-700 font-medium py-4 px-4 rounded-2xl border border-white/80 transition-all duration-200 flex flex-col items-center justify-center gap-1 cursor-pointer shadow-xs group";
+        btn.className = `month-btn ${hasData ? 'has-data' : 'no-data'}`;
         btn.innerHTML = `
           <span class="text-base font-semibold">${month}</span>
-          <span class="text-xs text-gray-400 group-hover:text-blue-100">${currentYear}</span>
+          <span class="text-xs opacity-70">${currentYear}</span>
+          ${hasData ? `<span class="badge-count">${count} jour${count > 1 ? 's' : ''}</span>` : ''}
         `;
         btn.onclick = () => selectMonth(index);
         grid.appendChild(btn);
@@ -859,7 +958,7 @@
 
     function computeMonthTotals(monthIndex) {
       const db = getCurrentDB();
-      let f1 = 0, f2 = 0;
+      const sums = { nat: 0, inter: 0, lrNat: 0, lrInt: 0 };
       const details = [];
 
       const daysInMonth = new Date(currentYear, monthIndex + 1, 0).getDate();
@@ -873,16 +972,23 @@
         const lrNat = entry.lrNat || 0;
         const lrInt = entry.lrInt || 0;
 
-        const dayF1 = nat * RATES.nat + inter * RATES.inter;
-        const dayF2 = lrNat * RATES.lrNat + lrInt * RATES.lrInt;
+        sums.nat   += nat;
+        sums.inter += inter;
+        sums.lrNat += lrNat;
+        sums.lrInt += lrInt;
 
-        f1 += dayF1;
-        f2 += dayF2;
-
-        details.push({ day, nat, inter, lrNat, lrInt, dayF1, dayF2 });
+        details.push({ day, nat, inter, lrNat, lrInt });
       }
 
-      return { f1, f2, details };
+      const f1 = sums.nat * RATES.nat + sums.inter * RATES.inter;
+      const f2 = sums.lrNat * RATES.lrNat + sums.lrInt * RATES.lrInt;
+
+      details.forEach(d => {
+        d.dayF1 = d.nat * RATES.nat + d.inter * RATES.inter;
+        d.dayF2 = d.lrNat * RATES.lrNat + d.lrInt * RATES.lrInt;
+      });
+
+      return { f1, f2, sums, details };
     }
 
     function formatDA(n) { return n.toLocaleString('fr-FR') + ' DA'; }
@@ -892,8 +998,10 @@
       document.getElementById('formule1Total').textContent = formatDA(f1);
       document.getElementById('formule2Total').textContent = formatDA(f2);
 
-      document.getElementById('formule1Subtext').textContent = `Nat × ${RATES.nat} + Int × ${RATES.inter}`;
-      document.getElementById('formule2Subtext').textContent = `LR Nat × ${RATES.lrNat} + LR Int × ${RATES.lrInt}`;
+      document.getElementById('formule1Subtext').textContent =
+        `Σ Nat × ${RATES.nat} + Σ Int × ${RATES.inter}`;
+      document.getElementById('formule2Subtext').textContent =
+        `Σ LR Nat × ${RATES.lrNat} + Σ LR Int × ${RATES.lrInt}`;
 
       const cfg = SECTION_CONFIG[currentSection];
       const card1 = document.getElementById('formule1Card');
@@ -1064,13 +1172,64 @@
 
     function renderDetailModal() {
       const cfg = SECTION_CONFIG[currentSection];
-      const { f1, f2, details } = computeMonthTotals(currentMonthIndex);
+      const { f1, f2, sums, details } = computeMonthTotals(currentMonthIndex);
       const isF1 = currentDetailType === 'f1';
 
-      document.getElementById('detailTitle').textContent = `${cfg.label} - ${isF1 ? 'Formule 1' : 'Formule 2'}`;
+      document.getElementById('detailTitle').textContent =
+        `${cfg.label} - ${isF1 ? 'Formule 1' : 'Formule 2'}`;
+
       document.getElementById('detailFormula').textContent = isF1
-        ? `Nat × ${RATES.nat} DA + Int × ${RATES.inter} DA`
-        : `LR Nat × ${RATES.lrNat} DA + LR Int × ${RATES.lrInt} DA`;
+        ? `Formule 1 = (Σ Nat) × ${RATES.nat} DA + (Σ Int) × ${RATES.inter} DA`
+        : `Formule 2 = (Σ LR Nat) × ${RATES.lrNat} DA + (Σ LR Int) × ${RATES.lrInt} DA`;
+
+      const recap = document.getElementById('detailRecap');
+      if (isF1) {
+        const totalNat = sums.nat * RATES.nat;
+        const totalInt = sums.inter * RATES.inter;
+        recap.innerHTML = `
+          <div class="font-semibold text-blue-800 mb-2">Détail du calcul</div>
+          <div class="flex justify-between py-1">
+            <span class="text-gray-600">Σ Lettres Nat</span>
+            <span class="font-mono font-semibold">${sums.nat.toLocaleString('fr-FR')}</span>
+          </div>
+          <div class="flex justify-between py-1">
+            <span class="text-gray-600">Σ Lettres Int</span>
+            <span class="font-mono font-semibold">${sums.inter.toLocaleString('fr-FR')}</span>
+          </div>
+          <div class="border-t border-gray-300 my-2"></div>
+          <div class="flex justify-between py-1">
+            <span class="text-gray-600">Σ Nat × ${RATES.nat}</span>
+            <span class="font-mono">${totalNat.toLocaleString('fr-FR')} DA</span>
+          </div>
+          <div class="flex justify-between py-1">
+            <span class="text-gray-600">Σ Int × ${RATES.inter}</span>
+            <span class="font-mono">${totalInt.toLocaleString('fr-FR')} DA</span>
+          </div>
+        `;
+      } else {
+        const totalLrNat = sums.lrNat * RATES.lrNat;
+        const totalLrInt = sums.lrInt * RATES.lrInt;
+        recap.innerHTML = `
+          <div class="font-semibold text-amber-800 mb-2">Détail du calcul</div>
+          <div class="flex justify-between py-1">
+            <span class="text-gray-600">Σ LR Nat</span>
+            <span class="font-mono font-semibold">${sums.lrNat.toLocaleString('fr-FR')}</span>
+          </div>
+          <div class="flex justify-between py-1">
+            <span class="text-gray-600">Σ LR Int</span>
+            <span class="font-mono font-semibold">${sums.lrInt.toLocaleString('fr-FR')}</span>
+          </div>
+          <div class="border-t border-gray-300 my-2"></div>
+          <div class="flex justify-between py-1">
+            <span class="text-gray-600">Σ LR Nat × ${RATES.lrNat}</span>
+            <span class="font-mono">${totalLrNat.toLocaleString('fr-FR')} DA</span>
+          </div>
+          <div class="flex justify-between py-1">
+            <span class="text-gray-600">Σ LR Int × ${RATES.lrInt}</span>
+            <span class="font-mono">${totalLrInt.toLocaleString('fr-FR')} DA</span>
+          </div>
+        `;
+      }
 
       const list = document.getElementById('detailList');
       list.innerHTML = '';
@@ -1078,18 +1237,23 @@
       if (details.length === 0) {
         list.innerHTML = `<p class="text-sm text-gray-400 italic text-center py-4">Aucune saisie ce mois-ci</p>`;
       } else {
+        const listTitle = document.createElement('div');
+        listTitle.className = 'text-xs font-bold uppercase tracking-wider text-gray-500 mb-2 mt-2';
+        listTitle.textContent = 'Contribution jour par jour';
+        list.appendChild(listTitle);
+
         details.forEach(d => {
           const dayTotal = isF1 ? d.dayF1 : d.dayF2;
           const detailLine = isF1
-            ? `Nat: ${d.nat} × ${RATES.nat} + Int: ${d.inter} × ${RATES.inter}`
-            : `LR Nat: ${d.lrNat} × ${RATES.lrNat} + LR Int: ${d.lrInt} × ${RATES.lrInt}`;
+            ? `${d.nat} × ${RATES.nat} + ${d.inter} × ${RATES.inter}`
+            : `${d.lrNat} × ${RATES.lrNat} + ${d.lrInt} × ${RATES.lrInt}`;
 
           const row = document.createElement('div');
           row.className = "flex justify-between items-center py-2 px-3 rounded-xl bg-white/60 border border-gray-200";
           row.innerHTML = `
             <div class="flex flex-col">
               <span class="text-sm font-semibold text-gray-700">${d.day} ${months[currentMonthIndex]}</span>
-              <span class="text-[11px] text-gray-500">${detailLine}</span>
+              <span class="text-[11px] text-gray-500 font-mono">${detailLine}</span>
             </div>
             <span class="text-sm font-bold ${isF1 ? 'text-blue-700' : 'text-amber-700'}">${formatDA(dayTotal)}</span>
           `;
@@ -1110,11 +1274,79 @@
       setTimeout(() => modal.classList.add('hidden'), 300);
     }
 
+    // ============================================================
+    // 4) SÉLECTEUR D'ANNÉE
+    // ============================================================
+    function openYearPicker() {
+      const grid = document.getElementById('yearGrid');
+      grid.innerHTML = '';
+
+      const startYear = 2020;
+      const endYear = 2030;
+
+      for (let y = startYear; y <= endYear; y++) {
+        const isCurrent = (y === currentYear);
+        const isToday = (y === TODAY_YEAR);
+
+        const btn = document.createElement('button');
+        btn.className = `py-3 px-2 rounded-2xl border font-semibold text-sm transition-all duration-200 cursor-pointer ${
+          isCurrent
+            ? 'bg-amber-400 border-amber-500 text-gray-900 shadow-sm'
+            : isToday
+              ? 'bg-blue-50/70 border-blue-200 text-blue-700 hover:bg-blue-50'
+              : 'bg-white/70 border-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white hover:border-blue-600'
+        }`;
+        btn.innerHTML = `
+          <span class="block">${y}</span>
+          ${isToday ? '<span class="block text-[10px] opacity-70 mt-1">Aujourd\'hui</span>' : ''}
+        `;
+        btn.onclick = () => selectYear(y);
+        grid.appendChild(btn);
+      }
+
+      const modal = document.getElementById('yearModal');
+      const content = document.getElementById('yearModalContent');
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        content.classList.remove('scale-95');
+        content.classList.add('scale-100');
+      }, 10);
+    }
+
+    function closeYearPicker() {
+      const modal = document.getElementById('yearModal');
+      const content = document.getElementById('yearModalContent');
+      modal.classList.add('opacity-0');
+      content.classList.remove('scale-100');
+      content.classList.add('scale-95');
+      setTimeout(() => modal.classList.add('hidden'), 300);
+    }
+
+    function selectYear(year) {
+      currentYear = year;
+      document.getElementById('yearBadgeLabel').textContent = currentYear;
+      closeYearPicker();
+
+      // Rafraîchir la vue courante
+      if (currentView === 'viewMonths') {
+        renderMonths();
+      } else if (currentView === 'viewDays') {
+        renderDays(currentMonthIndex);
+      }
+    }
+
+    // ============================================================
+    // 5) FERMETURE DES MODALES AU CLIC EXTÉRIEUR
+    // ============================================================
     document.getElementById('modal').addEventListener('click', (e) => {
       if (e.target === document.getElementById('modal')) closeModal();
     });
     document.getElementById('detailModal').addEventListener('click', (e) => {
       if (e.target === document.getElementById('detailModal')) closeDetailModal();
+    });
+    document.getElementById('yearModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('yearModal')) closeYearPicker();
     });
   </script>
 
