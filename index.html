@@ -10,7 +10,7 @@
   <meta name="description" content="Gestion du courrier - Bureau de poste DAHMOUNI 14010">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="DAHMOUNI 14010">
+  <meta name="apple-mobile-web-app-title" content="Poste LAD">
   <link rel="manifest" href="./manifest.json">
   <link rel="icon" type="image/png" href="./icon.png">
   <link rel="apple-touch-icon" href="./icon.png">
@@ -149,7 +149,6 @@
     .text-left { text-align: left; }
     .text-right { text-align: right; }
     .leading-none { line-height: 1; }
-    .leading-tight { line-height: 1.25; }
     .whitespace-nowrap { white-space: nowrap; }
 
     /* ===== COLORS - Text ===== */
@@ -563,9 +562,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
       </button>
-      <h1 id="appTitle" class="text-sm sm:text-base font-bold tracking-tight text-gray-700 leading-tight">
-        Bureau de poste<br class="sm:hidden"> DAHMOUNI 14010
-      </h1>
+      <h1 id="appTitle" class="text-base sm:text-xl font-bold tracking-tight text-gray-700 leading-tight">Bureau de poste<br class="sm:hidden"> DAHMOUNI 14010</h1>
     </div>
     <button id="yearBadge" class="year-badge hidden" onclick="openYearPicker()" aria-label="Changer d'année">
       <span id="yearBadgeLabel">2026</span>
@@ -604,28 +601,28 @@
     <div id="viewDays" class="hidden w-full max-w-3xl bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-6 sm:p-8">
       <h2 id="daysTitle" class="text-lg sm:text-xl font-semibold mb-4 text-center text-gray-700">Sélectionnez un jour</h2>
 
-      <!-- Cartes Ordinaires / Recommandées (uniquement pour Départs) -->
-      <div id="formulesRow" class="hidden grid grid-cols-2 gap-3 mb-6">
-        <button id="ordinairesCard" onclick="openDetails('ordinaires')" class="text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer">
+      <!-- Cartes Formule 1 & 2 (uniquement pour les Lettres de départ) -->
+      <div id="formulesContainer" class="grid grid-cols-2 gap-3 mb-6">
+        <button id="formule1Card" onclick="openDetails('f1')" class="text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer">
           <div class="flex justify-between items-start mb-1">
-            <span class="text-xs font-bold uppercase tracking-wider opacity-90">Ordinaires</span>
+            <span class="text-xs font-bold uppercase tracking-wider opacity-90">Formule 1</span>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
           </div>
-          <div id="ordinairesTotal" class="text-2xl font-bold">0 DA</div>
-          <div id="ordinairesSubtext" class="text-[11px] opacity-75 mt-1">Σ Nat × 25 + Σ Int × 50</div>
+          <div id="formule1Total" class="text-2xl font-bold">0 DA</div>
+          <div id="formule1Subtext" class="text-[11px] opacity-75 mt-1">Σ Nat × 25 + Σ Int × 50</div>
         </button>
 
-        <button id="recommandeesCard" onclick="openDetails('recommandees')" class="text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer">
+        <button id="formule2Card" onclick="openDetails('f2')" class="text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer">
           <div class="flex justify-between items-start mb-1">
-            <span class="text-xs font-bold uppercase tracking-wider opacity-90">Recommandées</span>
+            <span class="text-xs font-bold uppercase tracking-wider opacity-90">Formule 2</span>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
           </div>
-          <div id="recommandeesTotal" class="text-2xl font-bold">0 DA</div>
-          <div id="recommandeesSubtext" class="text-[11px] opacity-75 mt-1">Σ LR Nat × 175 + Σ LR Int × 350</div>
+          <div id="formule2Total" class="text-2xl font-bold">0 DA</div>
+          <div id="formule2Subtext" class="text-[11px] opacity-75 mt-1">Σ LR Nat × 175 + Σ LR Int × 350</div>
         </button>
       </div>
 
@@ -1012,7 +1009,7 @@
     let currentDay = null;
     let currentView = 'viewHome';
     let currentSection = 'arrivals';
-    let currentDetailType = 'ordinaires';
+    let currentDetailType = 'f1';
     let annualSection = 'arrivals';
 
     const BASE_FIELDS = [
@@ -1035,8 +1032,8 @@
         lastFieldLabel: 'CRT',
         lastColHeader: 'CRT',
         storageKey: 'poste_dahmouni_arrivals',
-        // Les formules ne s'affichent QUE pour les départs
-        showFormules: false,
+        cardClasses: 'bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white',
+        hasFormules: false,
       },
       departures: {
         label: "Lettres de départ",
@@ -1044,7 +1041,8 @@
         lastFieldLabel: 'EXP',
         lastColHeader: 'EXP',
         storageKey: 'poste_dahmouni_departures',
-        showFormules: true,
+        cardClasses: 'bg-gradient-to-br from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900',
+        hasFormules: true,
       },
     };
 
@@ -1203,32 +1201,32 @@
 
     function updateFormuleCards(monthIndex) {
       const cfg = SECTION_CONFIG[currentSection];
-      const formulesRow = document.getElementById('formulesRow');
+      const container = document.getElementById('formulesContainer');
 
-      // Afficher / cacher les cartes selon la section
-      if (cfg.showFormules) {
-        formulesRow.classList.remove('hidden');
-        formulesRow.classList.add('grid');
-      } else {
-        formulesRow.classList.add('hidden');
-        formulesRow.classList.remove('grid');
+      // Masquer complètement les formules si la section ne les supporte pas
+      if (!cfg.hasFormules) {
+        container.classList.add('hidden');
         return;
       }
+      container.classList.remove('hidden');
 
       const { f1, f2 } = computeMonthTotals(monthIndex);
-      document.getElementById('ordinairesTotal').textContent = formatDA(f1);
-      document.getElementById('recommandeesTotal').textContent = formatDA(f2);
+      document.getElementById('formule1Total').textContent = formatDA(f1);
+      document.getElementById('formule2Total').textContent = formatDA(f2);
 
-      document.getElementById('ordinairesSubtext').textContent =
+      document.getElementById('formule1Subtext').textContent =
         `Σ Nat × ${RATES.nat} + Σ Int × ${RATES.inter}`;
-      document.getElementById('recommandeesSubtext').textContent =
+      document.getElementById('formule2Subtext').textContent =
         `Σ LR Nat × ${RATES.lrNat} + Σ LR Int × ${RATES.lrInt}`;
 
-      const card1 = document.getElementById('ordinairesCard');
-      const card2 = document.getElementById('recommandeesCard');
+      const card1 = document.getElementById('formule1Card');
+      const card2 = document.getElementById('formule2Card');
 
-      card1.className = `text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer ${cfg.cardClasses || 'bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white'}`;
-      card2.className = `text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer bg-gradient-to-br from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900`;
+      card1.className = `text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer ${cfg.cardClasses}`;
+      const altClasses = currentSection === 'arrivals'
+        ? 'bg-gradient-to-br from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900'
+        : 'bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white';
+      card2.className = `text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer ${altClasses}`;
     }
 
     function renderDays(monthIndex) {
@@ -1412,8 +1410,8 @@
     }
 
     function openDetails(type) {
-      // Sécurité : si on est dans Arrivées, on ne doit pas pouvoir ouvrir les formules
-      if (!SECTION_CONFIG[currentSection].showFormules) return;
+      // Sécurité : les formules ne sont disponibles que pour les départs
+      if (!SECTION_CONFIG[currentSection].hasFormules) return;
 
       currentDetailType = type;
       renderDetailModal();
@@ -1430,13 +1428,13 @@
     }
 
     function fillRateInputs() {
-      const isOrdinaires = currentDetailType === 'ordinaires';
+      const isF1 = currentDetailType === 'f1';
       const input1 = document.getElementById('rate1Input');
       const input2 = document.getElementById('rate2Input');
       const label1 = document.getElementById('rate1Label');
       const label2 = document.getElementById('rate2Label');
 
-      if (isOrdinaires) {
+      if (isF1) {
         label1.textContent = 'Tarif Nat (DA)';
         label2.textContent = 'Tarif Int (DA)';
         input1.value = RATES.nat;
@@ -1458,7 +1456,7 @@
     }
 
     function saveRates() {
-      const isOrdinaires = currentDetailType === 'ordinaires';
+      const isF1 = currentDetailType === 'f1';
       const v1 = parseInt(document.getElementById('rate1Input').value, 10);
       const v2 = parseInt(document.getElementById('rate2Input').value, 10);
 
@@ -1467,18 +1465,19 @@
         return;
       }
 
-      if (isOrdinaires) { RATES.nat = v1; RATES.inter = v2; }
+      if (isF1) { RATES.nat = v1; RATES.inter = v2; }
       else { RATES.lrNat = v1; RATES.lrInt = v2; }
 
       localStorage.setItem(RATES_STORAGE_KEY, JSON.stringify(RATES));
       if (currentView === 'viewDays') renderDays(currentMonthIndex);
+      if (currentView === 'viewAnnual') renderAnnualReport();
       renderDetailModal();
       fillRateInputs();
     }
 
     function resetRates() {
-      const isOrdinaires = currentDetailType === 'ordinaires';
-      if (isOrdinaires) {
+      const isF1 = currentDetailType === 'f1';
+      if (isF1) {
         document.getElementById('rate1Input').value = DEFAULT_RATES.nat;
         document.getElementById('rate2Input').value = DEFAULT_RATES.inter;
       } else {
@@ -1490,17 +1489,17 @@
     function renderDetailModal() {
       const cfg = SECTION_CONFIG[currentSection];
       const { f1, f2, sums, details } = computeMonthTotals(currentMonthIndex);
-      const isOrdinaires = currentDetailType === 'ordinaires';
+      const isF1 = currentDetailType === 'f1';
 
       document.getElementById('detailTitle').textContent =
-        `${cfg.label} - ${isOrdinaires ? 'Ordinaires' : 'Recommandées'}`;
+        `${cfg.label} - ${isF1 ? 'Formule 1' : 'Formule 2'}`;
 
-      document.getElementById('detailFormula').textContent = isOrdinaires
-        ? `Ordinaires = (Σ Nat) × ${RATES.nat} DA + (Σ Int) × ${RATES.inter} DA`
-        : `Recommandées = (Σ LR Nat) × ${RATES.lrNat} DA + (Σ LR Int) × ${RATES.lrInt} DA`;
+      document.getElementById('detailFormula').textContent = isF1
+        ? `Formule 1 = (Σ Nat) × ${RATES.nat} DA + (Σ Int) × ${RATES.inter} DA`
+        : `Formule 2 = (Σ LR Nat) × ${RATES.lrNat} DA + (Σ LR Int) × ${RATES.lrInt} DA`;
 
       const recap = document.getElementById('detailRecap');
-      if (isOrdinaires) {
+      if (isF1) {
         const totalNat = sums.nat * RATES.nat;
         const totalInt = sums.inter * RATES.inter;
         recap.innerHTML = `
@@ -1560,8 +1559,8 @@
         list.appendChild(listTitle);
 
         details.forEach(d => {
-          const dayTotal = isOrdinaires ? d.dayF1 : d.dayF2;
-          const detailLine = isOrdinaires
+          const dayTotal = isF1 ? d.dayF1 : d.dayF2;
+          const detailLine = isF1
             ? `${d.nat} × ${RATES.nat} + ${d.inter} × ${RATES.inter}`
             : `${d.lrNat} × ${RATES.lrNat} + ${d.lrInt} × ${RATES.lrInt}`;
 
@@ -1572,14 +1571,14 @@
               <span class="text-sm font-semibold text-gray-700">${d.day} ${months[currentMonthIndex]}</span>
               <span class="text-[11px] text-gray-500 font-mono">${detailLine}</span>
             </div>
-            <span class="text-sm font-bold ${isOrdinaires ? 'text-blue-700' : 'text-amber-700'}">${formatDA(dayTotal)}</span>
+            <span class="text-sm font-bold ${isF1 ? 'text-blue-700' : 'text-amber-700'}">${formatDA(dayTotal)}</span>
           `;
           list.appendChild(row);
         });
       }
 
-      document.getElementById('detailTotal').textContent = formatDA(isOrdinaires ? f1 : f2);
-      document.getElementById('detailTotal').className = `text-xl font-bold ${isOrdinaires ? 'text-blue-700' : 'text-amber-700'}`;
+      document.getElementById('detailTotal').textContent = formatDA(isF1 ? f1 : f2);
+      document.getElementById('detailTotal').className = `text-xl font-bold ${isF1 ? 'text-blue-700' : 'text-amber-700'}`;
     }
 
     function closeDetailModal() {
@@ -1800,13 +1799,8 @@
       if (e.target === document.getElementById('detailModal')) closeDetailModal();
     });
     document.getElementById('yearModal').addEventListener('click', (e) => {
-      if (e.target === document.getElementById('yearModal')) closeYearModalSafe();
-    });
-    document.getElementById('yearModal').addEventListener('click', (e) => {
       if (e.target === document.getElementById('yearModal')) closeYearPicker();
     });
-
-    function closeYearModalSafe() { closeYearPicker(); }
   </script>
 
 </body>
