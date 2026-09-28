@@ -97,7 +97,6 @@
     .max-w-2xl { max-width: 42rem; }
     .max-w-3xl { max-width: 48rem; }
     .max-w-4xl { max-width: 56rem; }
-    .min-h-\[150px\] { min-height: 150px; }
     .max-h-\[90vh\] { max-height: 90vh; }
 
     /* ===== SPACING ===== */
@@ -153,8 +152,6 @@
     .text-center { text-align: center; }
     .text-left { text-align: left; }
     .leading-none { line-height: 1; }
-    .line-through { text-decoration: line-through; }
-    .underline { text-decoration: underline; }
 
     /* ===== COLORS - Text ===== */
     .text-white { color: #ffffff; }
@@ -176,6 +173,7 @@
     .bg-white\/80 { background-color: rgba(255, 255, 255, 0.8); }
     .bg-white\/90 { background-color: rgba(255, 255, 255, 0.9); }
     .bg-white\/95 { background-color: rgba(255, 255, 255, 0.95); }
+    .bg-white\/98 { background-color: rgba(255, 255, 255, 0.98); }
     .bg-gray-200\/50 { background-color: rgba(229, 231, 235, 0.5); }
     .bg-gray-200\/60 { background-color: rgba(229, 231, 235, 0.6); }
     .bg-blue-50\/50 { background-color: rgba(239, 246, 255, 0.5); }
@@ -190,6 +188,7 @@
     .bg-amber-500 { background-color: #f59e0b; }
     .bg-slate-50\/60 { background-color: rgba(248, 250, 252, 0.6); }
     .bg-slate-900\/30 { background-color: rgba(15, 23, 42, 0.3); }
+    .bg-slate-900\/40 { background-color: rgba(15, 23, 42, 0.4); }
 
     /* Gradients */
     .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); }
@@ -210,12 +209,10 @@
     .border-2 { border: 2px solid; }
     .border-t-2 { border-top: 2px solid; }
     .border-b { border-bottom: 1px solid; }
-    .border-dashed { border-style: dashed; }
     .border-white { border-color: #ffffff; }
     .border-white\/80 { border-color: rgba(255, 255, 255, 0.8); }
     .border-gray-200 { border-color: #e5e7eb; }
     .border-gray-300\/80 { border-color: rgba(209, 213, 219, 0.8); }
-    .border-gray-300\/60 { border-color: rgba(209, 213, 219, 0.6); }
     .border-blue-100 { border-color: #dbeafe; }
     .border-blue-200 { border-color: #bfdbfe; }
     .border-amber-100 { border-color: #fef3c7; }
@@ -243,13 +240,14 @@
     .transition { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
     .duration-200 { transition-duration: 200ms; }
     .duration-300 { transition-duration: 300ms; }
+    .duration-350 { transition-duration: 350ms; }
 
     /* ===== TRANSFORMS ===== */
     .scale-95 { transform: scale(0.95); }
     .scale-100 { transform: scale(1); }
     .transform { transform: translate(var(--tw-translate-x, 0), var(--tw-translate-y, 0)) rotate(var(--tw-rotate, 0)) scale(var(--tw-scale-x, 1), var(--tw-scale-y, 1)); }
 
-    /* ===== INTERACTIONS (HOVER / ACTIVE / FOCUS) ===== */
+    /* ===== INTERACTIONS ===== */
     .hover\:bg-white:hover { background-color: #ffffff; }
     .hover\:bg-gray-200\/50:hover { background-color: rgba(229, 231, 235, 0.5); }
     .hover\:bg-gray-200\/60:hover { background-color: rgba(229, 231, 235, 0.6); }
@@ -279,6 +277,8 @@
     .bottom-0 { bottom: 0; }
     .z-10 { z-index: 10; }
     .z-50 { z-index: 50; }
+    .z-60 { z-index: 60; }
+    .z-70 { z-index: 70; }
 
     /* ===== OVERFLOW / DISPLAY ===== */
     .hidden { display: none; }
@@ -288,6 +288,75 @@
     .opacity-90 { opacity: 0.9; }
     .overflow-y-auto { overflow-y: auto; }
     .aspect-square { aspect-ratio: 1 / 1; }
+
+    /* ===== BOUTON INSTALLER PWA (flottant) ===== */
+    .install-btn {
+      position: fixed;
+      left: 50%;
+      bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+      transform: translateX(-50%) translateY(150%);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 60;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: 9999px;
+      background: linear-gradient(to bottom right, #2563eb, #1d4ed8);
+      color: #ffffff;
+      font-size: 0.875rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .install-btn.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .install-btn:active { transform: translateX(-50%) translateY(0) scale(0.95); }
+    .install-btn svg { width: 1rem; height: 1rem; }
+
+    /* Aide iOS (modal) */
+    .ios-hint {
+      position: fixed;
+      inset: 0;
+      z-index: 70;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .ios-hint.show { display: flex; }
+    .ios-hint-card {
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      max-width: 22rem;
+      width: 100%;
+      text-align: left;
+    }
+    .ios-hint-card h3 { font-size: 1.125rem; margin-bottom: 0.75rem; color: #1f2937; }
+    .ios-hint-card ol { padding-left: 1.25rem; margin: 0.5rem 0 1rem; color: #4b5563; font-size: 0.875rem; line-height: 1.6; }
+    .ios-hint-card li { margin-bottom: 0.25rem; }
+    .ios-hint-card .ios-close {
+      display: block;
+      margin-left: auto;
+      padding: 0.5rem 1rem;
+      border-radius: 0.75rem;
+      background: #2563eb;
+      color: #ffffff;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
 
     /* ===== BREAKPOINTS ===== */
     @media (min-width: 640px) {
@@ -529,6 +598,30 @@
     </div>
   </div>
 
+  <!-- BOUTON INSTALLER PWA -->
+  <button id="installBtn" class="install-btn" aria-label="Installer l'application">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 4v12m0 0l-4-4m4 4l4-4" />
+    </svg>
+    <span>Installer l'application</span>
+  </button>
+
+  <!-- AIDE iOS -->
+  <div id="iosHint" class="ios-hint">
+    <div class="ios-hint-card">
+      <h3>📲 Installer sur iPhone / iPad</h3>
+      <ol>
+        <li>Ouvrez cette page dans <strong>Safari</strong></li>
+        <li>Appuyez sur le bouton <strong>Partager</strong> (icône ⎙ en bas)</li>
+        <li>Faites défiler et choisissez <strong>« Sur l'écran d'accueil »</strong></li>
+        <li>Appuyez sur <strong>Ajouter</strong></li>
+      </ol>
+      <button class="ios-close" onclick="document.getElementById('iosHint').classList.remove('show')">
+        J'ai compris
+      </button>
+    </div>
+  </div>
+
   <script>
     // ===== Service Worker =====
     if ('serviceWorker' in navigator) {
@@ -539,6 +632,48 @@
       });
     }
 
+    // ===== BOUTON INSTALLER PWA =====
+    let deferredInstallPrompt = null;
+    const installBtn = document.getElementById('installBtn');
+    const iosHint = document.getElementById('iosHint');
+
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+                       || window.navigator.standalone === true;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      installBtn.classList.add('show');
+    });
+
+    if (isIOS && !isStandalone) {
+      installBtn.classList.add('show');
+    }
+
+    installBtn.addEventListener('click', async () => {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        const { outcome } = await deferredInstallPrompt.userChoice;
+        console.log('[PWA] Choix utilisateur :', outcome);
+        deferredInstallPrompt = null;
+        installBtn.classList.remove('show');
+      } else if (isIOS) {
+        iosHint.classList.add('show');
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      console.log('[PWA] Application installée ✅');
+      deferredInstallPrompt = null;
+      installBtn.classList.remove('show');
+    });
+
+    iosHint.addEventListener('click', (e) => {
+      if (e.target === iosHint) iosHint.classList.remove('show');
+    });
+
+    // ===== APP LOGIC =====
     const currentYear = new Date().getFullYear();
     let currentMonthIndex = null;
     let currentDay = null;
