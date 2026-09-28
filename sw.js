@@ -1,8 +1,7 @@
 /* ============================================================
    Service Worker - Poste Dahmouni
-   Stratégie :
-   - HTML → Network First (pour récupérer les mises à jour)
-   - Autres assets → Cache First (rapide + offline)
+   - HTML → Network First
+   - Assets → Cache First
    ============================================================ */
 
 const CACHE_VERSION = 'poste-dahmouni-v1';
@@ -15,36 +14,32 @@ const PRECACHE_ASSETS = [
   './icon.png'
 ];
 
-// ===== INSTALLATION =====
+// ===== INSTALL =====
 self.addEventListener('install', (event) => {
   console.log('[SW] Installation...');
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => {
-        return Promise.all(
-          PRECACHE_ASSETS.map(url =>
-            cache.add(url).catch(err => console.warn(`[SW] Échec cache ${url}:`, err))
-          )
-        );
-      })
+      .then((cache) => Promise.all(
+        PRECACHE_ASSETS.map(url =>
+          cache.add(url).catch(err => console.warn(`[SW] Échec cache ${url}:`, err))
+        )
+      ))
       .then(() => self.skipWaiting())
   );
 });
 
-// ===== ACTIVATION =====
+// ===== ACTIVATE =====
 self.addEventListener('activate', (event) => {
   console.log('[SW] Activation...');
   event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            console.log('[SW] Suppression ancien cache :', key);
-            return caches.delete(key);
-          }
-        })
-      );
-    }).then(() => self.clients.claim())
+    caches.keys().then((keys) => Promise.all(
+      keys.map((key) => {
+        if (key !== CACHE_NAME) {
+          console.log('[SW] Suppression ancien cache :', key);
+          return caches.delete(key);
+        }
+      })
+    )).then(() => self.clients.claim())
   );
 });
 
@@ -52,9 +47,12 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
 
+  // Ignore les méthodes non-GET
   if (request.method !== 'GET') return;
 
-  const url = new URL(request.url);
+  // Ignore les requêtes cross-origin
+  let url;
+  try { url = new URL(request.url); } catch { return; }
   if (url.origin !== self.location.origin) return;
 
   const isHTML = request.headers.get('accept')?.includes('text/html') ||
@@ -62,7 +60,7 @@ self.addEventListener('fetch', (event) => {
                  url.pathname.endsWith('/');
 
   if (isHTML) {
-    // Network First (mises à jour)
+    // NETWORK FIRST
     event.respondWith(
       fetch(request)
         .then((response) => {
@@ -73,7 +71,7 @@ self.addEventListener('fetch', (event) => {
         .catch(() => caches.match(request).then(cached => cached || caches.match('./index.html')))
     );
   } else {
-    // Cache First
+    // CACHE FIRST
     event.respondWith(
       caches.match(request).then((cached) => {
         if (cached) return cached;
@@ -84,9 +82,8 @@ self.addEventListener('fetch', (event) => {
           }
           return response;
         }).catch(() => {
-          if (request.destination === 'image') {
-            return caches.match('./icon.png');
-          }
+          if (request.destination === 'image') return caches.match('./icon.png');
+          return new Response('', { status: 408, statusText: 'Offline' });
         });
       })
     );
@@ -95,7 +92,5 @@ self.addEventListener('fetch', (event) => {
 
 // ===== MESSAGE =====
 self.addEventListener('message', (event) => {
-  if (event.data === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
+  if (event.data === 'SKIP_WAITING') self.skipWaiting();
 });
