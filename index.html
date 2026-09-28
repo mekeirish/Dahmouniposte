@@ -304,6 +304,22 @@
     .overflow-y-auto { overflow-y: auto; }
     .aspect-square { aspect-ratio: 1 / 1; }
 
+    /* ===== TITRE APP (peut être long sur mobile) ===== */
+    .app-title {
+      font-size: 0.875rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #374151;
+      line-height: 1.15;
+      max-width: 60vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    @media (min-width: 640px) {
+      .app-title { font-size: 1.125rem; max-width: none; }
+    }
+
     /* ===== ANNEE BADGE ===== */
     .year-badge {
       display: inline-flex;
@@ -318,6 +334,7 @@
       cursor: pointer;
       transition: background-color 0.15s;
       border: none;
+      flex-shrink: 0;
     }
     .year-badge:hover { background-color: #fbbf24; }
     .year-badge svg { width: 0.75rem; height: 0.75rem; opacity: 0.7; }
@@ -555,14 +572,14 @@
 </head>
 <body>
 
-  <header class="w-full p-4 sm:p-6 flex justify-between items-center max-w-4xl mx-auto">
-    <div class="flex items-center gap-3">
-      <button id="backBtn" onclick="goBack()" class="hidden bg-white/70 hover:bg-white text-gray-700 p-2.5 rounded-2xl border border-white/80 transition-all cursor-pointer">
+  <header class="w-full p-3 sm:p-6 flex justify-between items-center gap-2 max-w-4xl mx-auto">
+    <div class="flex items-center gap-2 min-w-0 flex-1">
+      <button id="backBtn" onclick="goBack()" class="hidden bg-white/70 hover:bg-white text-gray-700 p-2.5 rounded-2xl border border-white/80 transition-all cursor-pointer flex-shrink-0">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
       </button>
-      <h1 id="appTitle" class="text-base sm:text-xl font-bold tracking-tight text-gray-700 leading-tight">Bureau de poste<br class="sm:hidden"> DAHMOUNI 14010</h1>
+      <h1 id="appTitle" class="app-title">Bureau de poste DAHMOUNI 14010</h1>
     </div>
     <button id="yearBadge" class="year-badge hidden" onclick="openYearPicker()" aria-label="Changer d'année">
       <span id="yearBadgeLabel">2026</span>
@@ -601,8 +618,8 @@
     <div id="viewDays" class="hidden w-full max-w-3xl bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-6 sm:p-8">
       <h2 id="daysTitle" class="text-lg sm:text-xl font-semibold mb-4 text-center text-gray-700">Sélectionnez un jour</h2>
 
-      <!-- Cartes Formule 1 & 2 (uniquement pour les Lettres de départ) -->
-      <div id="formulesContainer" class="grid grid-cols-2 gap-3 mb-6">
+      <!-- Cartes Formule 1 & 2 — UNIQUEMENT POUR LES LETTRES DE DÉPART -->
+      <div id="formulesWrapper" class="hidden grid grid-cols-2 gap-3 mb-6">
         <button id="formule1Card" onclick="openDetails('f1')" class="text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer">
           <div class="flex justify-between items-start mb-1">
             <span class="text-xs font-bold uppercase tracking-wider opacity-90">Formule 1</span>
@@ -699,6 +716,20 @@
             <tbody id="annualTableBody"></tbody>
             <tfoot id="annualTableFooter"></tfoot>
           </table>
+        </div>
+      </div>
+
+      <!-- Totaux en DA — UNIQUEMENT POUR LES LETTRES DE DÉPART -->
+      <div id="annualFormulesWrapper" class="hidden mt-5 grid grid-cols-2 gap-3">
+        <div class="rounded-2xl p-4 border bg-blue-50/60 border-blue-200">
+          <div class="text-xs font-bold uppercase tracking-wider text-blue-700 mb-1">Formule 1 annuelle</div>
+          <div id="annualF1" class="text-lg font-bold text-blue-800">0 DA</div>
+          <div class="text-[11px] text-gray-500 mt-1">Σ Nat × Tarif + Σ Int × Tarif</div>
+        </div>
+        <div class="rounded-2xl p-4 border bg-amber-50/60 border-amber-200">
+          <div class="text-xs font-bold uppercase tracking-wider text-amber-700 mb-1">Formule 2 annuelle</div>
+          <div id="annualF2" class="text-lg font-bold text-amber-800">0 DA</div>
+          <div class="text-[11px] text-gray-500 mt-1">Σ LRN × Tarif + Σ LRI × Tarif</div>
         </div>
       </div>
     </div>
@@ -1033,7 +1064,7 @@
         lastColHeader: 'CRT',
         storageKey: 'poste_dahmouni_arrivals',
         cardClasses: 'bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white',
-        hasFormules: false,
+        showFormules: false,
       },
       departures: {
         label: "Lettres de départ",
@@ -1042,7 +1073,7 @@
         lastColHeader: 'EXP',
         storageKey: 'poste_dahmouni_departures',
         cardClasses: 'bg-gradient-to-br from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900',
-        hasFormules: true,
+        showFormules: true,
       },
     };
 
@@ -1201,14 +1232,14 @@
 
     function updateFormuleCards(monthIndex) {
       const cfg = SECTION_CONFIG[currentSection];
-      const container = document.getElementById('formulesContainer');
 
-      // Masquer complètement les formules si la section ne les supporte pas
-      if (!cfg.hasFormules) {
-        container.classList.add('hidden');
+      // Masquer la zone formules pour les Lettres d'arrivées
+      const wrapper = document.getElementById('formulesWrapper');
+      if (!cfg.showFormules) {
+        wrapper.classList.add('hidden');
         return;
       }
-      container.classList.remove('hidden');
+      wrapper.classList.remove('hidden');
 
       const { f1, f2 } = computeMonthTotals(monthIndex);
       document.getElementById('formule1Total').textContent = formatDA(f1);
@@ -1223,9 +1254,7 @@
       const card2 = document.getElementById('formule2Card');
 
       card1.className = `text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer ${cfg.cardClasses}`;
-      const altClasses = currentSection === 'arrivals'
-        ? 'bg-gradient-to-br from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900'
-        : 'bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white';
+      const altClasses = 'bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white';
       card2.className = `text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer ${altClasses}`;
     }
 
@@ -1410,9 +1439,6 @@
     }
 
     function openDetails(type) {
-      // Sécurité : les formules ne sont disponibles que pour les départs
-      if (!SECTION_CONFIG[currentSection].hasFormules) return;
-
       currentDetailType = type;
       renderDetailModal();
       fillRateInputs();
@@ -1668,7 +1694,10 @@
         monthRows.push(row);
       }
 
-      return { monthRows, totals, lastKey };
+      const f1 = totals.nat * RATES.nat + totals.inter * RATES.inter;
+      const f2 = totals.lrNat * RATES.lrNat + totals.lrInt * RATES.lrInt;
+
+      return { monthRows, totals, f1, f2, lastKey };
     }
 
     function renderAnnualReport() {
@@ -1678,7 +1707,7 @@
       document.getElementById('annualYearLabel').textContent = currentYear;
       document.getElementById('annualLastColHeader').textContent = cfg.lastColHeader;
 
-      const { monthRows, totals } = computeAnnualTotals(annualSection);
+      const { monthRows, totals, f1, f2 } = computeAnnualTotals(annualSection);
 
       const tbody = document.getElementById('annualTableBody');
       const tfoot = document.getElementById('annualTableFooter');
@@ -1724,6 +1753,16 @@
         <td>${totals[lastKey]}</td>
       `;
       tfoot.appendChild(trTotal);
+
+      // Formules annuelles : UNIQUEMENT pour les départs
+      const formulesWrapper = document.getElementById('annualFormulesWrapper');
+      if (cfg.showFormules) {
+        formulesWrapper.classList.remove('hidden');
+        document.getElementById('annualF1').textContent = formatDA(f1);
+        document.getElementById('annualF2').textContent = formatDA(f2);
+      } else {
+        formulesWrapper.classList.add('hidden');
+      }
     }
 
     // ============================================================
