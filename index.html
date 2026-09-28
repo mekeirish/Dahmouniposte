@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Poste Dahmouni</title>
+
+  <!-- PWA -->
+  <meta name="theme-color" content="#1e40af">
+  <meta name="description" content="Gestion du courrier - Poste Dahmouni">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Poste Dahmouni">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="apple-touch-icon" href="icon.png">
+
+  <!-- Tailwind en local (remplace le CDN pour fonctionner hors ligne) -->
+  <script src="tailwind.min.js"></script>
+
+  <style>
+    html, body { -webkit-tap-highlight-color: transparent; }
+    /* Petit helper pour le splash iOS */
+    @supports (padding: env(safe-area-inset-top)) {
+      body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+    }
+  </style>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4b6cb7">
+<link rel="apple-touch-icon" href="icon.png"></head>
+<body class="bg-gradient-to-br from-slate-100 via-gray-200 to-slate-200 text-gray-800 min-h-screen flex flex-col justify-between font-sans antialiased selection:bg-blue-500 selection:text-white">
+
+  <header class="w-full p-4 sm:p-6 flex justify-between items-center max-w-4xl mx-auto">
+    <div class="flex items-center gap-3">
+      <button id="backBtn" onclick="goBack()" class="hidden bg-white/70 hover:bg-white text-gray-700 p-2.5 rounded-2xl border border-white/80 transition-all cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <h1 id="appTitle" class="text-xl sm:text-2xl font-bold tracking-tight text-gray-700">Poste Dahmouni</h1>
+    </div>
+    <span id="yearBadge" class="hidden text-xs font-semibold bg-amber-400/80 text-gray-900 px-3 py-1 rounded-full">2026</span>
+  </header>
+
+  <main class="flex-grow flex items-start justify-center p-4 sm:p-6 w-full">
+
+    <div id="viewHome" class="w-full max-w-md bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-6 sm:p-8 text-center space-y-4 self-center">
+      <h2 class="text-lg sm:text-xl font-semibold mb-4 text-gray-700">Menu Principal</h2>
+
+      <button onclick="goToSection('arrivals')" class="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium py-3.5 px-6 rounded-2xl transition-all duration-200 transform active:scale-95 cursor-pointer shadow-sm">
+        Lettres d'arrivées
+      </button>
+
+      <button onclick="goToSection('departures')" class="w-full bg-amber-400 hover:bg-amber-500 active:bg-amber-600 text-gray-900 font-medium py-3.5 px-6 rounded-2xl transition-all duration-200 transform active:scale-95 cursor-pointer shadow-sm">
+        Lettres de départ
+      </button>
+
+      <button onclick="alert('Fonctionnalité Rapport annuel à venir')" class="w-full bg-white/70 hover:bg-white text-gray-700 font-medium py-3.5 px-6 rounded-2xl border border-white/80 transition-all duration-200 transform active:scale-95 cursor-pointer">
+        Rapport annuel
+      </button>
+    </div>
+
+    <div id="viewMonths" class="hidden w-full max-w-2xl bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-6 sm:p-8 self-center">
+      <h2 id="monthsTitle" class="text-lg sm:text-xl font-semibold mb-6 text-center text-gray-700">Sélectionnez un mois</h2>
+      <div id="monthsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4"></div>
+    </div>
+
+    <div id="viewDays" class="hidden w-full max-w-3xl bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-6 sm:p-8">
+      <h2 id="daysTitle" class="text-lg sm:text-xl font-semibold mb-4 text-center text-gray-700">Sélectionnez un jour</h2>
+
+      <div class="grid grid-cols-2 gap-3 mb-6">
+        <button id="formule1Card" onclick="openDetails('f1')" class="text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer">
+          <div class="flex justify-between items-start mb-1">
+            <span class="text-xs font-bold uppercase tracking-wider opacity-90">Formule 1</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+          <div id="formule1Total" class="text-2xl font-bold">0 DA</div>
+          <div id="formule1Subtext" class="text-[11px] opacity-75 mt-1">Nat × 25 + Int × 50</div>
+        </button>
+
+        <button id="formule2Card" onclick="openDetails('f2')" class="text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer">
+          <div class="flex justify-between items-start mb-1">
+            <span class="text-xs font-bold uppercase tracking-wider opacity-90">Formule 2</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+          <div id="formule2Total" class="text-2xl font-bold">0 DA</div>
+          <div id="formule2Subtext" class="text-[11px] opacity-75 mt-1">LR Nat × 175 + LR Int × 350</div>
+        </button>
+      </div>
+
+      <div id="daysGrid" class="grid grid-cols-5 sm:grid-cols-7 gap-2.5 sm:gap-3"></div>
+    </div>
+
+  </main>
+
+  <footer class="w-full p-4 text-center text-xs text-gray-500 font-medium">
+    LB 2026 - Algerie Poste
+  </footer>
+
+  <!-- MODALE DE SAISIE -->
+  <div id="modal" class="fixed inset-0 bg-slate-900/30 backdrop-blur-xs flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300 z-50 overflow-y-auto">
+    <div id="modalContent" class="w-full max-w-lg bg-white/90 backdrop-blur-lg border border-white rounded-3xl p-6 sm:p-8 transform scale-95 transition-transform duration-300 my-8 max-h-[90vh] overflow-y-auto">
+
+      <div class="flex justify-between items-center mb-6 sticky top-0 bg-white/90 backdrop-blur-lg pb-2 -mt-2 pt-2 z-10">
+        <h3 id="modalTitle" class="text-lg font-semibold text-gray-800">Saisie du jour</h3>
+        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl font-bold p-1 cursor-pointer leading-none">&times;</button>
+      </div>
+
+      <form id="entryForm" onsubmit="saveEntry(event)" class="space-y-4">
+
+        <div class="bg-blue-50/50 rounded-2xl p-4 border border-blue-100">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-blue-700 mb-3">Lettres</h4>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">Lettres Nat</label>
+              <input type="number" id="lettresNat" min="0" placeholder="0"
+                class="w-full px-3 py-2 bg-white/70 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">Lettres Int</label>
+              <input type="number" id="lettresInt" min="0" placeholder="0"
+                class="w-full px-3 py-2 bg-white/70 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800">
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-amber-50/50 rounded-2xl p-4 border border-amber-100">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-amber-700 mb-3">LR (Lettres Recommandées)</h4>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">LR Nat</label>
+              <input type="number" id="lrNat" min="0" placeholder="0"
+                class="w-full px-3 py-2 bg-white/70 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-800">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">LR Int</label>
+              <input type="number" id="lrInt" min="0" placeholder="0"
+                class="w-full px-3 py-2 bg-white/70 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-800">
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-50/60 rounded-2xl p-4 border border-slate-200">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 mb-3">Autres indicateurs</h4>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">RF</label>
+              <input type="number" id="rf" min="0" placeholder="0"
+                class="w-full px-3 py-2 bg-white/70 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">CO</label>
+              <input type="number" id="co" min="0" placeholder="0"
+                class="w-full px-3 py-2 bg-white/70 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">CH</label>
+              <input type="number" id="ch" min="0" placeholder="0"
+                class="w-full px-3 py-2 bg-white/70 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">PO</label>
+              <input type="number" id="po" min="0" placeholder="0"
+                class="w-full px-3 py-2 bg-white/70 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">PR</label>
+              <input type="number" id="pr" min="0" placeholder="0"
+                class="w-full px-3 py-2 bg-white/70 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">CPX</label>
+              <input type="number" id="cpx" min="0" placeholder="0"
+                class="w-full px-3 py-2 bg-white/70 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800">
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <label id="lastFieldLabel" class="block text-sm font-medium text-gray-600 mb-1">CRT</label>
+              <input type="number" id="lastField" min="0" placeholder="0"
+                class="w-full px-3 py-2 bg-white/70 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800">
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-2 sticky bottom-0 bg-white/90 backdrop-blur-lg pb-2 -mb-2">
+          <button type="button" onclick="closeModal()" class="px-5 py-2.5 rounded-2xl text-gray-600 hover:bg-gray-200/50 transition cursor-pointer font-medium">
+            Fermer
+          </button>
+          <button type="submit" class="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-6 py-2.5 rounded-2xl transition cursor-pointer font-medium shadow-sm">
+            Enregistrer
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- MODALE DÉTAIL + ÉDITION TARIFS -->
+  <div id="detailModal" class="fixed inset-0 bg-slate-900/30 backdrop-blur-xs flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300 z-50 overflow-y-auto">
+    <div id="detailModalContent" class="w-full max-w-md bg-white/95 backdrop-blur-lg border border-white rounded-3xl p-6 sm:p-8 transform scale-95 transition-transform duration-300 my-8 max-h-[90vh] overflow-y-auto">
+
+      <div class="flex justify-between items-center mb-4">
+        <h3 id="detailTitle" class="text-lg font-semibold text-gray-800">Détail</h3>
+        <button onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-600 text-2xl font-bold p-1 cursor-pointer leading-none">&times;</button>
+      </div>
+
+      <div id="rateEditor" class="rounded-2xl p-4 mb-5 border">
+        <h4 id="rateEditorTitle" class="text-xs font-bold uppercase tracking-wider mb-3">Modifier les tarifs (DA)</h4>
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div>
+            <label id="rate1Label" class="block text-xs font-medium text-gray-600 mb-1">Tarif 1</label>
+            <input type="number" id="rate1Input" min="0" step="1"
+              class="w-full px-3 py-2 bg-white/80 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 font-semibold">
+          </div>
+          <div>
+            <label id="rate2Label" class="block text-xs font-medium text-gray-600 mb-1">Tarif 2</label>
+            <input type="number" id="rate2Input" min="0" step="1"
+              class="w-full px-3 py-2 bg-white/80 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 font-semibold">
+          </div>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="resetRates()" class="px-3 py-1.5 text-xs rounded-xl text-gray-500 hover:bg-gray-200/60 transition cursor-pointer font-medium">
+            Réinitialiser
+          </button>
+          <button type="button" onclick="saveRates()" class="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-4 py-1.5 text-xs rounded-xl transition cursor-pointer font-semibold shadow-sm">
+            Enregistrer
+          </button>
+        </div>
+      </div>
+
+      <div id="detailFormula" class="text-xs font-medium text-gray-500 mb-4 pb-3 border-b border-gray-200"></div>
+
+      <div id="detailList" class="space-y-2"></div>
+
+      <div class="mt-5 pt-4 border-t-2 border-gray-200 flex justify-between items-center">
+        <span class="text-sm font-bold uppercase tracking-wider text-gray-600">Total</span>
+        <span id="detailTotal" class="text-xl font-bold text-gray-900">0 DA</span>
+      </div>
+
+      <div class="flex justify-end mt-5">
+        <button type="button" onclick="closeDetailModal()" class="px-5 py-2.5 rounded-2xl text-gray-600 hover:bg-gray-200/50 transition cursor-pointer font-medium">
+          Fermer
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // ===== Enregistrement du Service Worker =====
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('✅ Service Worker enregistré', reg.scope))
+          .catch(err => console.error('❌ Erreur SW :', err));
+      });
+    }
+
+    const currentYear = new Date().getFullYear();
+    let currentMonthIndex = null;
+    let currentDay = null;
+    let currentView = 'viewHome';
+    let currentSection = 'arrivals';
+    let currentDetailType = 'f1';
+
+    const BASE_FIELDS = [
+      { key: 'nat',   id: 'lettresNat' },
+      { key: 'inter', id: 'lettresInt' },
+      { key: 'lrNat', id: 'lrNat' },
+      { key: 'lrInt', id: 'lrInt' },
+      { key: 'rf',    id: 'rf' },
+      { key: 'co',    id: 'co' },
+      { key: 'ch',    id: 'ch' },
+      { key: 'po',    id: 'po' },
+      { key: 'pr',    id: 'pr' },
+      { key: 'cpx',   id: 'cpx' },
+    ];
+
+    const SECTION_CONFIG = {
+      arrivals: {
+        label: "Lettres d'arrivées",
+        lastFieldKey: 'crt',
+        lastFieldLabel: 'CRT',
+        storageKey: 'poste_dahmouni_arrivals',
+        cardClasses: 'bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white',
+      },
+      departures: {
+        label: "Lettres de départ",
+        lastFieldKey: 'exp',
+        lastFieldLabel: 'EXP',
+        storageKey: 'poste_dahmouni_departures',
+        cardClasses: 'bg-gradient-to-br from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900',
+      },
+    };
+
+    const DEFAULT_RATES = { nat: 25, inter: 50, lrNat: 175, lrInt: 350 };
+    const RATES_STORAGE_KEY = 'poste_dahmouni_rates';
+    let RATES = JSON.parse(localStorage.getItem(RATES_STORAGE_KEY)) || { ...DEFAULT_RATES };
+    Object.keys(DEFAULT_RATES).forEach(k => {
+      if (typeof RATES[k] !== 'number' || isNaN(RATES[k])) RATES[k] = DEFAULT_RATES[k];
+    });
+
+    let dbArrivals   = JSON.parse(localStorage.getItem(SECTION_CONFIG.arrivals.storageKey))   || {};
+    let dbDepartures = JSON.parse(localStorage.getItem(SECTION_CONFIG.departures.storageKey)) || {};
+
+    const months = [
+      "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+      "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+    ];
+
+    function getCurrentDB() { return currentSection === 'arrivals' ? dbArrivals : dbDepartures; }
+    function saveCurrentDB() {
+      const cfg = SECTION_CONFIG[currentSection];
+      localStorage.setItem(cfg.storageKey, JSON.stringify(getCurrentDB()));
+    }
+    function getFields() {
+      const cfg = SECTION_CONFIG[currentSection];
+      return [...BASE_FIELDS, { key: cfg.lastFieldKey, id: 'lastField' }];
+    }
+
+    function showView(viewId) {
+      ['viewHome', 'viewMonths', 'viewDays'].forEach(id => document.getElementById(id).classList.add('hidden'));
+      document.getElementById(viewId).classList.remove('hidden');
+      currentView = viewId;
+
+      const backBtn = document.getElementById('backBtn');
+      const yearBadge = document.getElementById('yearBadge');
+
+      if (viewId === 'viewHome') {
+        backBtn.classList.add('hidden');
+        yearBadge.classList.add('hidden');
+      } else {
+        backBtn.classList.remove('hidden');
+        yearBadge.classList.remove('hidden');
+        yearBadge.textContent = currentYear;
+      }
+    }
+
+    function goBack() {
+      if (currentView === 'viewDays') {
+        renderMonths();
+        showView('viewMonths');
+      } else {
+        showView('viewHome');
+      }
+    }
+
+    function goToSection(section) {
+      currentSection = section;
+      renderMonths();
+      showView('viewMonths');
+    }
+
+    function renderMonths() {
+      const cfg = SECTION_CONFIG[currentSection];
+      document.getElementById('monthsTitle').textContent = `${cfg.label} - Sélectionnez un mois`;
+
+      const grid = document.getElementById('monthsGrid');
+      grid.innerHTML = '';
+      months.forEach((month, index) => {
+        const btn = document.createElement('button');
+        btn.className = "bg-white/70 hover:bg-blue-600 hover:text-white text-gray-700 font-medium py-4 px-4 rounded-2xl border border-white/80 transition-all duration-200 flex flex-col items-center justify-center gap-1 cursor-pointer shadow-xs group";
+        btn.innerHTML = `
+          <span class="text-base font-semibold">${month}</span>
+          <span class="text-xs text-gray-400 group-hover:text-blue-100">${currentYear}</span>
+        `;
+        btn.onclick = () => selectMonth(index);
+        grid.appendChild(btn);
+      });
+    }
+
+    function selectMonth(monthIndex) {
+      currentMonthIndex = monthIndex;
+      renderDays(monthIndex);
+      showView('viewDays');
+    }
+
+    function computeMonthTotals(monthIndex) {
+      const db = getCurrentDB();
+      let f1 = 0, f2 = 0;
+      const details = [];
+
+      const daysInMonth = new Date(currentYear, monthIndex + 1, 0).getDate();
+      for (let day = 1; day <= daysInMonth; day++) {
+        const key = `${currentYear}-${monthIndex}-${day}`;
+        const entry = db[key];
+        if (!entry) continue;
+
+        const nat = entry.nat || 0;
+        const inter = entry.inter || 0;
+        const lrNat = entry.lrNat || 0;
+        const lrInt = entry.lrInt || 0;
+
+        const dayF1 = nat * RATES.nat + inter * RATES.inter;
+        const dayF2 = lrNat * RATES.lrNat + lrInt * RATES.lrInt;
+
+        f1 += dayF1;
+        f2 += dayF2;
+
+        details.push({ day, nat, inter, lrNat, lrInt, dayF1, dayF2 });
+      }
+
+      return { f1, f2, details };
+    }
+
+    function formatDA(n) { return n.toLocaleString('fr-FR') + ' DA'; }
+
+    function updateFormuleCards(monthIndex) {
+      const { f1, f2 } = computeMonthTotals(monthIndex);
+      document.getElementById('formule1Total').textContent = formatDA(f1);
+      document.getElementById('formule2Total').textContent = formatDA(f2);
+
+      document.getElementById('formule1Subtext').textContent = `Nat × ${RATES.nat} + Int × ${RATES.inter}`;
+      document.getElementById('formule2Subtext').textContent = `LR Nat × ${RATES.lrNat} + LR Int × ${RATES.lrInt}`;
+
+      const cfg = SECTION_CONFIG[currentSection];
+      const card1 = document.getElementById('formule1Card');
+      const card2 = document.getElementById('formule2Card');
+
+      card1.className = `text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer ${cfg.cardClasses}`;
+      const altClasses = currentSection === 'arrivals'
+        ? 'bg-gradient-to-br from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900'
+        : 'bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white';
+      card2.className = `text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer ${altClasses}`;
+    }
+
+    function renderDays(monthIndex) {
+      const cfg = SECTION_CONFIG[currentSection];
+      document.getElementById('daysTitle').textContent = `${cfg.label} - ${months[monthIndex]} ${currentYear}`;
+
+      updateFormuleCards(monthIndex);
+
+      const db = getCurrentDB();
+      const grid = document.getElementById('daysGrid');
+      grid.innerHTML = '';
+
+      const daysInMonth = new Date(currentYear, monthIndex + 1, 0).getDate();
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const key = `${currentYear}-${monthIndex}-${day}`;
+        const hasData = db[key] !== undefined;
+
+        const btn = document.createElement('button');
+        btn.className = `aspect-square rounded-2xl border transition-all duration-200 flex flex-col items-center justify-center font-semibold text-sm cursor-pointer shadow-xs ${
+          hasData
+            ? 'bg-amber-400/90 border-amber-500 text-gray-900 hover:bg-amber-500'
+            : 'bg-white/70 border-white/80 hover:bg-blue-600 hover:text-white text-gray-700'
+        }`;
+        btn.innerHTML = `
+          <span>${day}</span>
+          ${hasData ? '<span class="text-[10px] font-normal opacity-75">Saisi</span>' : ''}
+        `;
+        btn.onclick = () => openModalForDay(day);
+        grid.appendChild(btn);
+      }
+    }
+
+    function openModalForDay(day) {
+      currentDay = day;
+      const cfg = SECTION_CONFIG[currentSection];
+      const key = `${currentYear}-${currentMonthIndex}-${day}`;
+
+      document.getElementById('lastFieldLabel').textContent = cfg.lastFieldLabel;
+      document.getElementById('modalTitle').textContent = `${cfg.label} : ${day} ${months[currentMonthIndex]} ${currentYear}`;
+
+      const db = getCurrentDB();
+      const entry = db[key] || {};
+      getFields().forEach(f => {
+        const input = document.getElementById(f.id);
+        input.value = (entry[f.key] !== undefined && entry[f.key] !== null) ? entry[f.key] : '';
+      });
+
+      const modal = document.getElementById('modal');
+      const modalContent = document.getElementById('modalContent');
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        modalContent.classList.remove('scale-95');
+        modalContent.classList.add('scale-100');
+      }, 10);
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('modal');
+      const modalContent = document.getElementById('modalContent');
+      modal.classList.add('opacity-0');
+      modalContent.classList.remove('scale-100');
+      modalContent.classList.add('scale-95');
+      setTimeout(() => modal.classList.add('hidden'), 300);
+    }
+
+    function saveEntry(e) {
+      e.preventDefault();
+      const key = `${currentYear}-${currentMonthIndex}-${currentDay}`;
+
+      const entry = {};
+      getFields().forEach(f => {
+        const raw = document.getElementById(f.id).value;
+        entry[f.key] = raw === '' ? 0 : parseInt(raw, 10);
+      });
+
+      const db = getCurrentDB();
+      db[key] = entry;
+      saveCurrentDB();
+
+      closeModal();
+      renderDays(currentMonthIndex);
+    }
+
+    function openDetails(type) {
+      currentDetailType = type;
+      renderDetailModal();
+      fillRateInputs();
+
+      const modal = document.getElementById('detailModal');
+      const content = document.getElementById('detailModalContent');
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        content.classList.remove('scale-95');
+        content.classList.add('scale-100');
+      }, 10);
+    }
+
+    function fillRateInputs() {
+      const isF1 = currentDetailType === 'f1';
+      const input1 = document.getElementById('rate1Input');
+      const input2 = document.getElementById('rate2Input');
+      const label1 = document.getElementById('rate1Label');
+      const label2 = document.getElementById('rate2Label');
+
+      if (isF1) {
+        label1.textContent = 'Tarif Nat (DA)';
+        label2.textContent = 'Tarif Int (DA)';
+        input1.value = RATES.nat;
+        input2.value = RATES.inter;
+        input1.className = 'w-full px-3 py-2 bg-white/80 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 font-semibold';
+        input2.className = 'w-full px-3 py-2 bg-white/80 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 font-semibold';
+        document.getElementById('rateEditor').className = 'rounded-2xl p-4 mb-5 border bg-blue-50/60 border-blue-200';
+        document.getElementById('rateEditorTitle').className = 'text-xs font-bold uppercase tracking-wider mb-3 text-blue-700';
+      } else {
+        label1.textContent = 'Tarif LR Nat (DA)';
+        label2.textContent = 'Tarif LR Int (DA)';
+        input1.value = RATES.lrNat;
+        input2.value = RATES.lrInt;
+        input1.className = 'w-full px-3 py-2 bg-white/80 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-800 font-semibold';
+        input2.className = 'w-full px-3 py-2 bg-white/80 border border-gray-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-800 font-semibold';
+        document.getElementById('rateEditor').className = 'rounded-2xl p-4 mb-5 border bg-amber-50/60 border-amber-200';
+        document.getElementById('rateEditorTitle').className = 'text-xs font-bold uppercase tracking-wider mb-3 text-amber-700';
+      }
+    }
+
+    function saveRates() {
+      const isF1 = currentDetailType === 'f1';
+      const v1 = parseInt(document.getElementById('rate1Input').value, 10);
+      const v2 = parseInt(document.getElementById('rate2Input').value, 10);
+
+      if (isNaN(v1) || isNaN(v2) || v1 < 0 || v2 < 0) {
+        alert('Veuillez saisir des tarifs valides (nombres positifs).');
+        return;
+      }
+
+      if (isF1) { RATES.nat = v1; RATES.inter = v2; }
+      else { RATES.lrNat = v1; RATES.lrInt = v2; }
+
+      localStorage.setItem(RATES_STORAGE_KEY, JSON.stringify(RATES));
+      if (currentView === 'viewDays') renderDays(currentMonthIndex);
+      renderDetailModal();
+      fillRateInputs();
+    }
+
+    function resetRates() {
+      const isF1 = currentDetailType === 'f1';
+      if (isF1) {
+        document.getElementById('rate1Input').value = DEFAULT_RATES.nat;
+        document.getElementById('rate2Input').value = DEFAULT_RATES.inter;
+      } else {
+        document.getElementById('rate1Input').value = DEFAULT_RATES.lrNat;
+        document.getElementById('rate2Input').value = DEFAULT_RATES.lrInt;
+      }
+    }
+
+    function renderDetailModal() {
+      const cfg = SECTION_CONFIG[currentSection];
+      const { f1, f2, details } = computeMonthTotals(currentMonthIndex);
+      const isF1 = currentDetailType === 'f1';
+
+      document.getElementById('detailTitle').textContent = `${cfg.label} - ${isF1 ? 'Formule 1' : 'Formule 2'}`;
+      document.getElementById('detailFormula').textContent = isF1
+        ? `Nat × ${RATES.nat} DA + Int × ${RATES.inter} DA`
+        : `LR Nat × ${RATES.lrNat} DA + LR Int × ${RATES.lrInt} DA`;
+
+      const list = document.getElementById('detailList');
+      list.innerHTML = '';
+
+      if (details.length === 0) {
+        list.innerHTML = `<p class="text-sm text-gray-400 italic text-center py-4">Aucune saisie ce mois-ci</p>`;
+      } else {
+        details.forEach(d => {
+          const dayTotal = isF1 ? d.dayF1 : d.dayF2;
+          const detailLine = isF1
+            ? `Nat: ${d.nat} × ${RATES.nat} + Int: ${d.inter} × ${RATES.inter}`
+            : `LR Nat: ${d.lrNat} × ${RATES.lrNat} + LR Int: ${d.lrInt} × ${RATES.lrInt}`;
+
+          const row = document.createElement('div');
+          row.className = "flex justify-between items-center py-2 px-3 rounded-xl bg-white/60 border border-gray-200";
+          row.innerHTML = `
+            <div class="flex flex-col">
+              <span class="text-sm font-semibold text-gray-700">${d.day} ${months[currentMonthIndex]}</span>
+              <span class="text-[11px] text-gray-500">${detailLine}</span>
+            </div>
+            <span class="text-sm font-bold ${isF1 ? 'text-blue-700' : 'text-amber-700'}">${formatDA(dayTotal)}</span>
+          `;
+          list.appendChild(row);
+        });
+      }
+
+      document.getElementById('detailTotal').textContent = formatDA(isF1 ? f1 : f2);
+      document.getElementById('detailTotal').className = `text-xl font-bold ${isF1 ? 'text-blue-700' : 'text-amber-700'}`;
+    }
+
+    function closeDetailModal() {
+      const modal = document.getElementById('detailModal');
+      const content = document.getElementById('detailModalContent');
+      modal.classList.add('opacity-0');
+      content.classList.remove('scale-100');
+      content.classList.add('scale-95');
+      setTimeout(() => modal.classList.add('hidden'), 300);
+    }
+
+    document.getElementById('modal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('modal')) closeModal();
+    });
+    document.getElementById('detailModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('detailModal')) closeDetailModal();
+    });
+  </script>
+
+
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script>
+</body>
+</html>
