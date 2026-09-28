@@ -1,0 +1,16 @@
+{
+  "name": "Dahmouniposte",
+  "short_name": "Dahmouniposte",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1a1c20",
+  "theme_color": "#4b6cb7",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
