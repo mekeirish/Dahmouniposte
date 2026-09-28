@@ -90,10 +90,13 @@
     .p-4 { padding: 1rem; }
     .p-6 { padding: 1.5rem; }
     .p-8 { padding: 2rem; }
+    .px-1 { padding-left: 0.25rem; padding-right: 0.25rem; }
+    .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
     .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
     .px-4 { padding-left: 1rem; padding-right: 1rem; }
     .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
     .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
     .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
     .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
     .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
@@ -113,21 +116,25 @@
     .mb-6 { margin-bottom: 1.5rem; }
     .mt-1 { margin-top: 0.25rem; }
     .mt-2 { margin-top: 0.5rem; }
+    .mt-4 { margin-top: 1rem; }
     .mt-5 { margin-top: 1.25rem; }
+    .mt-6 { margin-top: 1.5rem; }
     .mx-auto { margin-left: auto; margin-right: auto; }
     .my-8 { margin-top: 2rem; margin-bottom: 2rem; }
     .space-y-2 > * + * { margin-top: 0.5rem; }
     .space-y-4 > * + * { margin-top: 1rem; }
 
     /* ===== TYPO ===== */
+    .text-\[9px\] { font-size: 9px; }
+    .text-\[10px\] { font-size: 10px; }
+    .text-\[11px\] { font-size: 11px; }
+    .text-\[13px\] { font-size: 13px; }
     .text-xs { font-size: 0.75rem; line-height: 1rem; }
     .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
     .text-base { font-size: 1rem; line-height: 1.5rem; }
     .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
     .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
     .text-2xl { font-size: 1.5rem; line-height: 2rem; }
-    .text-\[10px\] { font-size: 10px; }
-    .text-\[11px\] { font-size: 11px; }
     .font-medium { font-weight: 500; }
     .font-semibold { font-weight: 600; }
     .font-bold { font-weight: 700; }
@@ -140,6 +147,7 @@
     .text-left { text-align: left; }
     .text-right { text-align: right; }
     .leading-none { line-height: 1; }
+    .whitespace-nowrap { white-space: nowrap; }
 
     /* ===== COLORS - Text ===== */
     .text-white { color: #ffffff; }
@@ -164,6 +172,7 @@
     .bg-white\/80 { background-color: rgba(255, 255, 255, 0.8); }
     .bg-white\/90 { background-color: rgba(255, 255, 255, 0.9); }
     .bg-white\/95 { background-color: rgba(255, 255, 255, 0.95); }
+    .bg-gray-50 { background-color: #f9fafb; }
     .bg-gray-100 { background-color: #f3f4f6; }
     .bg-gray-100\/70 { background-color: rgba(243, 244, 246, 0.7); }
     .bg-gray-200\/50 { background-color: rgba(229, 231, 235, 0.5); }
@@ -173,6 +182,7 @@
     .bg-blue-50\/70 { background-color: rgba(239, 246, 255, 0.7); }
     .bg-blue-500 { background-color: #3b82f6; }
     .bg-blue-600 { background-color: #2563eb; }
+    .bg-amber-50 { background-color: #fffbeb; }
     .bg-amber-50\/50 { background-color: rgba(255, 251, 235, 0.5); }
     .bg-amber-50\/60 { background-color: rgba(255, 251, 235, 0.6); }
     .bg-amber-50\/70 { background-color: rgba(255, 251, 235, 0.7); }
@@ -202,21 +212,27 @@
     /* ===== BORDERS ===== */
     .border { border: 1px solid; }
     .border-2 { border: 2px solid; }
+    .border-t { border-top: 1px solid; }
     .border-t-2 { border-top: 2px solid; }
     .border-b { border-bottom: 1px solid; }
     .border-white { border-color: #ffffff; }
     .border-white\/80 { border-color: rgba(255, 255, 255, 0.8); }
     .border-gray-200 { border-color: #e5e7eb; }
+    .border-gray-300 { border-color: #d1d5db; }
     .border-gray-300\/80 { border-color: rgba(209, 213, 219, 0.8); }
     .border-blue-100 { border-color: #dbeafe; }
     .border-blue-200 { border-color: #bfdbfe; }
     .border-amber-100 { border-color: #fef3c7; }
     .border-amber-200 { border-color: #fde68a; }
+    .border-amber-300 { border-color: #fcd34d; }
     .border-amber-400 { border-color: #fbbf24; }
     .border-amber-500 { border-color: #f59e0b; }
     .border-slate-200 { border-color: #e2e8f0; }
 
     /* ===== BORDER RADIUS ===== */
+    .rounded { border-radius: 0.25rem; }
+    .rounded-md { border-radius: 0.375rem; }
+    .rounded-lg { border-radius: 0.5rem; }
     .rounded-xl { border-radius: 0.75rem; }
     .rounded-2xl { border-radius: 1rem; }
     .rounded-3xl { border-radius: 1.5rem; }
@@ -281,10 +297,11 @@
     .opacity-70 { opacity: 0.7; }
     .opacity-75 { opacity: 0.75; }
     .opacity-90 { opacity: 0.9; }
+    .overflow-x-auto { overflow-x: auto; }
     .overflow-y-auto { overflow-y: auto; }
     .aspect-square { aspect-ratio: 1 / 1; }
 
-    /* ===== ANNEE BADGE (cliquable) ===== */
+    /* ===== ANNEE BADGE ===== */
     .year-badge {
       display: inline-flex;
       align-items: center;
@@ -371,7 +388,7 @@
       cursor: pointer;
     }
 
-    /* ===== MONTH CARD (avec / sans données) ===== */
+    /* ===== MONTH CARD ===== */
     .month-btn {
       padding: 1rem;
       border-radius: 1rem;
@@ -386,7 +403,6 @@
       font-weight: 500;
       position: relative;
     }
-    /* Mois AVEC données */
     .month-btn.has-data {
       background-color: rgba(251, 191, 36, 0.9);
       border-color: #f59e0b;
@@ -396,7 +412,6 @@
       background-color: #fbbf24;
       transform: translateY(-2px);
     }
-    /* Mois SANS données */
     .month-btn.no-data {
       background-color: rgba(243, 244, 246, 0.7);
       border-color: rgba(209, 213, 219, 0.6);
@@ -407,7 +422,6 @@
       border-color: #fbbf24;
       color: #374151;
     }
-    /* Badge "saisi" */
     .month-btn .badge-count {
       font-size: 0.65rem;
       font-weight: 700;
@@ -418,6 +432,53 @@
       margin-top: 0.1rem;
     }
     .month-btn.no-data .badge-count { display: none; }
+
+    /* ===== TABLEAU RÉCAP ===== */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+    }
+    .data-table th {
+      padding: 6px 3px;
+      text-align: center;
+      font-weight: 700;
+      background-color: rgba(251, 191, 36, 0.85);
+      color: #78350f;
+      border: 1px solid rgba(245, 158, 11, 0.5);
+      font-size: 10px;
+      letter-spacing: 0.02em;
+    }
+    .data-table td {
+      padding: 5px 3px;
+      text-align: center;
+      border: 1px solid rgba(209, 213, 219, 0.6);
+      color: #374151;
+      font-weight: 500;
+    }
+    .data-table tbody tr:nth-child(even) td {
+      background-color: rgba(255, 251, 235, 0.4);
+    }
+    .data-table tbody tr:hover td {
+      background-color: rgba(251, 191, 36, 0.15);
+    }
+    .data-table .col-date {
+      font-weight: 700;
+      color: #1e40af;
+      background-color: rgba(219, 234, 254, 0.4);
+    }
+    .data-table tfoot td {
+      font-weight: 700;
+      background-color: rgba(251, 191, 36, 0.4) !important;
+      color: #78350f;
+      padding: 6px 3px;
+      border: 1px solid rgba(245, 158, 11, 0.6);
+      font-size: 11px;
+    }
+    .data-table tfoot td:first-child {
+      color: #1e40af;
+    }
 
     /* ===== BREAKPOINTS ===== */
     @media (min-width: 640px) {
@@ -432,6 +493,8 @@
       .sm\:text-xl { font-size: 1.25rem; line-height: 1.75rem; }
       .sm\:text-2xl { font-size: 1.5rem; line-height: 2rem; }
       .sm\:col-span-1 { grid-column: span 1 / span 1; }
+      .data-table th { font-size: 11px; padding: 8px 4px; }
+      .data-table td { font-size: 12px; padding: 6px 4px; }
     }
   </style>
 </head>
@@ -505,6 +568,37 @@
       </div>
 
       <div id="daysGrid" class="grid grid-cols-5 sm:grid-cols-7 gap-2.5 sm:gap-3"></div>
+
+      <!-- TABLEAU RÉCAPITULATIF DES DONNÉES -->
+      <div id="tableSection" class="mt-6">
+        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-600 mb-3 text-center">
+          Tableau des données
+        </h3>
+        <div class="bg-white/80 backdrop-blur-md border border-white/80 rounded-2xl p-2 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="data-table" id="dataTable">
+              <thead>
+                <tr>
+                  <th>J</th>
+                  <th>NAT</th>
+                  <th>INT</th>
+                  <th>LRN</th>
+                  <th>LRI</th>
+                  <th>RF</th>
+                  <th>CO</th>
+                  <th>CH</th>
+                  <th>PO</th>
+                  <th>PR</th>
+                  <th>CPX</th>
+                  <th id="lastColHeader">CRT</th>
+                </tr>
+              </thead>
+              <tbody id="dataTableBody"></tbody>
+              <tfoot id="dataTableFooter"></tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
 
   </main>
@@ -807,8 +901,8 @@
     // ============================================================
     // 3) LOGIQUE APP
     // ============================================================
-    let currentYear = new Date().getFullYear();   // Année sélectionnée (modifiable)
-    const TODAY_YEAR = new Date().getFullYear();  // Année réelle actuelle
+    let currentYear = new Date().getFullYear();
+    const TODAY_YEAR = new Date().getFullYear();
     let currentMonthIndex = null;
     let currentDay = null;
     let currentView = 'viewHome';
@@ -833,6 +927,7 @@
         label: "Lettres d'arrivées",
         lastFieldKey: 'crt',
         lastFieldLabel: 'CRT',
+        lastColHeader: 'CRT',
         storageKey: 'poste_dahmouni_arrivals',
         cardClasses: 'bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white',
       },
@@ -840,6 +935,7 @@
         label: "Lettres de départ",
         lastFieldKey: 'exp',
         lastFieldLabel: 'EXP',
+        lastColHeader: 'EXP',
         storageKey: 'poste_dahmouni_departures',
         cardClasses: 'bg-gradient-to-br from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900',
       },
@@ -903,9 +999,6 @@
       showView('viewMonths');
     }
 
-    /**
-     * Vérifie si un mois donné contient au moins une saisie dans la section active.
-     */
     function monthHasData(monthIndex) {
       const db = getCurrentDB();
       for (let day = 1; day <= 31; day++) {
@@ -915,9 +1008,6 @@
       return false;
     }
 
-    /**
-     * Compte le nombre de jours saisis dans un mois.
-     */
     function countDaysInMonth(monthIndex) {
       const db = getCurrentDB();
       let count = 0;
@@ -1042,6 +1132,110 @@
         `;
         btn.onclick = () => openModalForDay(day);
         grid.appendChild(btn);
+      }
+
+      // Rendu du tableau récapitulatif
+      renderDataTable(monthIndex);
+    }
+
+    /**
+     * Génère le tableau récapitulatif des données du mois.
+     * Colonnes : J (jour) | NAT | INT | LRN | LRI | RF | CO | CH | PO | PR | CPX | CRT/EXP
+     * + une ligne TOTAL en bas.
+     */
+    function renderDataTable(monthIndex) {
+      const db = getCurrentDB();
+      const cfg = SECTION_CONFIG[currentSection];
+
+      document.getElementById('lastColHeader').textContent = cfg.lastColHeader;
+
+      const tbody = document.getElementById('dataTableBody');
+      const tfoot = document.getElementById('dataTableFooter');
+      tbody.innerHTML = '';
+      tfoot.innerHTML = '';
+
+      const daysInMonth = new Date(currentYear, monthIndex + 1, 0).getDate();
+      const lastKey = cfg.lastFieldKey;
+
+      const totals = {
+        nat: 0, inter: 0, lrNat: 0, lrInt: 0,
+        rf: 0, co: 0, ch: 0, po: 0, pr: 0, cpx: 0,
+        [lastKey]: 0
+      };
+
+      let rowsCount = 0;
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const key = `${currentYear}-${monthIndex}-${day}`;
+        const entry = db[key];
+        if (!entry) continue;
+
+        rowsCount++;
+
+        const nat = entry.nat || 0;
+        const inter = entry.inter || 0;
+        const lrNat = entry.lrNat || 0;
+        const lrInt = entry.lrInt || 0;
+        const rf = entry.rf || 0;
+        const co = entry.co || 0;
+        const ch = entry.ch || 0;
+        const po = entry.po || 0;
+        const pr = entry.pr || 0;
+        const cpx = entry.cpx || 0;
+        const lastVal = entry[lastKey] || 0;
+
+        totals.nat += nat;
+        totals.inter += inter;
+        totals.lrNat += lrNat;
+        totals.lrInt += lrInt;
+        totals.rf += rf;
+        totals.co += co;
+        totals.ch += ch;
+        totals.po += po;
+        totals.pr += pr;
+        totals.cpx += cpx;
+        totals[lastKey] += lastVal;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="col-date">${day}</td>
+          <td>${nat || '·'}</td>
+          <td>${inter || '·'}</td>
+          <td>${lrNat || '·'}</td>
+          <td>${lrInt || '·'}</td>
+          <td>${rf || '·'}</td>
+          <td>${co || '·'}</td>
+          <td>${ch || '·'}</td>
+          <td>${po || '·'}</td>
+          <td>${pr || '·'}</td>
+          <td>${cpx || '·'}</td>
+          <td>${lastVal || '·'}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+
+      if (rowsCount === 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td colspan="12" class="italic text-gray-400" style="padding: 12px 6px;">Aucune donnée saisie ce mois-ci</td>`;
+        tbody.appendChild(tr);
+      } else {
+        // Ligne TOTAL
+        const trTotal = document.createElement('tr');
+        trTotal.innerHTML = `
+          <td>TOT</td>
+          <td>${totals.nat}</td>
+          <td>${totals.inter}</td>
+          <td>${totals.lrNat}</td>
+          <td>${totals.lrInt}</td>
+          <td>${totals.rf}</td>
+          <td>${totals.co}</td>
+          <td>${totals.ch}</td>
+          <td>${totals.po}</td>
+          <td>${totals.pr}</td>
+          <td>${totals.cpx}</td>
+          <td>${totals[lastKey]}</td>
+        `;
+        tfoot.appendChild(trTotal);
       }
     }
 
@@ -1328,7 +1522,6 @@
       document.getElementById('yearBadgeLabel').textContent = currentYear;
       closeYearPicker();
 
-      // Rafraîchir la vue courante
       if (currentView === 'viewMonths') {
         renderMonths();
       } else if (currentView === 'viewDays') {
@@ -1344,6 +1537,9 @@
     });
     document.getElementById('detailModal').addEventListener('click', (e) => {
       if (e.target === document.getElementById('detailModal')) closeDetailModal();
+    });
+    document.getElementById('yearModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('yearModal')) closeYearModal();
     });
     document.getElementById('yearModal').addEventListener('click', (e) => {
       if (e.target === document.getElementById('yearModal')) closeYearPicker();
