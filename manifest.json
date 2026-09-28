@@ -1,7 +1,7 @@
 {
-  "name": "Poste Dahmouni - Gestion du courrier",
-  "short_name": "Poste Dahmouni",
-  "description": "Application de gestion du courrier du bureau de poste Dahmouni",
+  "name": "Bureau de poste DAHMOUNI 14010",
+  "short_name": "DAHMOUNI 14010",
+  "description": "Gestion du courrier - Bureau de poste DAHMOUNI 14010",
   "lang": "fr",
   "dir": "ltr",
   "start_url": "./index.html",
@@ -23,6 +23,20 @@
       "sizes": "192x192 512x512 any",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Lettres d'arrivées",
+      "short_name": "Arrivées",
+      "url": "./index.html?section=arrivals",
+      "icons": [{ "src": "./icon.png", "sizes": "192x192 512x512 any" }]
+    },
+    {
+      "name": "Lettres de départ",
+      "short_name": "Départs",
+      "url": "./index.html?section=departures",
+      "icons": [{ "src": "./icon.png", "sizes": "192x192 512x512 any" }]
     }
   ]
 }
