@@ -30,7 +30,9 @@
       flex-direction: column;
       justify-content: space-between;
       color: #1f2937;
-      background: linear-gradient(to bottom right, #f1f5f9, #e5e7eb, #e2e8f0);
+      /* Fond dégradé plus subtil et unifié */
+      background: linear-gradient(160deg, #f8fafc 0%, #eef2f7 50%, #e8eef4 100%);
+      background-attachment: fixed;
     }
     @supports (padding: env(safe-area-inset-top)) {
       body {
@@ -46,8 +48,6 @@
 
     /* ============================================================
        LOGO ANIMÉ PREMIUM
-       - Brillance confinée à la forme du logo (via mask-image)
-       - Flottement 3D + scale + drop-shadow dynamique
        ============================================================ */
     .logo-stage {
       position: relative;
@@ -58,7 +58,6 @@
       padding: 0.5rem;
     }
 
-    /* Halo lumineux derrière (pulsant doucement) */
     .logo-halo {
       position: absolute;
       width: 130px;
@@ -98,14 +97,12 @@
       will-change: filter;
     }
 
-    /* Brillance confinée à la forme du logo via mask-image */
     .logo-shine {
       position: absolute;
       inset: 0;
       pointer-events: none;
       z-index: 2;
       overflow: hidden;
-      /* Le mask-image reprend l'image elle-même → la brillance suit ses contours exacts */
       -webkit-mask-image: url('https://i.ibb.co/ds9JFS3p/1000127367-removebg-preview.png');
       mask-image: url('https://i.ibb.co/ds9JFS3p/1000127367-removebg-preview.png');
       -webkit-mask-size: contain;
@@ -116,7 +113,6 @@
       mask-repeat: no-repeat;
     }
 
-    /* Le trait lumineux qui traverse */
     .logo-shine::before {
       content: "";
       position: absolute;
@@ -137,7 +133,6 @@
       animation: logoShineSweep 5s ease-in-out infinite;
     }
 
-    /* Reflet secondaire plus discret */
     .logo-shine::after {
       content: "";
       position: absolute;
@@ -157,7 +152,6 @@
       animation-delay: 0.15s;
     }
 
-    /* Flottement 3D : monte, tourne légèrement sur l'axe Y, redescend */
     @keyframes logoLevitate {
       0%   { transform: translateY(0) rotateZ(-1.2deg) rotateY(-6deg) scale(1); }
       25%  { transform: translateY(-4px) rotateZ(0deg) rotateY(-2deg) scale(1.015); }
@@ -166,19 +160,16 @@
       100% { transform: translateY(0) rotateZ(-1.2deg) rotateY(-6deg) scale(1); }
     }
 
-    /* Ombre dynamique qui s'adapte au mouvement */
     @keyframes logoShadow {
       0%, 100% { filter: drop-shadow(0 6px 14px rgba(30, 64, 175, 0.28)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08)); }
       50%      { filter: drop-shadow(0 14px 22px rgba(30, 64, 175, 0.38)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.12)); }
     }
 
-    /* Halo qui respire */
     @keyframes haloBreath {
       0%, 100% { opacity: 0.6; transform: scale(1); }
       50%      { opacity: 1;    transform: scale(1.15); }
     }
 
-    /* Trait blanc qui balaye de gauche à droite */
     @keyframes logoShineSweep {
       0%, 55% { left: -60%; opacity: 0; }
       58%     { opacity: 1; }
@@ -187,7 +178,6 @@
       100%    { left: 130%; opacity: 0; }
     }
 
-    /* Trait ambré secondaire qui suit de près */
     @keyframes logoShineSweepAmber {
       0%, 55% { left: -40%; opacity: 0; }
       58%     { opacity: 1; }
@@ -235,7 +225,6 @@
       font-weight: 800;
       letter-spacing: 0.01em;
       line-height: 1.2;
-      /* Dégradé bleu → ambre (couleurs de l'app) */
       background: linear-gradient(
         100deg,
         #1e40af 0%,
@@ -247,13 +236,11 @@
       background-clip: text;
       -webkit-text-fill-color: transparent;
       color: transparent;
-      /* Léger relief */
       filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.5));
       display: inline-block;
       text-transform: uppercase;
     }
 
-    /* Ligne décorative sous le titre */
     .app-title-underline {
       display: block;
       width: 70px;
@@ -264,7 +251,6 @@
       opacity: 0.9;
     }
 
-    /* Variante 2e ligne du titre (DAHMOUNI 14010) */
     .app-title-line2 {
       display: block;
       font-size: 0.85em;
@@ -462,6 +448,13 @@
     .bg-slate-50\/60 { background-color: rgba(248, 250, 252, 0.6); }
     .bg-slate-900\/30 { background-color: rgba(15, 23, 42, 0.3); }
 
+    /* Fond carte unifié avec la page */
+    .bg-glass-unified {
+      background-color: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(8px) saturate(120%);
+      -webkit-backdrop-filter: blur(8px) saturate(120%);
+    }
+
     /* Gradients */
     .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); }
     .from-slate-100 { --tw-gradient-from: #f1f5f9; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(241, 245, 249, 0)); }
@@ -484,6 +477,8 @@
     .border-b { border-bottom: 1px solid; }
     .border-white { border-color: #ffffff; }
     .border-white\/80 { border-color: rgba(255, 255, 255, 0.8); }
+    .border-white\/60 { border-color: rgba(255, 255, 255, 0.6); }
+    .border-white\/40 { border-color: rgba(255, 255, 255, 0.4); }
     .border-gray-200 { border-color: #e5e7eb; }
     .border-gray-300 { border-color: #d1d5db; }
     .border-gray-300\/80 { border-color: rgba(209, 213, 219, 0.8); }
@@ -798,6 +793,85 @@
       color: #374151;
     }
 
+    /* ============================================================
+       CARTE ACCUEIL — FOND UNIFIÉ AVEC LA PAGE
+       ============================================================ */
+    .home-card {
+      width: 100%;
+      max-width: 28rem;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      align-self: center;
+      /* Fond translucide très léger, cohérent avec la page */
+      background-color: rgba(255, 255, 255, 0.42);
+      backdrop-filter: blur(10px) saturate(140%);
+      -webkit-backdrop-filter: blur(10px) saturate(140%);
+      /* Bordure délicate qui fond avec le fond */
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: 1.5rem;
+      /* Ombre très légère */
+      box-shadow:
+        0 1px 2px rgba(30, 64, 175, 0.04),
+        0 8px 24px -12px rgba(30, 64, 175, 0.12);
+    }
+
+    .home-card h2 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #374151;
+      letter-spacing: -0.01em;
+    }
+
+    /* Boutons d'accueil avec effet "verre" cohérent */
+    .home-btn {
+      width: 100%;
+      padding: 0.875rem 1.5rem;
+      border-radius: 1rem;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: all 0.2s;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .home-btn:active { transform: scale(0.97); }
+
+    .home-btn-primary {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      box-shadow: 0 6px 16px -6px rgba(37, 99, 235, 0.5);
+      border: 1px solid rgba(37, 99, 235, 0.9);
+    }
+    .home-btn-primary:hover {
+      background: linear-gradient(135deg, #1d4ed8, #1e40af);
+      box-shadow: 0 8px 20px -6px rgba(37, 99, 235, 0.6);
+    }
+
+    .home-btn-secondary {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #111827;
+      box-shadow: 0 6px 16px -6px rgba(245, 158, 11, 0.5);
+      border: 1px solid rgba(245, 158, 11, 0.9);
+    }
+    .home-btn-secondary:hover {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      box-shadow: 0 8px 20px -6px rgba(245, 158, 11, 0.6);
+    }
+
+    .home-btn-tertiary {
+      background-color: rgba(255, 255, 255, 0.6);
+      color: #374151;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    .home-btn-tertiary:hover {
+      background-color: rgba(255, 255, 255, 0.85);
+    }
+
     /* ===== BREAKPOINTS ===== */
     @media (min-width: 640px) {
       .sm\:p-6 { padding: 1.5rem; }
@@ -826,8 +900,6 @@
 
   <!-- HEADER : Titre + Logo + Année -->
   <header class="app-header">
-
-    <!-- TITRE STYLISÉ -->
     <div class="app-title-wrap">
       <h1 id="appTitle" class="app-title">
         Bureau de poste
@@ -836,7 +908,6 @@
       <span class="app-title-underline"></span>
     </div>
 
-    <!-- LOGO ANIMÉ PREMIUM -->
     <div class="logo-stage">
       <div class="logo-halo"></div>
       <div class="logo-inner">
@@ -865,21 +936,23 @@
 
   <main class="flex-grow flex items-start justify-center p-4 sm:p-6 w-full">
 
-    <!-- VUE 1 : ACCUEIL -->
-    <div id="viewHome" class="w-full max-w-md bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-6 sm:p-8 text-center space-y-4 self-center">
-      <h2 class="text-lg sm:text-xl font-semibold mb-4 text-gray-700">Menu Principal</h2>
+    <!-- VUE 1 : ACCUEIL — CARTE UNIFIÉE -->
+    <div id="viewHome" class="home-card">
+      <h2>Menu Principal</h2>
 
-      <button onclick="goToSection('arrivals')" class="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium py-3.5 px-6 rounded-2xl transition-all duration-200 transform active:scale-95 cursor-pointer shadow-sm">
-        Lettres d'arrivées
-      </button>
+      <div class="space-y-4">
+        <button onclick="goToSection('arrivals')" class="home-btn home-btn-primary">
+          Lettres d'arrivées
+        </button>
 
-      <button onclick="goToSection('departures')" class="w-full bg-amber-400 hover:bg-amber-500 active:bg-amber-600 text-gray-900 font-medium py-3.5 px-6 rounded-2xl transition-all duration-200 transform active:scale-95 cursor-pointer shadow-sm">
-        Lettres de départ
-      </button>
+        <button onclick="goToSection('departures')" class="home-btn home-btn-secondary">
+          Lettres de départ
+        </button>
 
-      <button onclick="goToAnnualReport()" class="w-full bg-white/70 hover:bg-white text-gray-700 font-medium py-3.5 px-6 rounded-2xl border border-white/80 transition-all duration-200 transform active:scale-95 cursor-pointer">
-        Rapport annuel
-      </button>
+        <button onclick="goToAnnualReport()" class="home-btn home-btn-tertiary">
+          Rapport annuel
+        </button>
+      </div>
     </div>
 
     <!-- VUE 2 : MOIS -->
@@ -993,7 +1066,7 @@
   </main>
 
   <footer class="w-full p-4 text-center text-xs text-gray-500 font-medium">
-    LB 2026 - Algerie Poste
+    2026 - Algerie Poste
   </footer>
 
   <!-- MODALE DE SAISIE -->
