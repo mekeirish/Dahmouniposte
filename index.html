@@ -30,7 +30,6 @@
       flex-direction: column;
       justify-content: space-between;
       color: #1f2937;
-      /* Fond dégradé plus subtil et unifié */
       background: linear-gradient(160deg, #f8fafc 0%, #eef2f7 50%, #e8eef4 100%);
       background-attachment: fixed;
     }
@@ -45,6 +44,25 @@
     h1, h2, h3, h4 { font-weight: 600; }
     svg { display: block; }
     ::selection { background: #3b82f6; color: white; }
+
+    /* ============================================================
+       BOUTONS — ANIMATION AMÉLIORÉE
+       ============================================================ */
+    /* Tous les boutons ont une transition de qualité + un effet de "press" */
+    button, .btn-anim {
+      transition:
+        transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.18s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        opacity 0.2s ease;
+      will-change: transform;
+    }
+    button:active, .btn-anim:active {
+      transform: scale(0.94);
+      transition-duration: 0.08s;
+    }
 
     /* ============================================================
        LOGO ANIMÉ PREMIUM
@@ -281,7 +299,6 @@
       padding: 0.5rem;
       border-radius: 1rem;
       border: 1px solid rgba(255, 255, 255, 0.8);
-      transition: all 0.15s;
       cursor: pointer;
     }
     .back-btn:hover { background-color: #ffffff; }
@@ -414,6 +431,8 @@
     .text-blue-600 { color: #2563eb; }
     .text-blue-700 { color: #1d4ed8; }
     .text-blue-800 { color: #1e40af; }
+    .text-red-600 { color: #dc2626; }
+    .text-red-700 { color: #b91c1c; }
     .text-amber-700 { color: #b45309; }
     .text-amber-800 { color: #92400e; }
     .text-amber-900 { color: #78350f; }
@@ -435,6 +454,7 @@
     .bg-blue-50\/70 { background-color: rgba(239, 246, 255, 0.7); }
     .bg-blue-500 { background-color: #3b82f6; }
     .bg-blue-600 { background-color: #2563eb; }
+    .bg-red-50\/60 { background-color: rgba(254, 242, 242, 0.6); }
     .bg-amber-50 { background-color: #fffbeb; }
     .bg-amber-50\/50 { background-color: rgba(255, 251, 235, 0.5); }
     .bg-amber-50\/60 { background-color: rgba(255, 251, 235, 0.6); }
@@ -447,13 +467,6 @@
     .bg-amber-500 { background-color: #f59e0b; }
     .bg-slate-50\/60 { background-color: rgba(248, 250, 252, 0.6); }
     .bg-slate-900\/30 { background-color: rgba(15, 23, 42, 0.3); }
-
-    /* Fond carte unifié avec la page */
-    .bg-glass-unified {
-      background-color: rgba(255, 255, 255, 0.35);
-      backdrop-filter: blur(8px) saturate(120%);
-      -webkit-backdrop-filter: blur(8px) saturate(120%);
-    }
 
     /* Gradients */
     .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); }
@@ -485,6 +498,7 @@
     .border-blue-100 { border-color: #dbeafe; }
     .border-blue-200 { border-color: #bfdbfe; }
     .border-blue-500 { border-color: #3b82f6; }
+    .border-red-200 { border-color: #fecaca; }
     .border-amber-100 { border-color: #fef3c7; }
     .border-amber-200 { border-color: #fde68a; }
     .border-amber-300 { border-color: #fcd34d; }
@@ -536,13 +550,11 @@
     .hover\:to-blue-700:hover { --tw-gradient-to: #1d4ed8; }
     .hover\:from-amber-500:hover { --tw-gradient-from: #f59e0b; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(245, 158, 11, 0)); }
     .hover\:to-amber-600:hover { --tw-gradient-to: #d97706; }
-    .active\:scale-95:active { transform: scale(0.95); }
-    .active\:bg-blue-800:active { background-color: #1e40af; }
-    .active\:bg-amber-600:active { background-color: #d97706; }
     .focus\:outline-none:focus { outline: 2px solid transparent; outline-offset: 2px; }
     .focus\:ring-2:focus { box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); }
     .focus\:ring-blue-500:focus { box-shadow: 0 0 0 2px #3b82f6; }
     .focus\:ring-amber-500:focus { box-shadow: 0 0 0 2px #f59e0b; }
+    .focus\:ring-red-500:focus { box-shadow: 0 0 0 2px #ef4444; }
     .group:hover .group-hover\:text-blue-100 { color: #dbeafe; }
 
     /* ===== POSITIONING ===== */
@@ -553,6 +565,7 @@
     .bottom-0 { bottom: 0; }
     .z-10 { z-index: 10; }
     .z-50 { z-index: 50; }
+    .z-\[100\] { z-index: 100; }
 
     /* ===== OVERFLOW / DISPLAY ===== */
     .hidden { display: none; }
@@ -576,7 +589,6 @@
       padding: 0.35rem 0.75rem;
       border-radius: 9999px;
       cursor: pointer;
-      transition: background-color 0.15s;
       border: none;
     }
     .year-badge:hover { background-color: #fbbf24; }
@@ -661,7 +673,6 @@
       align-items: center;
       justify-content: center;
       gap: 0.25rem;
-      transition: all 0.2s;
       cursor: pointer;
       font-weight: 500;
       position: relative;
@@ -770,7 +781,6 @@
       font-weight: 600;
       font-size: 0.875rem;
       border: 1px solid;
-      transition: all 0.2s;
       cursor: pointer;
     }
     .toggle-btn.active-blue {
@@ -794,7 +804,7 @@
     }
 
     /* ============================================================
-       CARTE ACCUEIL — FOND UNIFIÉ AVEC LA PAGE
+       CARTE ACCUEIL
        ============================================================ */
     .home-card {
       width: 100%;
@@ -802,14 +812,11 @@
       padding: 1.5rem 2rem;
       text-align: center;
       align-self: center;
-      /* Fond translucide très léger, cohérent avec la page */
       background-color: rgba(255, 255, 255, 0.42);
       backdrop-filter: blur(10px) saturate(140%);
       -webkit-backdrop-filter: blur(10px) saturate(140%);
-      /* Bordure délicate qui fond avec le fond */
       border: 1px solid rgba(255, 255, 255, 0.55);
       border-radius: 1.5rem;
-      /* Ombre très légère */
       box-shadow:
         0 1px 2px rgba(30, 64, 175, 0.04),
         0 8px 24px -12px rgba(30, 64, 175, 0.12);
@@ -823,21 +830,18 @@
       letter-spacing: -0.01em;
     }
 
-    /* Boutons d'accueil avec effet "verre" cohérent */
     .home-btn {
       width: 100%;
       padding: 0.875rem 1.5rem;
       border-radius: 1rem;
       font-weight: 500;
       font-size: 1rem;
-      transition: all 0.2s;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
     }
-    .home-btn:active { transform: scale(0.97); }
 
     .home-btn-primary {
       background: linear-gradient(135deg, #2563eb, #1d4ed8);
@@ -872,6 +876,196 @@
       background-color: rgba(255, 255, 255, 0.85);
     }
 
+    /* ============================================================
+       ÉCRAN DE MOT DE PASSE
+       ============================================================ */
+    .lock-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      background: linear-gradient(160deg, #f8fafc 0%, #eef2f7 50%, #e8eef4 100%);
+      background-attachment: fixed;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    .lock-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .lock-logo {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin-bottom: 1.5rem;
+      animation: logoLevitate 5s ease-in-out infinite;
+    }
+    .lock-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 14px rgba(30, 64, 175, 0.3));
+    }
+
+    .lock-title {
+      font-size: 1.125rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-align: center;
+      background: linear-gradient(100deg, #1e40af, #2563eb, #f59e0b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.35rem;
+    }
+
+    .lock-subtitle {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-bottom: 1.75rem;
+      text-align: center;
+    }
+
+    .lock-form {
+      width: 100%;
+      max-width: 20rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .lock-input-wrap {
+      position: relative;
+    }
+
+    .lock-input {
+      width: 100%;
+      padding: 0.9rem 3rem 0.9rem 1.25rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.5em;
+      text-align: center;
+      border-radius: 1rem;
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+      background-color: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: #1f2937;
+      transition: all 0.2s;
+      outline: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .lock-input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+    .lock-input.error {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.15);
+      animation: shake 0.4s;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
+    }
+
+    .lock-toggle {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      padding: 0.5rem;
+      cursor: pointer;
+      color: #6b7280;
+      display: flex;
+      align-items: center;
+    }
+    .lock-toggle:hover { color: #374151; }
+    .lock-toggle svg { width: 1.25rem; height: 1.25rem; }
+
+    .lock-btn {
+      padding: 0.9rem 1.5rem;
+      border-radius: 1rem;
+      font-weight: 600;
+      font-size: 1rem;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      box-shadow: 0 8px 20px -8px rgba(37, 99, 235, 0.6);
+      border: 1px solid rgba(37, 99, 235, 0.9);
+      cursor: pointer;
+    }
+    .lock-btn:hover {
+      background: linear-gradient(135deg, #1d4ed8, #1e40af);
+      box-shadow: 0 10px 24px -8px rgba(37, 99, 235, 0.7);
+    }
+    .lock-btn:active { transform: scale(0.96); }
+
+    .lock-error {
+      min-height: 1.25rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #dc2626;
+      text-align: center;
+      margin-top: -0.25rem;
+    }
+
+    .lock-hint {
+      margin-top: 2rem;
+      font-size: 0.7rem;
+      color: #9ca3af;
+      text-align: center;
+      max-width: 18rem;
+    }
+
+    /* ============================================================
+       BOUTON DÉCONNEXION (bas de page)
+       ============================================================ */
+    .logout-wrapper {
+      width: 100%;
+      padding: 0.5rem 1rem 1rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .logout-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #6b7280;
+      background-color: rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .logout-btn:hover {
+      background-color: rgba(255, 255, 255, 0.85);
+      color: #dc2626;
+      border-color: rgba(220, 38, 38, 0.3);
+    }
+    .logout-btn:active {
+      transform: scale(0.94);
+    }
+    .logout-btn svg { width: 0.875rem; height: 0.875rem; }
+
     /* ===== BREAKPOINTS ===== */
     @media (min-width: 640px) {
       .sm\:p-6 { padding: 1.5rem; }
@@ -893,114 +1087,203 @@
       .app-title-underline { width: 90px; height: 4px; }
       .logo-inner { width: 120px; height: 120px; }
       .logo-halo { width: 150px; height: 150px; }
+      .lock-logo { width: 120px; height: 120px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- HEADER : Titre + Logo + Année -->
-  <header class="app-header">
-    <div class="app-title-wrap">
-      <h1 id="appTitle" class="app-title">
-        Bureau de poste
-        <span class="app-title-line2">DAHMOUNI 14010</span>
-      </h1>
-      <span class="app-title-underline"></span>
+  <!-- ============================================================
+       ÉCRAN DE VERROUILLAGE
+       ============================================================ -->
+  <div id="lockScreen" class="lock-screen">
+    <div class="lock-logo">
+      <img src="https://i.ibb.co/ds9JFS3p/1000127367-removebg-preview.png" alt="Logo">
     </div>
 
-    <div class="logo-stage">
-      <div class="logo-halo"></div>
-      <div class="logo-inner">
-        <img src="https://i.ibb.co/ds9JFS3p/1000127367-removebg-preview.png" alt="Logo Bureau de poste DAHMOUNI 14010">
-        <div class="logo-shine"></div>
-      </div>
-    </div>
+    <div class="lock-title">Accès sécurisé</div>
+    <div class="lock-subtitle">Bureau de poste DAHMOUNI 14010</div>
 
-    <div class="header-row">
-      <button id="backBtn" onclick="goBack()" class="back-btn hidden" aria-label="Retour">
-        <svg xmlns="http://www.w3.org/2000/svg" style="width:1.25rem;height:1.25rem;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
-      </button>
-
-      <div class="year-badge-wrapper">
-        <button id="yearBadge" class="year-badge hidden" onclick="openYearPicker()" aria-label="Changer d'année">
-          <span id="yearBadgeLabel">2026</span>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+    <form id="lockForm" class="lock-form" onsubmit="handleUnlock(event)">
+      <div class="lock-input-wrap">
+        <input
+          type="password"
+          id="lockInput"
+          class="lock-input"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          maxlength="8"
+          placeholder="••••"
+          autocomplete="off"
+          autofocus>
+        <button type="button" class="lock-toggle" id="lockToggle" aria-label="Afficher/Masquer">
+          <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
         </button>
       </div>
+
+      <div id="lockError" class="lock-error"></div>
+
+      <button type="submit" class="lock-btn">Déverrouiller</button>
+    </form>
+
+    <div class="lock-hint">
+      Accès réservé au personnel autorisé
     </div>
-  </header>
+  </div>
 
-  <main class="flex-grow flex items-start justify-center p-4 sm:p-6 w-full">
+  <!-- ============================================================
+       CONTENU PRINCIPAL (masqué jusqu'à authentification)
+       ============================================================ -->
+  <div id="appContent" style="display: none; flex-direction: column; flex-grow: 1;">
 
-    <!-- VUE 1 : ACCUEIL — CARTE UNIFIÉE -->
-    <div id="viewHome" class="home-card">
-      <h2>Menu Principal</h2>
-
-      <div class="space-y-4">
-        <button onclick="goToSection('arrivals')" class="home-btn home-btn-primary">
-          Lettres d'arrivées
-        </button>
-
-        <button onclick="goToSection('departures')" class="home-btn home-btn-secondary">
-          Lettres de départ
-        </button>
-
-        <button onclick="goToAnnualReport()" class="home-btn home-btn-tertiary">
-          Rapport annuel
-        </button>
-      </div>
-    </div>
-
-    <!-- VUE 2 : MOIS -->
-    <div id="viewMonths" class="hidden w-full max-w-2xl bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-6 sm:p-8 self-center">
-      <h2 id="monthsTitle" class="text-lg sm:text-xl font-semibold mb-6 text-center text-gray-700">Sélectionnez un mois</h2>
-      <div id="monthsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4"></div>
-    </div>
-
-    <!-- VUE 3 : JOURS -->
-    <div id="viewDays" class="hidden w-full max-w-3xl bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-6 sm:p-8">
-      <h2 id="daysTitle" class="text-lg sm:text-xl font-semibold mb-4 text-center text-gray-700">Sélectionnez un jour</h2>
-
-      <div id="formuleCardsContainer" class="grid grid-cols-2 gap-3 mb-6 hidden">
-        <button id="formule1Card" onclick="openDetails('f1')" class="text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer">
-          <div class="flex justify-between items-start mb-1">
-            <span class="text-xs font-bold uppercase tracking-wider opacity-90">Ordinaires</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </div>
-          <div id="formule1Total" class="text-2xl font-bold">0 DA</div>
-          <div id="formule1Subtext" class="text-[11px] opacity-75 mt-1">Σ Nat × 25 + Σ Int × 50</div>
-        </button>
-
-        <button id="formule2Card" onclick="openDetails('f2')" class="text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer">
-          <div class="flex justify-between items-start mb-1">
-            <span class="text-xs font-bold uppercase tracking-wider opacity-90">Recommandées</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </div>
-          <div id="formule2Total" class="text-2xl font-bold">0 DA</div>
-          <div id="formule2Subtext" class="text-[11px] opacity-75 mt-1">Σ LR Nat × 175 + Σ LR Int × 350</div>
-        </button>
+    <!-- HEADER -->
+    <header class="app-header">
+      <div class="app-title-wrap">
+        <h1 id="appTitle" class="app-title">
+          Bureau de poste
+          <span class="app-title-line2">DAHMOUNI 14010</span>
+        </h1>
+        <span class="app-title-underline"></span>
       </div>
 
-      <div id="daysGrid" class="grid grid-cols-5 sm:grid-cols-7 gap-2.5 sm:gap-3"></div>
+      <div class="logo-stage">
+        <div class="logo-halo"></div>
+        <div class="logo-inner">
+          <img src="https://i.ibb.co/ds9JFS3p/1000127367-removebg-preview.png" alt="Logo Bureau de poste DAHMOUNI 14010">
+          <div class="logo-shine"></div>
+        </div>
+      </div>
 
-      <div id="tableSection" class="mt-6">
-        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-600 mb-3 text-center">
-          Tableau des données
-        </h3>
+      <div class="header-row">
+        <button id="backBtn" onclick="goBack()" class="back-btn hidden" aria-label="Retour">
+          <svg xmlns="http://www.w3.org/2000/svg" style="width:1.25rem;height:1.25rem;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <div class="year-badge-wrapper">
+          <button id="yearBadge" class="year-badge hidden" onclick="openYearPicker()" aria-label="Changer d'année">
+            <span id="yearBadgeLabel">2026</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-grow flex items-start justify-center p-4 sm:p-6 w-full">
+
+      <!-- VUE 1 : ACCUEIL -->
+      <div id="viewHome" class="home-card">
+        <h2>Menu Principal</h2>
+
+        <div class="space-y-4">
+          <button onclick="goToSection('arrivals')" class="home-btn home-btn-primary">
+            Lettres d'arrivées
+          </button>
+
+          <button onclick="goToSection('departures')" class="home-btn home-btn-secondary">
+            Lettres de départ
+          </button>
+
+          <button onclick="goToAnnualReport()" class="home-btn home-btn-tertiary">
+            Rapport annuel
+          </button>
+        </div>
+      </div>
+
+      <!-- VUE 2 : MOIS -->
+      <div id="viewMonths" class="hidden w-full max-w-2xl bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-6 sm:p-8 self-center">
+        <h2 id="monthsTitle" class="text-lg sm:text-xl font-semibold mb-6 text-center text-gray-700">Sélectionnez un mois</h2>
+        <div id="monthsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4"></div>
+      </div>
+
+      <!-- VUE 3 : JOURS -->
+      <div id="viewDays" class="hidden w-full max-w-3xl bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-6 sm:p-8">
+        <h2 id="daysTitle" class="text-lg sm:text-xl font-semibold mb-4 text-center text-gray-700">Sélectionnez un jour</h2>
+
+        <div id="formuleCardsContainer" class="grid grid-cols-2 gap-3 mb-6 hidden">
+          <button id="formule1Card" onclick="openDetails('f1')" class="text-left rounded-2xl p-4 cursor-pointer">
+            <div class="flex justify-between items-start mb-1">
+              <span class="text-xs font-bold uppercase tracking-wider opacity-90">Ordinaires</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+            <div id="formule1Total" class="text-2xl font-bold">0 DA</div>
+            <div id="formule1Subtext" class="text-[11px] opacity-75 mt-1">Σ Nat × 25 + Σ Int × 50</div>
+          </button>
+
+          <button id="formule2Card" onclick="openDetails('f2')" class="text-left rounded-2xl p-4 cursor-pointer">
+            <div class="flex justify-between items-start mb-1">
+              <span class="text-xs font-bold uppercase tracking-wider opacity-90">Recommandées</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+            <div id="formule2Total" class="text-2xl font-bold">0 DA</div>
+            <div id="formule2Subtext" class="text-[11px] opacity-75 mt-1">Σ LR Nat × 175 + Σ LR Int × 350</div>
+          </button>
+        </div>
+
+        <div id="daysGrid" class="grid grid-cols-5 sm:grid-cols-7 gap-2.5 sm:gap-3"></div>
+
+        <div id="tableSection" class="mt-6">
+          <h3 class="text-sm font-bold uppercase tracking-wider text-gray-600 mb-3 text-center">
+            Tableau des données
+          </h3>
+          <div class="bg-white/80 backdrop-blur-md border border-white/80 rounded-2xl p-2 overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="data-table" id="dataTable">
+                <thead>
+                  <tr>
+                    <th>J</th>
+                    <th>NAT</th>
+                    <th>INT</th>
+                    <th>LRN</th>
+                    <th>LRI</th>
+                    <th>RF</th>
+                    <th>CO</th>
+                    <th>CH</th>
+                    <th>PO</th>
+                    <th>PR</th>
+                    <th>CPX</th>
+                    <th id="lastColHeader">CRT</th>
+                  </tr>
+                </thead>
+                <tbody id="dataTableBody"></tbody>
+                <tfoot id="dataTableFooter"></tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VUE 4 : RAPPORT ANNUEL -->
+      <div id="viewAnnual" class="hidden w-full max-w-5xl bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-4 sm:p-6">
+        <h2 class="text-lg sm:text-xl font-semibold mb-3 text-center text-gray-700">
+          Rapport annuel <span id="annualYearLabel">2026</span>
+        </h2>
+
+        <div class="flex justify-center gap-2 mb-5">
+          <button id="toggleArrivals" onclick="switchAnnualSection('arrivals')" class="toggle-btn active-blue">
+            Lettres d'arrivées
+          </button>
+          <button id="toggleDepartures" onclick="switchAnnualSection('departures')" class="toggle-btn inactive">
+            Lettres de départ
+          </button>
+        </div>
+
         <div class="bg-white/80 backdrop-blur-md border border-white/80 rounded-2xl p-2 overflow-hidden">
           <div class="overflow-x-auto">
-            <table class="data-table" id="dataTable">
+            <table class="data-table annual" id="annualTable">
               <thead>
                 <tr>
-                  <th>J</th>
+                  <th class="col-month" style="text-align: left; padding-left: 6px;">MOIS</th>
                   <th>NAT</th>
                   <th>INT</th>
                   <th>LRN</th>
@@ -1011,63 +1294,33 @@
                   <th>PO</th>
                   <th>PR</th>
                   <th>CPX</th>
-                  <th id="lastColHeader">CRT</th>
+                  <th id="annualLastColHeader">CRT</th>
                 </tr>
               </thead>
-              <tbody id="dataTableBody"></tbody>
-              <tfoot id="dataTableFooter"></tfoot>
+              <tbody id="annualTableBody"></tbody>
+              <tfoot id="annualTableFooter"></tfoot>
             </table>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- VUE 4 : RAPPORT ANNUEL -->
-    <div id="viewAnnual" class="hidden w-full max-w-5xl bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-4 sm:p-6">
-      <h2 class="text-lg sm:text-xl font-semibold mb-3 text-center text-gray-700">
-        Rapport annuel <span id="annualYearLabel">2026</span>
-      </h2>
+    </main>
 
-      <div class="flex justify-center gap-2 mb-5">
-        <button id="toggleArrivals" onclick="switchAnnualSection('arrivals')" class="toggle-btn active-blue">
-          Lettres d'arrivées
-        </button>
-        <button id="toggleDepartures" onclick="switchAnnualSection('departures')" class="toggle-btn inactive">
-          Lettres de départ
+    <!-- FOOTER + BOUTON DÉCONNEXION -->
+    <footer class="w-full">
+      <div class="logout-wrapper">
+        <button onclick="handleLogout()" class="logout-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          <span>Se déconnecter</span>
         </button>
       </div>
-
-      <div class="bg-white/80 backdrop-blur-md border border-white/80 rounded-2xl p-2 overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="data-table annual" id="annualTable">
-            <thead>
-              <tr>
-                <th class="col-month" style="text-align: left; padding-left: 6px;">MOIS</th>
-                <th>NAT</th>
-                <th>INT</th>
-                <th>LRN</th>
-                <th>LRI</th>
-                <th>RF</th>
-                <th>CO</th>
-                <th>CH</th>
-                <th>PO</th>
-                <th>PR</th>
-                <th>CPX</th>
-                <th id="annualLastColHeader">CRT</th>
-              </tr>
-            </thead>
-            <tbody id="annualTableBody"></tbody>
-            <tfoot id="annualTableFooter"></tfoot>
-          </table>
-        </div>
+      <div class="p-2 text-center text-xs text-gray-500 font-medium">
+        2026 - Algerie Poste
       </div>
-    </div>
-
-  </main>
-
-  <footer class="w-full p-4 text-center text-xs text-gray-500 font-medium">
-    2026 - Algerie Poste
-  </footer>
+    </footer>
+  </div>
 
   <!-- MODALE DE SAISIE -->
   <div id="modal" class="fixed inset-0 bg-slate-900/30 backdrop-blur-xs flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300 z-50 overflow-y-auto">
@@ -1154,10 +1407,10 @@
         </div>
 
         <div class="flex justify-end gap-3 pt-2 sticky bottom-0 bg-white/90 backdrop-blur-lg pb-2 -mb-2">
-          <button type="button" onclick="closeModal()" class="px-5 py-2.5 rounded-2xl text-gray-600 hover:bg-gray-200/50 transition cursor-pointer font-medium">
+          <button type="button" onclick="closeModal()" class="px-5 py-2.5 rounded-2xl text-gray-600 hover:bg-gray-200/50 cursor-pointer font-medium">
             Fermer
           </button>
-          <button type="submit" class="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-6 py-2.5 rounded-2xl transition cursor-pointer font-medium shadow-sm">
+          <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-2xl cursor-pointer font-medium shadow-sm">
             Enregistrer
           </button>
         </div>
@@ -1166,7 +1419,7 @@
     </div>
   </div>
 
-  <!-- MODALE DÉTAIL + ÉDITION TARIFS -->
+  <!-- MODALE DÉTAIL -->
   <div id="detailModal" class="fixed inset-0 bg-slate-900/30 backdrop-blur-xs flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300 z-50 overflow-y-auto">
     <div id="detailModalContent" class="w-full max-w-md bg-white/95 backdrop-blur-lg border border-white rounded-3xl p-6 sm:p-8 transform scale-95 transition-transform duration-300 my-8 max-h-[90vh] overflow-y-auto">
 
@@ -1190,10 +1443,10 @@
           </div>
         </div>
         <div class="flex justify-end gap-2">
-          <button type="button" onclick="resetRates()" class="px-3 py-1.5 text-xs rounded-xl text-gray-500 hover:bg-gray-200/60 transition cursor-pointer font-medium">
+          <button type="button" onclick="resetRates()" class="px-3 py-1.5 text-xs rounded-xl text-gray-500 hover:bg-gray-200/60 cursor-pointer font-medium">
             Réinitialiser
           </button>
-          <button type="button" onclick="saveRates()" class="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-4 py-1.5 text-xs rounded-xl transition cursor-pointer font-semibold shadow-sm">
+          <button type="button" onclick="saveRates()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 text-xs rounded-xl cursor-pointer font-semibold shadow-sm">
             Enregistrer
           </button>
         </div>
@@ -1211,7 +1464,7 @@
       </div>
 
       <div class="flex justify-end mt-5">
-        <button type="button" onclick="closeDetailModal()" class="px-5 py-2.5 rounded-2xl text-gray-600 hover:bg-gray-200/50 transition cursor-pointer font-medium">
+        <button type="button" onclick="closeDetailModal()" class="px-5 py-2.5 rounded-2xl text-gray-600 hover:bg-gray-200/50 cursor-pointer font-medium">
           Fermer
         </button>
       </div>
@@ -1219,7 +1472,7 @@
     </div>
   </div>
 
-  <!-- MODALE SÉLECTEUR D'ANNÉE -->
+  <!-- MODALE ANNÉE -->
   <div id="yearModal" class="fixed inset-0 bg-slate-900/30 backdrop-blur-xs flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300 z-50 overflow-y-auto">
     <div id="yearModalContent" class="w-full max-w-md bg-white/95 backdrop-blur-lg border border-white rounded-3xl p-6 sm:p-8 transform scale-95 transition-transform duration-300 my-8">
 
@@ -1231,7 +1484,7 @@
       <div id="yearGrid" class="grid grid-cols-4 gap-3"></div>
 
       <div class="flex justify-end mt-6">
-        <button type="button" onclick="closeYearPicker()" class="px-5 py-2.5 rounded-2xl text-gray-600 hover:bg-gray-200/50 transition cursor-pointer font-medium">
+        <button type="button" onclick="closeYearPicker()" class="px-5 py-2.5 rounded-2xl text-gray-600 hover:bg-gray-200/50 cursor-pointer font-medium">
           Annuler
         </button>
       </div>
@@ -1265,7 +1518,144 @@
 
   <script>
     // ============================================================
-    // 1) SERVICE WORKER
+    // 0) VIBRATION GLOBALE AU CLIC
+    // ============================================================
+    function vibrate(duration = 12) {
+      try {
+        if (navigator.vibrate) navigator.vibrate(duration);
+      } catch (e) { /* ignore */ }
+    }
+
+    // Attache automatiquement la vibration à tous les <button>
+    function attachVibrationToButtons() {
+      document.querySelectorAll('button').forEach(btn => {
+        if (btn.dataset.vibAttached) return;
+        btn.dataset.vibAttached = '1';
+        btn.addEventListener('pointerdown', () => vibrate(10), { passive: true });
+      });
+    }
+    document.addEventListener('DOMContentLoaded', attachVibrationToButtons);
+    // Ré-attacher aux boutons créés dynamiquement
+    const _obs = new MutationObserver(() => attachVibrationToButtons());
+    document.addEventListener('DOMContentLoaded', () => {
+      _obs.observe(document.body, { childList: true, subtree: true });
+    });
+
+    // ============================================================
+    // 1) AUTHENTIFICATION (SHA-256)
+    // ============================================================
+    // Mot de passe demandé à CHAQUE lancement (pas de persistence)
+    let isAuthenticated = false; // en mémoire uniquement → redemandé à chaque ouverture
+
+    async function sha256(str) {
+      const buf = new TextEncoder().encode(str);
+      const hashBuf = await crypto.subtle.digest('SHA-256', buf);
+      return Array.from(new Uint8Array(hashBuf))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+    }
+
+    let EXPECTED_HASH = null;
+    (async () => {
+      EXPECTED_HASH = await sha256('0926');
+      console.log('[Auth] Hash attendu calculé');
+    })();
+
+    const lockScreen = document.getElementById('lockScreen');
+    const appContent = document.getElementById('appContent');
+    const lockForm = document.getElementById('lockForm');
+    const lockInput = document.getElementById('lockInput');
+    const lockError = document.getElementById('lockError');
+    const lockToggle = document.getElementById('lockToggle');
+    const eyeIcon = document.getElementById('eyeIcon');
+
+    let lockAttempts = 0;
+    let lockCooldownUntil = 0;
+
+    lockToggle.addEventListener('click', () => {
+      if (lockInput.type === 'password') {
+        lockInput.type = 'text';
+        eyeIcon.innerHTML = `
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+        `;
+      } else {
+        lockInput.type = 'password';
+        eyeIcon.innerHTML = `
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        `;
+      }
+    });
+
+    async function handleUnlock(e) {
+      e.preventDefault();
+      const now = Date.now();
+
+      if (now < lockCooldownUntil) {
+        const remaining = Math.ceil((lockCooldownUntil - now) / 1000);
+        lockError.textContent = `Trop d'essais. Réessayez dans ${remaining}s`;
+        vibrate([30, 50, 30]);
+        return;
+      }
+
+      if (!EXPECTED_HASH) EXPECTED_HASH = await sha256('0926');
+
+      const entered = lockInput.value.trim();
+      const enteredHash = await sha256(entered);
+
+      if (enteredHash === EXPECTED_HASH) {
+        isAuthenticated = true;
+        lockError.textContent = '';
+        vibrate(20);
+        lockScreen.classList.add('hidden');
+        appContent.style.display = 'flex';
+        setTimeout(() => lockScreen.style.display = 'none', 600);
+      } else {
+        lockAttempts++;
+        lockError.textContent = 'Mot de passe incorrect';
+        lockInput.classList.add('error');
+        lockInput.value = '';
+        vibrate([40, 30, 40]);
+        setTimeout(() => lockInput.classList.remove('error'), 500);
+
+        if (lockAttempts >= 3) {
+          lockCooldownUntil = now + 10000;
+          lockAttempts = 0;
+        }
+      }
+    }
+
+    // ============================================================
+    // 2) DÉCONNEXION
+    // ============================================================
+    function handleLogout() {
+      vibrate(25);
+      isAuthenticated = false;
+
+      // Réinitialiser l'input
+      lockInput.value = '';
+      lockInput.type = 'password';
+      lockError.textContent = '';
+      lockAttempts = 0;
+      lockCooldownUntil = 0;
+
+      // Revenir à la vue d'accueil pour la prochaine connexion
+      showView('viewHome');
+
+      // Cacher l'app et afficher l'écran de verrouillage
+      appContent.style.display = 'none';
+      lockScreen.style.display = 'flex';
+      // Force reflow pour que la transition fonctionne
+      void lockScreen.offsetWidth;
+      lockScreen.classList.remove('hidden');
+
+      setTimeout(() => {
+        lockInput.focus();
+      }, 500);
+    }
+
+    // ============================================================
+    // 3) SERVICE WORKER
     // ============================================================
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -1276,7 +1666,7 @@
     }
 
     // ============================================================
-    // 2) BOUTON INSTALLER PWA
+    // 4) BOUTON INSTALLER PWA
     // ============================================================
     let deferredInstallPrompt = null;
     let installBtn, iosHint;
@@ -1361,7 +1751,7 @@
     });
 
     // ============================================================
-    // 3) LOGIQUE APP
+    // 5) LOGIQUE APP
     // ============================================================
     let currentYear = new Date().getFullYear();
     const TODAY_YEAR = new Date().getFullYear();
@@ -1581,9 +1971,9 @@
       const card1 = document.getElementById('formule1Card');
       const card2 = document.getElementById('formule2Card');
 
-      card1.className = `text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer ${cfg.cardClasses}`;
+      card1.className = `text-left rounded-2xl p-4 cursor-pointer ${cfg.cardClasses}`;
       const altClasses = 'bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white';
-      card2.className = `text-left rounded-2xl p-4 transition-all duration-200 transform active:scale-95 cursor-pointer ${altClasses}`;
+      card2.className = `text-left rounded-2xl p-4 cursor-pointer ${altClasses}`;
     }
 
     function renderDays(monthIndex) {
@@ -1603,7 +1993,7 @@
         const hasData = db[key] !== undefined;
 
         const btn = document.createElement('button');
-        btn.className = `aspect-square rounded-2xl border transition-all duration-200 flex flex-col items-center justify-center font-semibold text-sm cursor-pointer shadow-xs ${
+        btn.className = `aspect-square rounded-2xl border flex flex-col items-center justify-center font-semibold text-sm cursor-pointer shadow-xs ${
           hasData
             ? 'bg-amber-400/90 border-amber-500 text-gray-900 hover:bg-amber-500'
             : 'bg-white/70 border-white/80 hover:bg-blue-600 hover:text-white text-gray-700'
@@ -1762,6 +2152,7 @@
       db[key] = entry;
       saveCurrentDB();
 
+      vibrate(15);
       closeModal();
       renderDays(currentMonthIndex);
     }
@@ -1948,7 +2339,7 @@
     }
 
     // ============================================================
-    // 4) RAPPORT ANNUEL
+    // RAPPORT ANNUEL
     // ============================================================
     function updateAnnualToggles() {
       const btnA = document.getElementById('toggleArrivals');
@@ -2084,7 +2475,7 @@
     }
 
     // ============================================================
-    // 5) SÉLECTEUR D'ANNÉE
+    // SÉLECTEUR D'ANNÉE
     // ============================================================
     function openYearPicker() {
       const grid = document.getElementById('yearGrid');
@@ -2098,7 +2489,7 @@
         const isToday = (y === TODAY_YEAR);
 
         const btn = document.createElement('button');
-        btn.className = `py-3 px-2 rounded-2xl border font-semibold text-sm transition-all duration-200 cursor-pointer ${
+        btn.className = `py-3 px-2 rounded-2xl border font-semibold text-sm cursor-pointer ${
           isCurrent
             ? 'bg-amber-400 border-amber-500 text-gray-900 shadow-sm'
             : isToday
@@ -2147,7 +2538,7 @@
     }
 
     // ============================================================
-    // 6) FERMETURE DES MODALES AU CLIC EXTÉRIEUR
+    // FERMETURE DES MODALES AU CLIC EXTÉRIEUR
     // ============================================================
     document.getElementById('modal').addEventListener('click', (e) => {
       if (e.target === document.getElementById('modal')) closeModal();
