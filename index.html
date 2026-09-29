@@ -45,10 +45,7 @@
     svg { display: block; }
     ::selection { background: #3b82f6; color: white; }
 
-    /* ============================================================
-       BOUTONS — ANIMATION AMÉLIORÉE
-       ============================================================ */
-    /* Tous les boutons ont une transition de qualité + un effet de "press" */
+    /* ===== ANIMATION BOUTONS PREMIUM ===== */
     button, .btn-anim {
       transition:
         transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -64,9 +61,7 @@
       transition-duration: 0.08s;
     }
 
-    /* ============================================================
-       LOGO ANIMÉ PREMIUM
-       ============================================================ */
+    /* ===== LOGO ANIMÉ ===== */
     .logo-stage {
       position: relative;
       display: flex;
@@ -217,9 +212,7 @@
       .logo-shine::after { animation: none; }
     }
 
-    /* ============================================================
-       HEADER — Titre stylisé
-       ============================================================ */
+    /* ===== HEADER ===== */
     .app-header {
       width: 100%;
       max-width: 56rem;
@@ -315,7 +308,6 @@
     .flex { display: flex; }
     .flex-col { flex-direction: column; }
     .flex-grow { flex-grow: 1; }
-    .flex-wrap { flex-wrap: wrap; }
     .items-center { align-items: center; }
     .items-start { align-items: flex-start; }
     .justify-center { justify-content: center; }
@@ -555,7 +547,6 @@
     .focus\:ring-blue-500:focus { box-shadow: 0 0 0 2px #3b82f6; }
     .focus\:ring-amber-500:focus { box-shadow: 0 0 0 2px #f59e0b; }
     .focus\:ring-red-500:focus { box-shadow: 0 0 0 2px #ef4444; }
-    .group:hover .group-hover\:text-blue-100 { color: #dbeafe; }
 
     /* ===== POSITIONING ===== */
     .fixed { position: fixed; }
@@ -565,7 +556,6 @@
     .bottom-0 { bottom: 0; }
     .z-10 { z-index: 10; }
     .z-50 { z-index: 50; }
-    .z-\[100\] { z-index: 100; }
 
     /* ===== OVERFLOW / DISPLAY ===== */
     .hidden { display: none; }
@@ -803,9 +793,7 @@
       color: #374151;
     }
 
-    /* ============================================================
-       CARTE ACCUEIL
-       ============================================================ */
+    /* ===== CARTE ACCUEIL ===== */
     .home-card {
       width: 100%;
       max-width: 28rem;
@@ -876,9 +864,7 @@
       background-color: rgba(255, 255, 255, 0.85);
     }
 
-    /* ============================================================
-       ÉCRAN DE MOT DE PASSE
-       ============================================================ */
+    /* ===== ÉCRAN DE MOT DE PASSE ===== */
     .lock-screen {
       position: fixed;
       inset: 0;
@@ -1030,9 +1016,7 @@
       max-width: 18rem;
     }
 
-    /* ============================================================
-       BOUTON DÉCONNEXION (bas de page)
-       ============================================================ */
+    /* ===== BOUTON DÉCONNEXION ===== */
     .logout-wrapper {
       width: 100%;
       padding: 0.5rem 1rem 1rem;
@@ -1054,7 +1038,6 @@
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
       cursor: pointer;
-      transition: all 0.2s;
     }
     .logout-btn:hover {
       background-color: rgba(255, 255, 255, 0.85);
@@ -1132,10 +1115,37 @@
     <div class="lock-hint">
       Accès réservé au personnel autorisé
     </div>
+
+    <!-- À SUPPRIMER : bouton de test vibration temporaire -->
+    <button
+      type="button"
+      onclick="
+        const hasApi = typeof navigator.vibrate === 'function';
+        const result = hasApi ? navigator.vibrate(200) : 'N/A';
+        alert(
+          'navigator.vibrate existe : ' + hasApi + '\n' +
+          'Résultat : ' + result + '\n' +
+          'isIOS : ' + isIOS
+        );
+      "
+      style="
+        margin-top:1rem;
+        padding:0.4rem 0.9rem;
+        border-radius:9999px;
+        font-size:0.7rem;
+        font-weight:600;
+        color:#6b7280;
+        background-color:rgba(255,255,255,0.5);
+        border:1px solid rgba(255,255,255,0.7);
+        cursor:pointer;
+      ">
+      Test vibration
+    </button>
+    <!-- FIN À SUPPRIMER -->
   </div>
 
   <!-- ============================================================
-       CONTENU PRINCIPAL (masqué jusqu'à authentification)
+       CONTENU PRINCIPAL
        ============================================================ -->
   <div id="appContent" style="display: none; flex-direction: column; flex-grow: 1;">
 
@@ -1240,20 +1250,7 @@
             <div class="overflow-x-auto">
               <table class="data-table" id="dataTable">
                 <thead>
-                  <tr>
-                    <th>J</th>
-                    <th>NAT</th>
-                    <th>INT</th>
-                    <th>LRN</th>
-                    <th>LRI</th>
-                    <th>RF</th>
-                    <th>CO</th>
-                    <th>CH</th>
-                    <th>PO</th>
-                    <th>PR</th>
-                    <th>CPX</th>
-                    <th id="lastColHeader">CRT</th>
-                  </tr>
+                  <tr id="dataTableHead"></tr>
                 </thead>
                 <tbody id="dataTableBody"></tbody>
                 <tfoot id="dataTableFooter"></tfoot>
@@ -1518,34 +1515,129 @@
 
   <script>
     // ============================================================
-    // 0) VIBRATION GLOBALE AU CLIC
+    // 0) VIBRATION GLOBALE AU CLIC (CORRIGÉE)
     // ============================================================
-    function vibrate(duration = 12) {
-      try {
-        if (navigator.vibrate) navigator.vibrate(duration);
-      } catch (e) { /* ignore */ }
+    // Deux mécanismes :
+    //   1) Android / Chrome : navigator.vibrate() — déclenché par un vrai click
+    //   2) iOS Safari 17.4+ : fallback via <input type="checkbox" switch> caché
+    // ============================================================
+
+    // --- Détection iOS (nécessaire ici, avant les fonctions de vibration) ---
+    const uaVibrate = navigator.userAgent || '';
+    const isIOS = /iPad|iPhone|iPod/.test(uaVibrate)
+                || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    const HAS_VIBRATE_API = typeof navigator.vibrate === 'function';
+
+    // ------------------------------------------------------------
+    // Fallback haptique iOS (Safari 17.4+)
+    // ------------------------------------------------------------
+    let iosHapticLabel = null;
+
+    function setupIOSHaptic() {
+      if (!isIOS || iosHapticLabel) return;
+
+      iosHapticLabel = document.createElement('label');
+      iosHapticLabel.setAttribute('aria-hidden', 'true');
+      iosHapticLabel.style.cssText =
+        'position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;overflow:hidden;';
+
+      const switchInput = document.createElement('input');
+      switchInput.type = 'checkbox';
+      switchInput.setAttribute('switch', '');
+      switchInput.setAttribute('tabindex', '-1');
+
+      iosHapticLabel.appendChild(switchInput);
+      document.body.appendChild(iosHapticLabel);
     }
 
-    // Attache automatiquement la vibration à tous les <button>
-    function attachVibrationToButtons() {
-      document.querySelectorAll('button').forEach(btn => {
-        if (btn.dataset.vibAttached) return;
-        btn.dataset.vibAttached = '1';
-        btn.addEventListener('pointerdown', () => vibrate(10), { passive: true });
-      });
+    function hapticIOS() {
+      if (!iosHapticLabel) return;
+      try {
+        iosHapticLabel.click();
+      } catch (e) {
+        // Silencieux
+      }
     }
-    document.addEventListener('DOMContentLoaded', attachVibrationToButtons);
-    // Ré-attacher aux boutons créés dynamiquement
-    const _obs = new MutationObserver(() => attachVibrationToButtons());
+
+    // ------------------------------------------------------------
+    // Vibrations (Android natif + fallback iOS)
+    // ------------------------------------------------------------
+    function vibrate(duration = 40) {
+      if (HAS_VIBRATE_API) {
+        try {
+          const ok = navigator.vibrate(duration);
+          if (ok === false) console.log('[Vibrate] navigator.vibrate a renvoyé false');
+          return ok;
+        } catch (e) {
+          console.log('[Vibrate] exception :', e);
+        }
+      }
+      if (isIOS) hapticIOS();
+      return false;
+    }
+
+    function vibrateError() {
+      // Pattern court-long-court (impossible à rater)
+      if (HAS_VIBRATE_API) {
+        try {
+          const ok = navigator.vibrate([80, 50, 80, 50, 80]);
+          if (ok === false) console.log('[Vibrate] navigator.vibrate (error) a renvoyé false');
+          return;
+        } catch (e) {}
+      }
+      if (isIOS) hapticIOS();
+    }
+
+    function vibrateSuccess() {
+      // Double pulse rapide
+      if (HAS_VIBRATE_API) {
+        try {
+          const ok = navigator.vibrate([30, 40, 30]);
+          if (ok === false) console.log('[Vibrate] navigator.vibrate (success) a renvoyé false');
+          return;
+        } catch (e) {}
+      }
+      if (isIOS) hapticIOS();
+    }
+
+    // Anti-doublon : un même tap ne vibre qu'une seule fois
+    let _lastVibrateTime = 0;
+    function vibrateOnce(duration = 40) {
+      const now = Date.now();
+      if (now - _lastVibrateTime < 100) return;
+      _lastVibrateTime = now;
+      vibrate(duration);
+    }
+
+    // ------------------------------------------------------------
+    // UN SEUL listener délégué en phase de capture
+    // ------------------------------------------------------------
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('button')) {
+        vibrateOnce(40);
+      }
+    }, true);
+
+    // ------------------------------------------------------------
+    // Initialisation + diagnostic
+    // ------------------------------------------------------------
     document.addEventListener('DOMContentLoaded', () => {
-      _obs.observe(document.body, { childList: true, subtree: true });
+      setupIOSHaptic();
+
+      if (HAS_VIBRATE_API) {
+        console.log('[Vibrate] API Android/Chrome disponible ✅');
+      } else if (isIOS) {
+        console.log('[Vibrate] API indisponible → fallback haptique iOS actif ✅');
+      } else {
+        console.log('[Vibrate] API indisponible, aucun fallback (navigateur non supporté) ❌');
+      }
     });
 
     // ============================================================
     // 1) AUTHENTIFICATION (SHA-256)
     // ============================================================
-    // Mot de passe demandé à CHAQUE lancement (pas de persistence)
-    let isAuthenticated = false; // en mémoire uniquement → redemandé à chaque ouverture
+    let isAuthenticated = false;
 
     async function sha256(str) {
       const buf = new TextEncoder().encode(str);
@@ -1569,32 +1661,36 @@
     const lockToggle = document.getElementById('lockToggle');
     const eyeIcon = document.getElementById('eyeIcon');
 
+    // SVG du bouton toggle (yeux ouverts / barrés)
+    const EYE_OPEN_SVG = `
+      <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    `;
+    const EYE_CLOSED_SVG = `
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+    `;
+
     let lockAttempts = 0;
     let lockCooldownUntil = 0;
 
     lockToggle.addEventListener('click', () => {
-      if (lockInput.type === 'password') {
-        lockInput.type = 'text';
-        eyeIcon.innerHTML = `
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
-        `;
-      } else {
-        lockInput.type = 'password';
-        eyeIcon.innerHTML = `
-          <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        `;
-      }
+      const showing = lockInput.type === 'password';
+      lockInput.type = showing ? 'text' : 'password';
+      eyeIcon.innerHTML = showing ? EYE_CLOSED_SVG : EYE_OPEN_SVG;
     });
 
     async function handleUnlock(e) {
       e.preventDefault();
+
+      // Vibration immédiate, AVANT tout await → garantit le geste utilisateur
+      vibrate(40);
+
       const now = Date.now();
 
       if (now < lockCooldownUntil) {
         const remaining = Math.ceil((lockCooldownUntil - now) / 1000);
         lockError.textContent = `Trop d'essais. Réessayez dans ${remaining}s`;
-        vibrate([30, 50, 30]);
+        vibrateError();
         return;
       }
 
@@ -1606,7 +1702,7 @@
       if (enteredHash === EXPECTED_HASH) {
         isAuthenticated = true;
         lockError.textContent = '';
-        vibrate(20);
+        vibrateSuccess();
         lockScreen.classList.add('hidden');
         appContent.style.display = 'flex';
         setTimeout(() => lockScreen.style.display = 'none', 600);
@@ -1615,7 +1711,7 @@
         lockError.textContent = 'Mot de passe incorrect';
         lockInput.classList.add('error');
         lockInput.value = '';
-        vibrate([40, 30, 40]);
+        vibrateError();
         setTimeout(() => lockInput.classList.remove('error'), 500);
 
         if (lockAttempts >= 3) {
@@ -1629,29 +1725,23 @@
     // 2) DÉCONNEXION
     // ============================================================
     function handleLogout() {
-      vibrate(25);
+      vibrateSuccess();
       isAuthenticated = false;
 
-      // Réinitialiser l'input
       lockInput.value = '';
       lockInput.type = 'password';
       lockError.textContent = '';
       lockAttempts = 0;
       lockCooldownUntil = 0;
 
-      // Revenir à la vue d'accueil pour la prochaine connexion
       showView('viewHome');
 
-      // Cacher l'app et afficher l'écran de verrouillage
       appContent.style.display = 'none';
       lockScreen.style.display = 'flex';
-      // Force reflow pour que la transition fonctionne
       void lockScreen.offsetWidth;
       lockScreen.classList.remove('hidden');
 
-      setTimeout(() => {
-        lockInput.focus();
-      }, 500);
+      setTimeout(() => lockInput.focus(), 500);
     }
 
     // ============================================================
@@ -1672,7 +1762,6 @@
     let installBtn, iosHint;
 
     const ua = navigator.userAgent || '';
-    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     const isFirefox = /Firefox|FxiOS/i.test(ua);
 
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches
@@ -1762,18 +1851,34 @@
     let currentDetailType = 'f1';
     let annualSection = 'arrivals';
 
-    const BASE_FIELDS = [
-      { key: 'nat',   id: 'lettresNat' },
-      { key: 'inter', id: 'lettresInt' },
-      { key: 'lrNat', id: 'lrNat' },
-      { key: 'lrInt', id: 'lrInt' },
-      { key: 'rf',    id: 'rf' },
-      { key: 'co',    id: 'co' },
-      { key: 'ch',    id: 'ch' },
-      { key: 'po',    id: 'po' },
-      { key: 'pr',    id: 'pr' },
-      { key: 'cpx',   id: 'cpx' },
-    ];
+    // Champs communs à toutes les sections (ordre : affichage dans le tableau)
+    const FIELD_KEYS = ['nat', 'inter', 'lrNat', 'lrInt', 'rf', 'co', 'ch', 'po', 'pr', 'cpx'];
+    // Correspondance clé → id HTML pour la modale de saisie
+    const FIELD_IDS = {
+      nat:   'lettresNat',
+      inter: 'lettresInt',
+      lrNat: 'lrNat',
+      lrInt: 'lrInt',
+      rf:    'rf',
+      co:    'co',
+      ch:    'ch',
+      po:    'po',
+      pr:    'pr',
+      cpx:   'cpx',
+    };
+    // Libellés des colonnes du tableau (courts, identiques à l'original)
+    const FIELD_LABELS = {
+      nat:   'NAT',
+      inter: 'INT',
+      lrNat: 'LRN',
+      lrInt: 'LRI',
+      rf:    'RF',
+      co:    'CO',
+      ch:    'CH',
+      po:    'PO',
+      pr:    'PR',
+      cpx:   'CPX',
+    };
 
     const SECTION_CONFIG = {
       arrivals: {
@@ -1819,7 +1924,30 @@
     }
     function getFields() {
       const cfg = SECTION_CONFIG[currentSection];
-      return [...BASE_FIELDS, { key: cfg.lastFieldKey, id: 'lastField' }];
+      return [...FIELD_KEYS.map(k => ({ key: k, id: FIELD_IDS[k] })), { key: cfg.lastFieldKey, id: 'lastField' }];
+    }
+
+    // ------------------------------------------------------------
+    // Helpers génériques pour les modales
+    // ------------------------------------------------------------
+    function openModalEl(modalId, contentId) {
+      const modal = document.getElementById(modalId);
+      const content = document.getElementById(contentId);
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        content.classList.remove('scale-95');
+        content.classList.add('scale-100');
+      }, 10);
+    }
+
+    function closeModalEl(modalId, contentId) {
+      const modal = document.getElementById(modalId);
+      const content = document.getElementById(contentId);
+      modal.classList.add('opacity-0');
+      content.classList.remove('scale-100');
+      content.classList.add('scale-95');
+      setTimeout(() => modal.classList.add('hidden'), 300);
     }
 
     function showView(viewId) {
@@ -2009,11 +2137,26 @@
       renderDataTable(monthIndex);
     }
 
+    // ------------------------------------------------------------
+    // Génération du tableau des données du mois
+    // ------------------------------------------------------------
     function renderDataTable(monthIndex) {
       const db = getCurrentDB();
       const cfg = SECTION_CONFIG[currentSection];
+      const lastKey = cfg.lastFieldKey;
+      const allKeys = [...FIELD_KEYS, lastKey];
 
-      document.getElementById('lastColHeader').textContent = cfg.lastColHeader;
+      // En-tête (généré une seule fois si vide)
+      const thead = document.getElementById('dataTableHead');
+      if (!thead.dataset.built) {
+        thead.innerHTML =
+          '<th>J</th>' +
+          FIELD_KEYS.map(k => `<th>${FIELD_LABELS[k]}</th>`).join('') +
+          `<th id="lastColHeader">${cfg.lastColHeader}</th>`;
+        thead.dataset.built = '1';
+      } else {
+        document.getElementById('lastColHeader').textContent = cfg.lastColHeader;
+      }
 
       const tbody = document.getElementById('dataTableBody');
       const tfoot = document.getElementById('dataTableFooter');
@@ -2021,13 +2164,8 @@
       tfoot.innerHTML = '';
 
       const daysInMonth = new Date(currentYear, monthIndex + 1, 0).getDate();
-      const lastKey = cfg.lastFieldKey;
-
-      const totals = {
-        nat: 0, inter: 0, lrNat: 0, lrInt: 0,
-        rf: 0, co: 0, ch: 0, po: 0, pr: 0, cpx: 0,
-        [lastKey]: 0
-      };
+      const totals = { [lastKey]: 0 };
+      allKeys.slice(0, -1).forEach(k => totals[k] = 0);
 
       let rowsCount = 0;
 
@@ -2038,69 +2176,29 @@
 
         rowsCount++;
 
-        const nat = entry.nat || 0;
-        const inter = entry.inter || 0;
-        const lrNat = entry.lrNat || 0;
-        const lrInt = entry.lrInt || 0;
-        const rf = entry.rf || 0;
-        const co = entry.co || 0;
-        const ch = entry.ch || 0;
-        const po = entry.po || 0;
-        const pr = entry.pr || 0;
-        const cpx = entry.cpx || 0;
-        const lastVal = entry[lastKey] || 0;
-
-        totals.nat += nat;
-        totals.inter += inter;
-        totals.lrNat += lrNat;
-        totals.lrInt += lrInt;
-        totals.rf += rf;
-        totals.co += co;
-        totals.ch += ch;
-        totals.po += po;
-        totals.pr += pr;
-        totals.cpx += cpx;
-        totals[lastKey] += lastVal;
+        const vals = {};
+        allKeys.forEach(k => {
+          vals[k] = entry[k] || 0;
+          totals[k] += vals[k];
+        });
 
         const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="col-date">${day}</td>
-          <td>${nat || '·'}</td>
-          <td>${inter || '·'}</td>
-          <td>${lrNat || '·'}</td>
-          <td>${lrInt || '·'}</td>
-          <td>${rf || '·'}</td>
-          <td>${co || '·'}</td>
-          <td>${ch || '·'}</td>
-          <td>${po || '·'}</td>
-          <td>${pr || '·'}</td>
-          <td>${cpx || '·'}</td>
-          <td>${lastVal || '·'}</td>
-        `;
+        tr.innerHTML =
+          `<td class="col-date">${day}</td>` +
+          allKeys.map(k => `<td>${vals[k] || '·'}</td>`).join('');
         tbody.appendChild(tr);
       }
 
       if (rowsCount === 0) {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td colspan="12" class="italic text-gray-400" style="padding: 12px 6px;">Aucune donnée saisie ce mois-ci</td>`;
+        tr.innerHTML = `<td colspan="${allKeys.length + 1}" class="italic text-gray-400" style="padding: 12px 6px;">Aucune donnée saisie ce mois-ci</td>`;
         tbody.appendChild(tr);
       } else {
-        const trTotal = document.createElement('tr');
-        trTotal.innerHTML = `
-          <td>TOT</td>
-          <td>${totals.nat}</td>
-          <td>${totals.inter}</td>
-          <td>${totals.lrNat}</td>
-          <td>${totals.lrInt}</td>
-          <td>${totals.rf}</td>
-          <td>${totals.co}</td>
-          <td>${totals.ch}</td>
-          <td>${totals.po}</td>
-          <td>${totals.pr}</td>
-          <td>${totals.cpx}</td>
-          <td>${totals[lastKey]}</td>
-        `;
-        tfoot.appendChild(trTotal);
+        const tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td>TOT</td>' +
+          allKeys.map(k => `<td>${totals[k]}</td>`).join('');
+        tfoot.appendChild(tr);
       }
     }
 
@@ -2119,23 +2217,11 @@
         input.value = (entry[f.key] !== undefined && entry[f.key] !== null) ? entry[f.key] : '';
       });
 
-      const modal = document.getElementById('modal');
-      const modalContent = document.getElementById('modalContent');
-      modal.classList.remove('hidden');
-      setTimeout(() => {
-        modal.classList.remove('opacity-0');
-        modalContent.classList.remove('scale-95');
-        modalContent.classList.add('scale-100');
-      }, 10);
+      openModalEl('modal', 'modalContent');
     }
 
     function closeModal() {
-      const modal = document.getElementById('modal');
-      const modalContent = document.getElementById('modalContent');
-      modal.classList.add('opacity-0');
-      modalContent.classList.remove('scale-100');
-      modalContent.classList.add('scale-95');
-      setTimeout(() => modal.classList.add('hidden'), 300);
+      closeModalEl('modal', 'modalContent');
     }
 
     function saveEntry(e) {
@@ -2152,7 +2238,7 @@
       db[key] = entry;
       saveCurrentDB();
 
-      vibrate(15);
+      vibrateSuccess();
       closeModal();
       renderDays(currentMonthIndex);
     }
@@ -2164,14 +2250,7 @@
       renderDetailModal();
       fillRateInputs();
 
-      const modal = document.getElementById('detailModal');
-      const content = document.getElementById('detailModalContent');
-      modal.classList.remove('hidden');
-      setTimeout(() => {
-        modal.classList.remove('opacity-0');
-        content.classList.remove('scale-95');
-        content.classList.add('scale-100');
-      }, 10);
+      openModalEl('detailModal', 'detailModalContent');
     }
 
     function fillRateInputs() {
@@ -2330,12 +2409,7 @@
     }
 
     function closeDetailModal() {
-      const modal = document.getElementById('detailModal');
-      const content = document.getElementById('detailModalContent');
-      modal.classList.add('opacity-0');
-      content.classList.remove('scale-100');
-      content.classList.add('scale-95');
-      setTimeout(() => modal.classList.add('hidden'), 300);
+      closeModalEl('detailModal', 'detailModalContent');
     }
 
     // ============================================================
@@ -2364,22 +2438,15 @@
       const db = getDB(section);
       const cfg = SECTION_CONFIG[section];
       const lastKey = cfg.lastFieldKey;
+      const allKeys = [...FIELD_KEYS, lastKey];
 
       const monthRows = [];
-      const totals = {
-        nat: 0, inter: 0, lrNat: 0, lrInt: 0,
-        rf: 0, co: 0, ch: 0, po: 0, pr: 0, cpx: 0,
-        [lastKey]: 0
-      };
+      const totals = {};
+      allKeys.forEach(k => totals[k] = 0);
 
       for (let m = 0; m < 12; m++) {
-        const row = {
-          month: m,
-          hasData: false,
-          nat: 0, inter: 0, lrNat: 0, lrInt: 0,
-          rf: 0, co: 0, ch: 0, po: 0, pr: 0, cpx: 0,
-          [lastKey]: 0
-        };
+        const row = { month: m, hasData: false };
+        allKeys.forEach(k => row[k] = 0);
 
         const daysInMonth = new Date(currentYear, m + 1, 0).getDate();
         for (let day = 1; day <= daysInMonth; day++) {
@@ -2388,31 +2455,10 @@
           if (!entry) continue;
 
           row.hasData = true;
-          row.nat   += entry.nat || 0;
-          row.inter += entry.inter || 0;
-          row.lrNat += entry.lrNat || 0;
-          row.lrInt += entry.lrInt || 0;
-          row.rf    += entry.rf || 0;
-          row.co    += entry.co || 0;
-          row.ch    += entry.ch || 0;
-          row.po    += entry.po || 0;
-          row.pr    += entry.pr || 0;
-          row.cpx   += entry.cpx || 0;
-          row[lastKey] += entry[lastKey] || 0;
+          allKeys.forEach(k => row[k] += entry[k] || 0);
         }
 
-        totals.nat   += row.nat;
-        totals.inter += row.inter;
-        totals.lrNat += row.lrNat;
-        totals.lrInt += row.lrInt;
-        totals.rf    += row.rf;
-        totals.co    += row.co;
-        totals.ch    += row.ch;
-        totals.po    += row.po;
-        totals.pr    += row.pr;
-        totals.cpx   += row.cpx;
-        totals[lastKey] += row[lastKey];
-
+        allKeys.forEach(k => totals[k] += row[k]);
         monthRows.push(row);
       }
 
@@ -2422,6 +2468,7 @@
     function renderAnnualReport() {
       const cfg = SECTION_CONFIG[annualSection];
       const lastKey = cfg.lastFieldKey;
+      const allKeys = [...FIELD_KEYS, lastKey];
 
       document.getElementById('annualYearLabel').textContent = currentYear;
       document.getElementById('annualLastColHeader').textContent = cfg.lastColHeader;
@@ -2436,41 +2483,17 @@
       monthRows.forEach(row => {
         const tr = document.createElement('tr');
         tr.className = row.hasData ? 'month-has-data' : 'month-empty';
-
         const fmt = (v) => row.hasData ? v : '·';
-
-        tr.innerHTML = `
-          <td class="col-month">${months[row.month]}</td>
-          <td>${fmt(row.nat)}</td>
-          <td>${fmt(row.inter)}</td>
-          <td>${fmt(row.lrNat)}</td>
-          <td>${fmt(row.lrInt)}</td>
-          <td>${fmt(row.rf)}</td>
-          <td>${fmt(row.co)}</td>
-          <td>${fmt(row.ch)}</td>
-          <td>${fmt(row.po)}</td>
-          <td>${fmt(row.pr)}</td>
-          <td>${fmt(row.cpx)}</td>
-          <td>${fmt(row[lastKey])}</td>
-        `;
+        tr.innerHTML =
+          `<td class="col-month">${months[row.month]}</td>` +
+          allKeys.map(k => `<td>${fmt(row[k])}</td>`).join('');
         tbody.appendChild(tr);
       });
 
       const trTotal = document.createElement('tr');
-      trTotal.innerHTML = `
-        <td>TOTALE</td>
-        <td>${totals.nat}</td>
-        <td>${totals.inter}</td>
-        <td>${totals.lrNat}</td>
-        <td>${totals.lrInt}</td>
-        <td>${totals.rf}</td>
-        <td>${totals.co}</td>
-        <td>${totals.ch}</td>
-        <td>${totals.po}</td>
-        <td>${totals.pr}</td>
-        <td>${totals.cpx}</td>
-        <td>${totals[lastKey]}</td>
-      `;
+      trTotal.innerHTML =
+        '<td>TOTALE</td>' +
+        allKeys.map(k => `<td>${totals[k]}</td>`).join('');
       tfoot.appendChild(trTotal);
     }
 
@@ -2504,23 +2527,11 @@
         grid.appendChild(btn);
       }
 
-      const modal = document.getElementById('yearModal');
-      const content = document.getElementById('yearModalContent');
-      modal.classList.remove('hidden');
-      setTimeout(() => {
-        modal.classList.remove('opacity-0');
-        content.classList.remove('scale-95');
-        content.classList.add('scale-100');
-      }, 10);
+      openModalEl('yearModal', 'yearModalContent');
     }
 
     function closeYearPicker() {
-      const modal = document.getElementById('yearModal');
-      const content = document.getElementById('yearModalContent');
-      modal.classList.add('opacity-0');
-      content.classList.remove('scale-100');
-      content.classList.add('scale-95');
-      setTimeout(() => modal.classList.add('hidden'), 300);
+      closeModalEl('yearModal', 'yearModalContent');
     }
 
     function selectYear(year) {
@@ -2540,14 +2551,14 @@
     // ============================================================
     // FERMETURE DES MODALES AU CLIC EXTÉRIEUR
     // ============================================================
-    document.getElementById('modal').addEventListener('click', (e) => {
-      if (e.target === document.getElementById('modal')) closeModal();
-    });
-    document.getElementById('detailModal').addEventListener('click', (e) => {
-      if (e.target === document.getElementById('detailModal')) closeDetailModal();
-    });
-    document.getElementById('yearModal').addEventListener('click', (e) => {
-      if (e.target === document.getElementById('yearModal')) closeYearPicker();
+    [
+      { modalId: 'modal',       close: closeModal },
+      { modalId: 'detailModal', close: closeDetailModal },
+      { modalId: 'yearModal',   close: closeYearPicker },
+    ].forEach(({ modalId, close }) => {
+      document.getElementById(modalId).addEventListener('click', (e) => {
+        if (e.target === document.getElementById(modalId)) close();
+      });
     });
   </script>
 
