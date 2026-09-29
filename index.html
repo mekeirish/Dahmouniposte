@@ -1208,7 +1208,7 @@
 
       <!-- VUE 2 : MOIS -->
       <div id="viewMonths" class="hidden w-full max-w-2xl bg-white/60 backdrop-blur-md border border-white/80 rounded-3xl p-6 sm:p-8 self-center">
-        <h2 id="monthsTitle" class="text-lg sm:text-xl font-semibold mb-6 text-center text-gray-700">Sélectionnez un mois</h2>
+        <h2 id="monthsTitle" class="text-lg sm:text-xl font-semibold mb-6 text-center text-gray-700">Lettres d'arrivées</h2>
         <div id="monthsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4"></div>
       </div>
 
@@ -2014,7 +2014,7 @@
 
     function renderMonths() {
       const cfg = SECTION_CONFIG[currentSection];
-      document.getElementById('monthsTitle').textContent = `${cfg.label} - Sélectionnez un mois`;
+      document.getElementById('monthsTitle').textContent = cfg.label;
 
       const grid = document.getElementById('monthsGrid');
       grid.innerHTML = '';
