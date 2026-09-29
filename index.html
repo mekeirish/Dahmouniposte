@@ -447,6 +447,8 @@
     .bg-blue-500 { background-color: #3b82f6; }
     .bg-blue-600 { background-color: #2563eb; }
     .bg-red-50\/60 { background-color: rgba(254, 242, 242, 0.6); }
+    .bg-red-500 { background-color: #ef4444; }
+    .bg-red-600 { background-color: #dc2626; }
     .bg-amber-50 { background-color: #fffbeb; }
     .bg-amber-50\/50 { background-color: rgba(255, 251, 235, 0.5); }
     .bg-amber-50\/60 { background-color: rgba(255, 251, 235, 0.6); }
@@ -459,6 +461,7 @@
     .bg-amber-500 { background-color: #f59e0b; }
     .bg-slate-50\/60 { background-color: rgba(248, 250, 252, 0.6); }
     .bg-slate-900\/30 { background-color: rgba(15, 23, 42, 0.3); }
+    .bg-slate-900\/50 { background-color: rgba(15, 23, 42, 0.5); }
 
     /* Gradients */
     .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); }
@@ -473,6 +476,8 @@
     .to-amber-500 { --tw-gradient-to: #f59e0b; }
     .from-amber-500 { --tw-gradient-from: #f59e0b; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(245, 158, 11, 0)); }
     .to-amber-600 { --tw-gradient-to: #d97706; }
+    .from-red-500 { --tw-gradient-from: #ef4444; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(239, 68, 68, 0)); }
+    .to-red-600 { --tw-gradient-to: #dc2626; }
 
     /* ===== BORDERS ===== */
     .border { border: 1px solid; }
@@ -491,6 +496,7 @@
     .border-blue-200 { border-color: #bfdbfe; }
     .border-blue-500 { border-color: #3b82f6; }
     .border-red-200 { border-color: #fecaca; }
+    .border-red-500 { border-color: #ef4444; }
     .border-amber-100 { border-color: #fef3c7; }
     .border-amber-200 { border-color: #fde68a; }
     .border-amber-300 { border-color: #fcd34d; }
@@ -535,6 +541,7 @@
     .hover\:bg-blue-700:hover { background-color: #1d4ed8; }
     .hover\:bg-amber-500:hover { background-color: #f59e0b; }
     .hover\:bg-amber-200:hover { background-color: #fde68a; }
+    .hover\:bg-red-500:hover { background-color: #ef4444; }
     .hover\:text-white:hover { color: #ffffff; }
     .hover\:text-gray-600:hover { color: #4b5563; }
     .hover\:border-amber-500:hover { border-color: #f59e0b; }
@@ -666,6 +673,9 @@
       cursor: pointer;
       font-weight: 500;
       position: relative;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
     }
     .month-btn.has-data {
       background-color: rgba(251, 191, 36, 0.9);
@@ -1049,6 +1059,279 @@
     }
     .logout-btn svg { width: 0.875rem; height: 0.875rem; }
 
+    /* ===== ACTIONS SOUS TABLEAU ===== */
+    .table-actions {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid;
+      transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .action-btn:active { transform: scale(0.94); }
+    .action-btn svg { width: 0.9rem; height: 0.9rem; }
+
+    .action-btn-export {
+      background-color: rgba(255, 255, 255, 0.7);
+      color: #1d4ed8;
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+    .action-btn-export:hover {
+      background-color: rgba(219, 234, 254, 0.9);
+      border-color: #3b82f6;
+    }
+
+    .action-btn-print {
+      background-color: rgba(255, 255, 255, 0.7);
+      color: #b45309;
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+    .action-btn-print:hover {
+      background-color: rgba(254, 243, 199, 0.9);
+      border-color: #f59e0b;
+    }
+
+    /* ===== MODALE CONFIRMATION ===== */
+    .confirm-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 110;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+    .confirm-modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .confirm-card {
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      max-width: 22rem;
+      width: 100%;
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.25);
+      transform: scale(0.95);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .confirm-modal.show .confirm-card { transform: scale(1); }
+    .confirm-icon {
+      width: 3rem;
+      height: 3rem;
+      margin: 0 auto 0.75rem;
+      border-radius: 50%;
+      background-color: rgba(254, 226, 226, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #dc2626;
+    }
+    .confirm-icon svg { width: 1.5rem; height: 1.5rem; }
+    .confirm-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1f2937;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .confirm-message {
+      font-size: 0.85rem;
+      color: #4b5563;
+      text-align: center;
+      margin-bottom: 1.25rem;
+      line-height: 1.5;
+    }
+    .confirm-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .confirm-actions button {
+      flex: 1;
+      padding: 0.7rem 1rem;
+      border-radius: 0.875rem;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .confirm-cancel {
+      background-color: rgba(243, 244, 246, 1);
+      color: #374151;
+      border: 1px solid rgba(209, 213, 219, 0.8);
+    }
+    .confirm-cancel:hover { background-color: #e5e7eb; }
+    .confirm-ok {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #ffffff;
+      border: 1px solid #dc2626;
+      box-shadow: 0 4px 12px -3px rgba(220, 38, 38, 0.5);
+    }
+    .confirm-ok:hover {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      box-shadow: 0 6px 16px -3px rgba(220, 38, 38, 0.6);
+    }
+    .confirm-ok:active { transform: scale(0.96); }
+
+    /* ============================================================
+       PRINT — Mise en page du document imprimé
+       ============================================================ */
+    .print-document { display: none; }
+
+    @media print {
+      /* Cacher tout sauf le document d'impression */
+      body * { visibility: hidden; }
+      body { background: #ffffff !important; }
+      .print-document,
+      .print-document * { visibility: visible; }
+
+      .print-document {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        color: #111827;
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      }
+
+      .print-doc-header {
+        text-align: center;
+        border-bottom: 3px double #1e40af;
+        padding-bottom: 0.75rem;
+        margin-bottom: 1rem;
+      }
+      .print-doc-header .line1 {
+        font-size: 12pt;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #1e40af;
+        margin-bottom: 0.2rem;
+      }
+      .print-doc-header .line2 {
+        font-size: 9pt;
+        color: #6b7280;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+      }
+      .print-doc-header .doc-title {
+        font-size: 14pt;
+        font-weight: 800;
+        color: #111827;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 0.5rem;
+      }
+      .print-doc-header .doc-subtitle {
+        font-size: 11pt;
+        color: #374151;
+        margin-top: 0.2rem;
+        font-weight: 600;
+      }
+
+      .print-doc-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 8.5pt;
+        color: #6b7280;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.4rem;
+        border-bottom: 1px solid #d1d5db;
+      }
+
+      .print-doc-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9pt;
+        margin-bottom: 1.25rem;
+      }
+      .print-doc-table th {
+        background: #dbeafe !important;
+        color: #1e40af;
+        border: 1px solid #6b7280;
+        padding: 4pt 3pt;
+        font-weight: 700;
+        text-align: center;
+        font-size: 8.5pt;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .print-doc-table th.col-month {
+        text-align: left;
+        padding-left: 6pt;
+      }
+      .print-doc-table td {
+        border: 1px solid #9ca3af;
+        padding: 3pt 3pt;
+        text-align: center;
+        font-size: 9pt;
+      }
+      .print-doc-table td.col-month {
+        text-align: left;
+        padding-left: 6pt;
+        font-weight: 700;
+        color: #1e40af;
+        background-color: #eff6ff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .print-doc-table tfoot td {
+        background-color: #fef3c7 !important;
+        font-weight: 800;
+        color: #78350f;
+        border-top: 2px solid #6b7280;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .print-doc-footer {
+        margin-top: 1.5rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid #d1d5db;
+        display: flex;
+        justify-content: space-between;
+        font-size: 8pt;
+        color: #6b7280;
+      }
+      .print-doc-footer .signature {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+      }
+      .print-doc-footer .signature .line {
+        border-top: 1px solid #374151;
+        width: 5rem;
+        text-align: center;
+        padding-top: 0.2rem;
+        font-size: 7.5pt;
+      }
+
+      @page { margin: 12mm; }
+    }
+
     /* ===== BREAKPOINTS ===== */
     @media (min-width: 640px) {
       .sm\:p-6 { padding: 1.5rem; }
@@ -1115,33 +1398,6 @@
     <div class="lock-hint">
       Accès réservé au personnel autorisé
     </div>
-
-    <!-- À SUPPRIMER : bouton de test vibration temporaire -->
-    <button
-      type="button"
-      onclick="
-        const hasApi = typeof navigator.vibrate === 'function';
-        const result = hasApi ? navigator.vibrate(200) : 'N/A';
-        alert(
-          'navigator.vibrate existe : ' + hasApi + '\n' +
-          'Résultat : ' + result + '\n' +
-          'isIOS : ' + isIOS
-        );
-      "
-      style="
-        margin-top:1rem;
-        padding:0.4rem 0.9rem;
-        border-radius:9999px;
-        font-size:0.7rem;
-        font-weight:600;
-        color:#6b7280;
-        background-color:rgba(255,255,255,0.5);
-        border:1px solid rgba(255,255,255,0.7);
-        cursor:pointer;
-      ">
-      Test vibration
-    </button>
-    <!-- FIN À SUPPRIMER -->
   </div>
 
   <!-- ============================================================
@@ -1257,6 +1513,22 @@
               </table>
             </div>
           </div>
+
+          <!-- Actions sous tableau (vue mensuelle) -->
+          <div class="table-actions">
+            <button class="action-btn action-btn-export" onclick="exportMonthlyCSV()">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16" />
+              </svg>
+              <span>Exporter CSV</span>
+            </button>
+            <button class="action-btn action-btn-print" onclick="printMonthly()">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6v-8z" />
+              </svg>
+              <span>Imprimer</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -1298,6 +1570,22 @@
               <tfoot id="annualTableFooter"></tfoot>
             </table>
           </div>
+        </div>
+
+        <!-- Actions sous tableau (rapport annuel) -->
+        <div class="table-actions">
+          <button class="action-btn action-btn-export" onclick="exportAnnualCSV()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16" />
+            </svg>
+            <span>Exporter CSV</span>
+          </button>
+          <button class="action-btn action-btn-print" onclick="printAnnual()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6v-8z" />
+            </svg>
+            <span>Imprimer</span>
+          </button>
         </div>
       </div>
 
@@ -1489,6 +1777,23 @@
     </div>
   </div>
 
+  <!-- MODALE DE CONFIRMATION (long press) -->
+  <div id="confirmModal" class="confirm-modal">
+    <div class="confirm-card">
+      <div class="confirm-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4a2 2 0 00-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z" />
+        </svg>
+      </div>
+      <div class="confirm-title" id="confirmTitle">Confirmer la suppression</div>
+      <div class="confirm-message" id="confirmMessage">Cette action supprimera définitivement les données. Voulez-vous continuer ?</div>
+      <div class="confirm-actions">
+        <button type="button" class="confirm-cancel" onclick="closeConfirmModal()">Annuler</button>
+        <button type="button" class="confirm-ok" id="confirmOkBtn">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
   <!-- BOUTON INSTALLER PWA -->
   <button id="installBtn" class="install-btn" aria-label="Installer l'application">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -1513,25 +1818,46 @@
     </div>
   </div>
 
+  <!-- ============================================================
+       DOCUMENT IMPRIMABLE (caché à l'écran, visible à l'impression)
+       ============================================================ -->
+  <div id="printDocument" class="print-document">
+    <div class="print-doc-header">
+      <div class="line1">Bureau de poste DAHMOUNI 14010</div>
+      <div class="line2">Algérie Poste</div>
+      <div class="doc-title" id="printDocTitle">Lettres d'arrivées</div>
+      <div class="doc-subtitle" id="printDocSubtitle">Janvier 2026</div>
+    </div>
+
+    <div class="print-doc-meta">
+      <span id="printDocDate"></span>
+      <span id="printDocSignature">Bureau de poste DAHMOUNI 14010</span>
+    </div>
+
+    <table class="print-doc-table" id="printDocTable">
+      <thead id="printDocThead"></thead>
+      <tbody id="printDocTbody"></tbody>
+      <tfoot id="printDocTfoot"></tfoot>
+    </table>
+
+    <div class="print-doc-footer">
+      <div>Document généré le <span id="printDocGenerated"></span></div>
+      <div class="signature">
+        <div class="line">Cachet et signature</div>
+      </div>
+    </div>
+  </div>
+
   <script>
     // ============================================================
-    // 0) VIBRATION GLOBALE AU CLIC (CORRIGÉE)
+    // 0) VIBRATION GLOBALE AU CLIC
     // ============================================================
-    // Deux mécanismes :
-    //   1) Android / Chrome : navigator.vibrate() — déclenché par un vrai click
-    //   2) iOS Safari 17.4+ : fallback via <input type="checkbox" switch> caché
-    // ============================================================
-
-    // --- Détection iOS (nécessaire ici, avant les fonctions de vibration) ---
     const uaVibrate = navigator.userAgent || '';
     const isIOS = /iPad|iPhone|iPod/.test(uaVibrate)
                 || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
     const HAS_VIBRATE_API = typeof navigator.vibrate === 'function';
 
-    // ------------------------------------------------------------
-    // Fallback haptique iOS (Safari 17.4+)
-    // ------------------------------------------------------------
     let iosHapticLabel = null;
 
     function setupIOSHaptic() {
@@ -1553,55 +1879,31 @@
 
     function hapticIOS() {
       if (!iosHapticLabel) return;
-      try {
-        iosHapticLabel.click();
-      } catch (e) {
-        // Silencieux
-      }
+      try { iosHapticLabel.click(); } catch (e) {}
     }
 
-    // ------------------------------------------------------------
-    // Vibrations (Android natif + fallback iOS)
-    // ------------------------------------------------------------
     function vibrate(duration = 40) {
       if (HAS_VIBRATE_API) {
-        try {
-          const ok = navigator.vibrate(duration);
-          if (ok === false) console.log('[Vibrate] navigator.vibrate a renvoyé false');
-          return ok;
-        } catch (e) {
-          console.log('[Vibrate] exception :', e);
-        }
+        try { return navigator.vibrate(duration); } catch (e) {}
       }
       if (isIOS) hapticIOS();
       return false;
     }
 
     function vibrateError() {
-      // Pattern court-long-court (impossible à rater)
       if (HAS_VIBRATE_API) {
-        try {
-          const ok = navigator.vibrate([80, 50, 80, 50, 80]);
-          if (ok === false) console.log('[Vibrate] navigator.vibrate (error) a renvoyé false');
-          return;
-        } catch (e) {}
+        try { navigator.vibrate([80, 50, 80, 50, 80]); return; } catch (e) {}
       }
       if (isIOS) hapticIOS();
     }
 
     function vibrateSuccess() {
-      // Double pulse rapide
       if (HAS_VIBRATE_API) {
-        try {
-          const ok = navigator.vibrate([30, 40, 30]);
-          if (ok === false) console.log('[Vibrate] navigator.vibrate (success) a renvoyé false');
-          return;
-        } catch (e) {}
+        try { navigator.vibrate([30, 40, 30]); return; } catch (e) {}
       }
       if (isIOS) hapticIOS();
     }
 
-    // Anti-doublon : un même tap ne vibre qu'une seule fois
     let _lastVibrateTime = 0;
     function vibrateOnce(duration = 40) {
       const now = Date.now();
@@ -1610,29 +1912,11 @@
       vibrate(duration);
     }
 
-    // ------------------------------------------------------------
-    // UN SEUL listener délégué en phase de capture
-    // ------------------------------------------------------------
     document.addEventListener('click', (e) => {
-      if (e.target.closest('button')) {
-        vibrateOnce(40);
-      }
+      if (e.target.closest('button')) vibrateOnce(40);
     }, true);
 
-    // ------------------------------------------------------------
-    // Initialisation + diagnostic
-    // ------------------------------------------------------------
-    document.addEventListener('DOMContentLoaded', () => {
-      setupIOSHaptic();
-
-      if (HAS_VIBRATE_API) {
-        console.log('[Vibrate] API Android/Chrome disponible ✅');
-      } else if (isIOS) {
-        console.log('[Vibrate] API indisponible → fallback haptique iOS actif ✅');
-      } else {
-        console.log('[Vibrate] API indisponible, aucun fallback (navigateur non supporté) ❌');
-      }
-    });
+    document.addEventListener('DOMContentLoaded', setupIOSHaptic);
 
     // ============================================================
     // 1) AUTHENTIFICATION (SHA-256)
@@ -1650,7 +1934,6 @@
     let EXPECTED_HASH = null;
     (async () => {
       EXPECTED_HASH = await sha256('0926');
-      console.log('[Auth] Hash attendu calculé');
     })();
 
     const lockScreen = document.getElementById('lockScreen');
@@ -1661,7 +1944,6 @@
     const lockToggle = document.getElementById('lockToggle');
     const eyeIcon = document.getElementById('eyeIcon');
 
-    // SVG du bouton toggle (yeux ouverts / barrés)
     const EYE_OPEN_SVG = `
       <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
       <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -1681,10 +1963,7 @@
 
     async function handleUnlock(e) {
       e.preventDefault();
-
-      // Vibration immédiate, AVANT tout await → garantit le geste utilisateur
       vibrate(40);
-
       const now = Date.now();
 
       if (now < lockCooldownUntil) {
@@ -1749,9 +2028,7 @@
     // ============================================================
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then(reg => console.log('✅ SW enregistré, scope :', reg.scope))
-          .catch(err => console.error('❌ SW erreur :', err));
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
       });
     }
 
@@ -1820,8 +2097,7 @@
       installBtn.addEventListener('click', async () => {
         if (deferredInstallPrompt) {
           deferredInstallPrompt.prompt();
-          const { outcome } = await deferredInstallPrompt.userChoice;
-          console.log('[PWA] Choix utilisateur :', outcome);
+          await deferredInstallPrompt.userChoice;
           deferredInstallPrompt = null;
           hideInstallButton();
         } else {
@@ -2030,6 +2306,7 @@
           ${hasData ? `<span class="badge-count">${count} jour${count > 1 ? 's' : ''}</span>` : ''}
         `;
         btn.onclick = () => selectMonth(index);
+        attachLongPress(btn, () => askClearMonth(index));
         grid.appendChild(btn);
       });
     }
@@ -2126,11 +2403,15 @@
             ? 'bg-amber-400/90 border-amber-500 text-gray-900 hover:bg-amber-500'
             : 'bg-white/70 border-white/80 hover:bg-blue-600 hover:text-white text-gray-700'
         }`;
+        btn.style.userSelect = 'none';
+        btn.style.webkitUserSelect = 'none';
+        btn.style.webkitTouchCallout = 'none';
         btn.innerHTML = `
           <span>${day}</span>
           ${hasData ? '<span class="text-[10px] font-normal opacity-75">Saisi</span>' : ''}
         `;
         btn.onclick = () => openModalForDay(day);
+        attachLongPress(btn, () => askClearDay(day));
         grid.appendChild(btn);
       }
 
@@ -2560,6 +2841,311 @@
         if (e.target === document.getElementById(modalId)) close();
       });
     });
+
+    // ============================================================
+    // LONG PRESS — Suppression avec confirmation
+    // ============================================================
+    const LONG_PRESS_MS = 600;
+
+    function attachLongPress(el, callback) {
+      let timer = null;
+      let triggered = false;
+
+      const start = (e) => {
+        triggered = false;
+        // Ne pas déclencher si c'est un clic droit ou un autre bouton
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+        timer = setTimeout(() => {
+          triggered = true;
+          vibrateError();
+          callback();
+        }, LONG_PRESS_MS);
+      };
+
+      const cancel = () => {
+        if (timer) {
+          clearTimeout(timer);
+          timer = null;
+        }
+      };
+
+      // Empêcher le click de se déclencher après un long press
+      const handleClick = (e) => {
+        if (triggered) {
+          e.preventDefault();
+          e.stopPropagation();
+          triggered = false;
+        }
+      };
+
+      el.addEventListener('pointerdown', start, { passive: true });
+      el.addEventListener('pointerup', cancel);
+      el.addEventListener('pointerleave', cancel);
+      el.addEventListener('pointercancel', cancel);
+      el.addEventListener('contextmenu', (e) => e.preventDefault());
+      el.addEventListener('click', handleClick, true);
+    }
+
+    // Modale de confirmation
+    let confirmCallback = null;
+
+    function askClearDay(day) {
+      const cfg = SECTION_CONFIG[currentSection];
+      const key = `${currentYear}-${currentMonthIndex}-${day}`;
+      if (getCurrentDB()[key] === undefined) return; // rien à supprimer
+
+      document.getElementById('confirmTitle').textContent = 'Supprimer ce jour ?';
+      document.getElementById('confirmMessage').innerHTML =
+        `Voulez-vous vraiment supprimer les données du <strong>${day} ${months[currentMonthIndex]} ${currentYear}</strong> (${cfg.label}) ?<br><br>Cette action est irréversible.`;
+
+      confirmCallback = () => {
+        const db = getCurrentDB();
+        delete db[key];
+        saveCurrentDB();
+        vibrateSuccess();
+        renderDays(currentMonthIndex);
+      };
+
+      showConfirmModal();
+    }
+
+    function askClearMonth(monthIndex) {
+      const cfg = SECTION_CONFIG[currentSection];
+      if (!monthHasData(monthIndex)) return; // rien à supprimer
+
+      document.getElementById('confirmTitle').textContent = 'Supprimer ce mois ?';
+      document.getElementById('confirmMessage').innerHTML =
+        `Voulez-vous vraiment supprimer <strong>toutes les données de ${months[monthIndex]} ${currentYear}</strong> (${cfg.label}) ?<br><br>Cette action est irréversible.`;
+
+      confirmCallback = () => {
+        const db = getCurrentDB();
+        for (let day = 1; day <= 31; day++) {
+          const key = `${currentYear}-${monthIndex}-${day}`;
+          if (db[key] !== undefined) delete db[key];
+        }
+        saveCurrentDB();
+        vibrateSuccess();
+        renderMonths();
+      };
+
+      showConfirmModal();
+    }
+
+    function showConfirmModal() {
+      const modal = document.getElementById('confirmModal');
+      modal.classList.add('show');
+      document.getElementById('confirmOkBtn').onclick = () => {
+        if (confirmCallback) confirmCallback();
+        confirmCallback = null;
+        closeConfirmModal();
+      };
+    }
+
+    function closeConfirmModal() {
+      const modal = document.getElementById('confirmModal');
+      modal.classList.remove('show');
+      confirmCallback = null;
+    }
+
+    // ============================================================
+    // EXPORT CSV
+    // ============================================================
+    function downloadCSV(filename, content) {
+      // BOM UTF-8 pour Excel (accents corrects)
+      const BOM = '\uFEFF';
+      const blob = new Blob([BOM + content], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function escapeCSV(v) {
+      const s = String(v);
+      if (/[",;\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+      return s;
+    }
+
+    function exportMonthlyCSV() {
+      if (currentMonthIndex === null) return;
+      const cfg = SECTION_CONFIG[currentSection];
+      const db = getCurrentDB();
+      const lastKey = cfg.lastFieldKey;
+      const allKeys = [...FIELD_KEYS, lastKey];
+
+      // En-tête
+      const headers = ['Date', ...FIELD_KEYS.map(k => FIELD_LABELS[k]), cfg.lastColHeader];
+
+      // Lignes
+      const lines = [headers.map(escapeCSV).join(';')];
+
+      const daysInMonth = new Date(currentYear, currentMonthIndex + 1, 0).getDate();
+      const totals = { [lastKey]: 0 };
+      allKeys.slice(0, -1).forEach(k => totals[k] = 0);
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const key = `${currentYear}-${currentMonthIndex}-${day}`;
+        const entry = db[key];
+        if (!entry) continue;
+
+        const row = [day];
+        allKeys.forEach(k => {
+          const v = entry[k] || 0;
+          totals[k] += v;
+          row.push(v);
+        });
+        lines.push(row.map(escapeCSV).join(';'));
+      }
+
+      // Ligne TOTAL
+      const totalRow = ['TOTAL'];
+      allKeys.forEach(k => totalRow.push(totals[k]));
+      lines.push(totalRow.map(escapeCSV).join(';'));
+
+      const filename = `${cfg.label.replace(/\s+/g, '_')}_${months[currentMonthIndex]}_${currentYear}.csv`;
+      downloadCSV(filename, lines.join('\n'));
+    }
+
+    function exportAnnualCSV() {
+      const cfg = SECTION_CONFIG[annualSection];
+      const lastKey = cfg.lastFieldKey;
+      const allKeys = [...FIELD_KEYS, lastKey];
+
+      const { monthRows, totals } = computeAnnualTotals(annualSection);
+
+      // En-tête
+      const headers = ['Mois', ...FIELD_KEYS.map(k => FIELD_LABELS[k]), cfg.lastColHeader];
+      const lines = [headers.map(escapeCSV).join(';')];
+
+      monthRows.forEach(row => {
+        const r = [months[row.month]];
+        allKeys.forEach(k => r.push(row.hasData ? row[k] : 0));
+        lines.push(r.map(escapeCSV).join(';'));
+      });
+
+      const totalRow = ['TOTALE'];
+      allKeys.forEach(k => totalRow.push(totals[k]));
+      lines.push(totalRow.map(escapeCSV).join(';'));
+
+      const filename = `Rapport_${cfg.label.replace(/\s+/g, '_')}_${currentYear}.csv`;
+      downloadCSV(filename, lines.join('\n'));
+    }
+
+    // ============================================================
+    // IMPRESSION
+    // ============================================================
+    function buildPrintDoc_Generic(title, subtitle, headers, rows, totalRow) {
+      document.getElementById('printDocTitle').textContent = title;
+      document.getElementById('printDocSubtitle').textContent = subtitle;
+
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('fr-FR', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      });
+      const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('printDocDate').textContent = `Le ${dateStr} à ${timeStr}`;
+      document.getElementById('printDocGenerated').textContent = `${dateStr} ${timeStr}`;
+
+      document.getElementById('printDocThead').innerHTML =
+        '<tr>' + headers.map((h, i) =>
+          `<th${i === 0 ? ' class="col-month"' : ''}>${escapeHTML(h)}</th>`
+        ).join('') + '</tr>';
+
+      document.getElementById('printDocTbody').innerHTML =
+        rows.map(r =>
+          '<tr>' + r.map((v, i) =>
+            `<td${i === 0 ? ' class="col-month"' : ''}>${escapeHTML(String(v))}</td>`
+          ).join('') + '</tr>'
+        ).join('');
+
+      document.getElementById('printDocTfoot').innerHTML =
+        '<tr>' + totalRow.map((v, i) =>
+          `<td${i === 0 ? ' class="col-month"' : ''}>${escapeHTML(String(v))}</td>`
+        ).join('') + '</tr>';
+    }
+
+    function escapeHTML(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function printMonthly() {
+      if (currentMonthIndex === null) return;
+      const cfg = SECTION_CONFIG[currentSection];
+      const db = getCurrentDB();
+      const lastKey = cfg.lastFieldKey;
+      const allKeys = [...FIELD_KEYS, lastKey];
+
+      const headers = ['Date', ...FIELD_KEYS.map(k => FIELD_LABELS[k]), cfg.lastColHeader];
+      const rows = [];
+      const totals = { [lastKey]: 0 };
+      allKeys.slice(0, -1).forEach(k => totals[k] = 0);
+
+      const daysInMonth = new Date(currentYear, currentMonthIndex + 1, 0).getDate();
+      for (let day = 1; day <= daysInMonth; day++) {
+        const key = `${currentYear}-${currentMonthIndex}-${day}`;
+        const entry = db[key];
+        if (!entry) continue;
+
+        const row = [day];
+        allKeys.forEach(k => {
+          const v = entry[k] || 0;
+          totals[k] += v;
+          row.push(v);
+        });
+        rows.push(row);
+      }
+
+      const totalRow = ['TOTAL'];
+      allKeys.forEach(k => totalRow.push(totals[k]));
+
+      buildPrintDoc_Generic(
+        cfg.label,
+        `${months[currentMonthIndex]} ${currentYear}`,
+        headers,
+        rows,
+        totalRow
+      );
+
+      setTimeout(() => window.print(), 100);
+    }
+
+    function printAnnual() {
+      const cfg = SECTION_CONFIG[annualSection];
+      const lastKey = cfg.lastFieldKey;
+      const allKeys = [...FIELD_KEYS, lastKey];
+
+      const { monthRows, totals } = computeAnnualTotals(annualSection);
+
+      const headers = ['Mois', ...FIELD_KEYS.map(k => FIELD_LABELS[k]), cfg.lastColHeader];
+      const rows = monthRows.map(row => {
+        const r = [months[row.month]];
+        allKeys.forEach(k => r.push(row.hasData ? row[k] : '·'));
+        return r;
+      });
+
+      const totalRow = ['TOTALE'];
+      allKeys.forEach(k => totalRow.push(totals[k]));
+
+      buildPrintDoc_Generic(
+        `Rapport annuel — ${cfg.label}`,
+        `Année ${currentYear}`,
+        headers,
+        rows,
+        totalRow
+      );
+
+      setTimeout(() => window.print(), 100);
+    }
   </script>
 
 </body>
