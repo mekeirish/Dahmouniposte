@@ -1,10 +1,12 @@
 /* ============================================================
    Service Worker - Bureau de poste DAHMOUNI 14010
-   - HTML → Network First
-   - Assets locaux + logo ImgBB → Cache First
+   - HTML → Network First (avec fallback cache)
+   - Assets locaux + logo distant → Cache First
+   - skipWaiting() à l'install + clients.claim() à l'activate
+   - Purge des anciens caches à l'activate
    ============================================================ */
 
-const CACHE_VERSION = 'poste-dahmouni-v3';
+const CACHE_VERSION = 'poste-v2';
 const CACHE_NAME = CACHE_VERSION;
 
 const LOGO_URL = 'https://i.ibb.co/ds9JFS3p/1000127367-removebg-preview.png';
@@ -17,6 +19,7 @@ const PRECACHE_ASSETS = [
   LOGO_URL
 ];
 
+// ===== INSTALL =====
 self.addEventListener('install', (event) => {
   console.log('[SW] Installation...');
   event.waitUntil(
@@ -30,6 +33,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
+// ===== ACTIVATE =====
 self.addEventListener('activate', (event) => {
   console.log('[SW] Activation...');
   event.waitUntil(
@@ -44,6 +48,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// ===== FETCH =====
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
@@ -52,8 +57,7 @@ self.addEventListener('fetch', (event) => {
   try { url = new URL(request.url); } catch { return; }
 
   // Autoriser le cache du logo distant (i.ibb.co)
-  const isLogo = request.url === LOGO_URL ||
-                 url.hostname === 'i.ibb.co';
+  const isLogo = request.url === LOGO_URL || url.hostname === 'i.ibb.co';
 
   // Bloquer les autres cross-origin
   if (url.origin !== self.location.origin && !isLogo) return;
@@ -63,6 +67,7 @@ self.addEventListener('fetch', (event) => {
                  url.pathname.endsWith('/');
 
   if (isHTML) {
+    // Network First
     event.respondWith(
       fetch(request)
         .then((response) => {
@@ -70,9 +75,12 @@ self.addEventListener('fetch', (event) => {
           caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
           return response;
         })
-        .catch(() => caches.match(request).then(cached => cached || caches.match('./index.html')))
+        .catch(() =>
+          caches.match(request).then(cached => cached || caches.match('./index.html'))
+        )
     );
   } else {
+    // Cache First
     event.respondWith(
       caches.match(request).then((cached) => {
         if (cached) return cached;
@@ -91,6 +99,7 @@ self.addEventListener('fetch', (event) => {
   }
 });
 
+// ===== MESSAGE =====
 self.addEventListener('message', (event) => {
   if (event.data === 'SKIP_WAITING') self.skipWaiting();
 });
